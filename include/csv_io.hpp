@@ -32,6 +32,54 @@ public:
   static constexpr bool value = type::value;
 };
 
+namespace csvio::util {
+inline std::string escape(std::string_view data) {
+  std::string result;
+  bool needs_escape{false};
+  for (const char& c : data) {
+    switch (c) {
+      case '\"':
+        result.push_back(c);
+      case '\n':
+      case ',':
+        needs_escape = true;
+    }
+    result.push_back(c);
+  }
+
+  if (needs_escape) {
+    result.push_back('\"');
+    result.insert(0, "\"");
+  }
+  return result;
+}
+
+inline std::string unescape(std::string_view data) {
+  std::string result;
+  int quotes_seen = 0;
+  if (data[0] == '\"') {
+    data = data.substr(1, data.size() - 2);
+  }
+
+  for (const char& c : data) {
+    switch (c) {
+      case '\"':
+        quotes_seen++;
+        if (quotes_seen == 2) {
+          quotes_seen = 0;
+          result.push_back('\"');
+        }
+        break;
+      default:
+        quotes_seen = 0;
+        result.push_back(c);
+    }
+  }
+  return result;
+}
+
+}  // namespace csvio::util
+
 template <typename RowContainer>
 struct SplitFunction {
   static RowContainer delimiter_split(std::string_view input, std::string_view delim) {
