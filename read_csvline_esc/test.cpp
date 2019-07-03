@@ -13,22 +13,22 @@ class CSVLineState {
 
   CSVLineState(std::ifstream& infile) : m_infile(infile) {}
 
-  std::string_view readline() {
+  std::string readline() {
     return getcsvline();
   }
 
  private:
-  std::string_view getcsvline() {
+  std::string getcsvline() {
     std::string result;
+
     char buf[1024]{0};
     char * buf_end = buf + 1000;
     char * pos = buf;
 
     while(m_infile.good()) {
       m_infile.get(*pos);
-      std::cout << pos << '\n';
       if (m_state == LINE && pos[0] == '\n') {
-        result += std::string(buf);
+        result.append(buf);
         break;
       } else if (m_state == LINE && pos[0] == '\"') {
         m_state = QUOTE;
@@ -48,7 +48,7 @@ class CSVLineState {
         std::fill(buf, buf + 1024, '\0');
       }
     }
-    return {result};
+    return result;
   }
 
   Scope m_state = LINE;
@@ -60,8 +60,8 @@ int main() {
   std::ifstream infile("testreadline.csv", std::ios::binary);
   CSVLineState state(infile);
   while(infile.good()) {
-    std::string s(state.readline());
-    std::cout << s;
+    std::string s = state.readline();
+    std::cout << s << '\n';
   }
   return 0;
 }
