@@ -1,27 +1,3 @@
-/**
-MIT License
-
-Copyright (c) 2019 Matthew Guidry
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
 #include <algorithm>
 #include <cassert>
 #include <exception>
@@ -111,6 +87,22 @@ struct SplitFunction {
         has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
     RowContainer output;
+    size_t first = 0;
+    while (first < input.size()) {
+      const auto second = input.find_first_of(delim, first);
+      if (first != second) output.push_back(input.substr(first, second - first));
+      if (second == std::string_view::npos) break;
+      first = second + 1;
+    }
+    return output;
+  }
+
+  static RowContainer delimiter_esc_split(std::string_view input, std::string_view delim) {
+    static_assert(
+        has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
+        "The template parameter needs to be a container type with an push_back function.");
+    RowContainer output;
+
     size_t first = 0;
     while (first < input.size()) {
       const auto second = input.find_first_of(delim, first);
