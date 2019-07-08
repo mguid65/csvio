@@ -9,6 +9,10 @@
 #include <string_view>
 #include <vector>
 
+
+/** \class has_push_back
+ *  \brief 
+ */
 template <typename, typename T>
 struct has_push_back {
   static_assert(
@@ -19,10 +23,18 @@ struct has_push_back {
 template <typename C, typename Ret, typename... Args>
 struct has_push_back<C, Ret(Args...)> {
 private:
+
+  /** \brief 
+   *  \return
+   */
   template <typename T>
   static constexpr auto check(T*) -> typename std::is_same<
       decltype(std::declval<T>().push_back(std::declval<Args>()...)), Ret>::type;
 
+
+  /** \brief 
+   *  \return
+   */
   template <typename>
   static constexpr std::false_type check(...);
 
@@ -33,8 +45,23 @@ public:
 };
 
 namespace csvio::util {
+
+/** \brief function to escape characters in csv fields according to RFC 4180
+ *
+ *  Source: https://tools.ietf.org/html/rfc4180
+ *
+ *  If discoverd that the string doesn't have any characters which need to be escaped,
+ *  the string will not be enclosed in quotes
+ *
+ *  Generally O(n) avg time and space complexity
+ *
+ *  \param data string to escape
+ *  \return escaped csv field if necessary, otherwise the string
+ */
 inline std::string escape(std::string_view data) {
   std::string result;
+  result.reserve(data.length()); // avoid lots of allocations by setting a reasonable initial allocation
+
   bool needs_escape{false};
   for (const char& c : data) {
     switch (c) {
@@ -51,13 +78,23 @@ inline std::string escape(std::string_view data) {
     result.push_back('\"');
     result.insert(0, "\"");
   }
+
   return result;
 }
 
+
+/** \brief unescape a csv escaped string according to RFC 4180
+ *
+ *  Generally O(n) avg time and space complexity
+ *
+ *  \param data string_view csv data to unescape
+ *  \return unquoted csv field
+ */
 inline std::string unescape(std::string_view data) {
   std::string result;
   int quotes_seen = 0;
-  if (data[0] == '\"') {
+
+  if (data[0] == '\"') { // if the first char is a quote, then the string is assumed to be quoted
     data = data.substr(1, data.size() - 2);
   }
 
@@ -80,8 +117,18 @@ inline std::string unescape(std::string_view data) {
 
 }  // namespace csvio::util
 
+
+/** \class SplitFunction
+ *  \brief 
+ */
 template <typename RowContainer>
 struct SplitFunction {
+
+  /** \brief 
+   *  \param input
+   *  \param delim
+   *  \return
+   */
   static RowContainer delimiter_split(std::string_view input, std::string_view delim) {
     static_assert(
         has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
@@ -97,6 +144,12 @@ struct SplitFunction {
     return output;
   }
 
+
+  /** \brief 
+   *  \param input
+   *  \param delim
+   *  \return
+   */
   static RowContainer delimiter_esc_split(std::string_view input, std::string_view delim) {
     static_assert(
         has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
@@ -119,9 +172,17 @@ using VectorSplitS = SplitFunction<std::vector<std::string>>;
 using ListSplitSV = SplitFunction<std::list<std::string_view>>;
 using ListSplitS = SplitFunction<std::list<std::string>>;
 
+
+/** \class ColumnMismatchException
+ *  \brief exception to describe mismatch in number of csv columns
+ */
 class ColumnMismatchException : public std::exception {
   virtual const char* what() const throw() { return "CSV column number mismatch detected"; }
 } ColumnMismatchException;
+
+// maybe implement a class which gives the option of returning a raw line in strict conformance to RFC 4180 or
+// in a mode where it only returns lines whether or not they are valid csv
+
 
 template <typename RowContainer = std::vector<std::string_view>>
 class CSVReader {
