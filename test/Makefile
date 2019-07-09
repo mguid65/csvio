@@ -1,5 +1,10 @@
+CXXFLAGS = -I$(PWD)/../include -lgtest -lpthread -std=c++17 
+
 all:
-	g++ -o test_line_reader test_line_reader.cpp -I$(PWD)/../include -lgtest -lpthread -std=c++17
-	./test_line_reader
+	rm -r bin && mkdir bin
+	g++ -o bin/test_line_reader test_line_reader.cpp ${CXXFLAGS}
+	g++ -o bin/test_escape_utils test_escape_utils.cpp ${CXXFLAGS}
+	./bin/test_line_reader
+	./bin/test_escape_utils
 clean:
-	rm test_line_reader
+	rm bin/test_line_reader bin/test_escape_utils

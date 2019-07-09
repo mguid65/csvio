@@ -53,12 +53,15 @@ namespace csvio::util {
  *  If discoverd that the string doesn't have any characters which need to be escaped,
  *  the string will not be enclosed in quotes
  *
+ *  Also handles alternative delimiters and allows forced escapes
+ *  which will append leading and trailing double quotes
+ *
  *  Generally O(n) avg time and space complexity
  *
  *  \param data string to escape
  *  \return escaped csv field if necessary, otherwise the string
  */
-inline std::string escape(std::string_view data) {
+inline std::string escape(std::string_view data, char delim=',', bool force_escape=false) {
   std::string result;
   result.reserve(data.length()); // avoid lots of allocations by setting a reasonable initial allocation
 
@@ -68,13 +71,15 @@ inline std::string escape(std::string_view data) {
       case '\"':
         result.push_back(c);
       case '\n':
-      case ',':
         needs_escape = true;
+        break;
+      default:
+        if (c == delim) needs_escape = true; // special handle for alternative delimiters
     }
     result.push_back(c);
   }
 
-  if (needs_escape) {
+  if (needs_escape || force_escape) {
     result.push_back('\"');
     result.insert(0, "\"");
   }
