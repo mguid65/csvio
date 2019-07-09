@@ -11,7 +11,7 @@
 
 
 /** \class has_push_back
- *  \brief 
+ *  \brief SFINAE Helper to determine if T has a push_back method
  */
 template <typename, typename T>
 struct has_push_back {
@@ -24,16 +24,16 @@ template <typename C, typename Ret, typename... Args>
 struct has_push_back<C, Ret(Args...)> {
 private:
 
-  /** \brief 
-   *  \return
+  /** \brief check if a type T has method push_back
+   *  \return boolean whether T has a method push_back
    */
   template <typename T>
   static constexpr auto check(T*) -> typename std::is_same<
       decltype(std::declval<T>().push_back(std::declval<Args>()...)), Ret>::type;
 
 
-  /** \brief 
-   *  \return
+  /** \brief overload which returns false
+   *  \return false
    */
   template <typename>
   static constexpr std::false_type check(...);
@@ -342,3 +342,65 @@ private:
 
   RowContainer m_current;
 };
+
+class CSVLineReader {
+ public:
+  enum Scope {
+    LINE,
+    QUOTE
+  };
+
+  CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
+
+  std::string readline() {
+      m_result.clear();
+
+      char buf[1024]{0};
+      char * buf_end = buf + 1023;
+      char * pos = buf;
+
+      while(m_csv_stream.good()) {
+        m_csv_stream.get(*pos);
+        if (m_state == LINE && pos[0] == '\n') {
+          m_result.append(buf);
+          break;
+        } else if (m_state == LINE && pos[0] == '\"') {
+          m_state = QUOTE;
+        } else if (m_state == QUOTE && pos[0] == '\"') {
+          m_state = LINE;
+        } else if (m_state == QUOTE && pos[0] == EOF) {
+          std::cerr << "Unexpected EOF\n" << '\n'; // maybe change to do something else
+          m_result = "";
+          pos = buf;
+          break;
+        } else if (m_state == LINE && pos[0] == EOF) {
+          m_result.append(buf);
+          break;
+        }
+        pos++;
+
+        if(pos >= buf_end) {
+          pos = buf;
+          m_result.append(buf);
+          std::fill(buf, buf + 1024, '\0');
+        }
+      }
+      m_lines_read++;
+    return m_result;
+  }
+
+  const size_t lcount() const {
+    return m_lines_read;
+  }
+
+  bool good() {
+    return m_csv_stream.good();
+  }
+
+ private:
+  Scope m_state{LINE};
+  std::istream& m_csv_stream;
+  std::string m_result;
+  size_t m_lines_read{0};
+};
+

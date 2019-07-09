@@ -1,5 +1,5 @@
 all:
-	g++ -o test_csvio test.cpp -I$(PWD)/../include -std=c++17
-	./test_csvio
+	g++ -o test_line_reader test_line_reader.cpp -I$(PWD)/../include -lgtest -lpthread -std=c++17
+	./test_line_reader
 clean:
-	rm test_csvio
+	rm test_line_reader
