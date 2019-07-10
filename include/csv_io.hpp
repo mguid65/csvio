@@ -266,7 +266,7 @@ public:
 
     while (m_csv_stream.good()) {
       m_csv_stream.get(*pos);
-      if (m_state == LINE && pos[0] == '\n') {
+      if (m_state == LINE && pos[0] == '\n' || pos[0] == EOF) {
         m_result.append(buf);
         pos = buf;
         std::fill(buf, buf + 1024, '\0');
@@ -275,15 +275,10 @@ public:
         m_state = QUOTE;
       } else if (m_state == QUOTE && pos[0] == '\"') {
         m_state = LINE;
-      } else if (m_state == QUOTE && pos[0] == EOF) {
-        std::cerr << "Unexpected EOF\n" << '\n';  // maybe change to do something else
+      } else if (m_state == QUOTE && !m_csv_stream.good()) {
+        std::cerr << "Unexpected EOF" << '\n';  // maybe change to do something else
         m_result = "";
 	return m_result;
-      } else if (m_state == LINE && pos[0] == EOF) {
-        m_result.append(buf);
-        pos = buf;
-        std::fill(buf, buf + 1024, '\0');
-        break;
       }
       pos++;
 
@@ -297,6 +292,7 @@ public:
       m_result.append(buf);
     }
     m_lines_read++;
+    m_state = LINE;
     return m_result;
   }
 
@@ -395,7 +391,6 @@ private:
    */
   void advance() {
     m_current_str_line = m_csv_line_reader.readline();
-    std::cout << m_current_str_line << '\n';
     parse_current_str();
   }
 

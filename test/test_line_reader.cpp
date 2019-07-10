@@ -93,7 +93,7 @@ TEST(CSVLineReaderTest, ReadOnePrematureEOF) {
   CSVLineReader csv_lr(data);
 
   EXPECT_EQ("", csv_lr.readline());
-  EXPECT_EQ(1u, csv_lr.lcount());
+  EXPECT_EQ(0u, csv_lr.lcount());
   EXPECT_EQ(false, csv_lr.good());
 }
 
@@ -134,6 +134,7 @@ TEST(CSVLineReaderTest, ReadTwoLinesCRLF) {
 } // namespace
 
 int main(int argc, char **argv) {
+  std::cout << EOF << '\n';
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
