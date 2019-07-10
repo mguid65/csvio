@@ -10,43 +10,43 @@ namespace {
 TEST(SplitFunctionTest, SplitEmptyStringToVector) {
   std::string to_split{""};
   std::vector<std::string> expected{""};
-  EXPECT_EQ(expected, VectorSplit::delimiter_split(to_split, ','));
+  EXPECT_EQ(expected, VectorSplit::delim_split_naive(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitSampleStringToVector) {
   std::string to_split{"a,b,c,d,e"};
   std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, VectorSplit::delimiter_split(to_split, ','));
+  EXPECT_EQ(expected, VectorSplit::delim_split_naive(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitEscEmptySVToVector) {
   std::string_view to_split{""};
   std::vector<std::string> expected{""};
-  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
+  EXPECT_EQ(expected, VectorSplit::delim_split_unescaped(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitEscSVToVector) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"a","b","c"};
-  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
+  EXPECT_EQ(expected, VectorSplit::delim_split_unescaped(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitEscSVToVectorNoUnescape) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"\"a\"","\"b\"","\"c\""};
-  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ',', false));
+  EXPECT_EQ(expected, VectorSplit::delim_split_escaped(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitEscSVToVectorWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::vector<std::string> expected{"a,","b,","c,"};
-  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
+  EXPECT_EQ(expected, VectorSplit::delim_split_unescaped(to_split, ','));
 }
 
 TEST(SplitFunctionTest, SplitEscSVToVectorNoUnescapeWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::vector<std::string> expected{"\"a,\"","\"b,\"","\"c,\""};
-  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ',', false));
+  EXPECT_EQ(expected, VectorSplit::delim_split_escaped(to_split, ','));
 }
 
 

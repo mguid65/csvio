@@ -8,6 +8,8 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <memory>
+#include <istream>
 
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
@@ -135,7 +137,7 @@ struct SplitFunction {
    *  \param delim delimiter to split on
    *  \return RowContainer of split csv fields
    */
-  static RowContainer<std::string> delimiter_split(const std::string& input, const char delim) {
+  static RowContainer<std::string> delim_split_naive(const std::string& input, const char delim) {
     static_assert(
         has_push_back<
             RowContainer<std::string>,
@@ -163,9 +165,9 @@ struct SplitFunction {
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
    *  \param unescape_output whether to unescape all fields in output
-   *  \return RowContainer of split csv fields
+   *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one emty string
    */
-  static RowContainer<std::string> delimiter_esc_split(std::string_view input, const char delim, bool unescape_output=true) {
+  static RowContainer<std::string> delim_split_escaped(std::string_view input, const char delim) {
     static_assert(
         has_push_back<
             RowContainer<std::string>,
@@ -227,21 +229,34 @@ struct SplitFunction {
       last_element.pop_back();
     }
 
-    if (unescape_output) for(auto& field : output) field = csvio::util::unescape(field);
-
     return output;
+  }
+
+  static RowContainer<std::string> delim_split_unescaped(std::string_view input, const char delim) {
+    RowContainer<std::string> result = delim_split_escaped(input, delim);
+    for(auto& field : result) field = csvio::util::unescape(field);
+    return result;
   }
 };
 
 using VectorSplit = SplitFunction<std::vector>;
 using ListSplit = SplitFunction<std::list>;
 
+/** \class CSVLineReader
+ *  \brief Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180
+ */
 class CSVLineReader {
 public:
   enum Scope { LINE, QUOTE };
 
+  /** \brief Construct a CSVLineReader from a reference to a std::istream
+   *  \param instream reference to a std::istream
+   */
   CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
 
+  /** \brief read a csv line
+   *  \return a string with the contents of the csv line
+   */
   std::string readline() {
     m_result.clear();
 
@@ -253,6 +268,8 @@ public:
       m_csv_stream.get(*pos);
       if (m_state == LINE && pos[0] == '\n') {
         m_result.append(buf);
+        pos = buf;
+        std::fill(buf, buf + 1024, '\0');
         break;
       } else if (m_state == LINE && pos[0] == '\"') {
         m_state = QUOTE;
@@ -261,10 +278,11 @@ public:
       } else if (m_state == QUOTE && pos[0] == EOF) {
         std::cerr << "Unexpected EOF\n" << '\n';  // maybe change to do something else
         m_result = "";
-        pos = buf;
-        break;
+	return m_result;
       } else if (m_state == LINE && pos[0] == EOF) {
         m_result.append(buf);
+        pos = buf;
+        std::fill(buf, buf + 1024, '\0');
         break;
       }
       pos++;
@@ -275,12 +293,21 @@ public:
         std::fill(buf, buf + 1024, '\0');
       }
     }
+    if (pos != buf) {
+      m_result.append(buf);
+    }
     m_lines_read++;
     return m_result;
   }
 
+  /** \brief Get number of csv lines read so far
+   *  \return number of csv lines read so far
+   */
   const size_t lcount() const { return m_lines_read; }
 
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
   bool good() { return m_csv_stream.good(); }
 
 private:
@@ -300,44 +327,84 @@ class ColumnMismatchException : public std::exception {
 // maybe implement a class which gives the option of returning a raw line in strict conformance to
 // RFC 4180 or in a mode where it only returns lines whether or not they are valid csv
 
+/** \class CSVReader
+ *  \brief Reader to read a stream as CSV
+ */
 template <template <class...> class RowContainer = std::vector, typename LineReader = CSVLineReader>
 class CSVReader {
 public:
-  CSVReader() {}
+  /** \brief Construct a CSVReader from a reference to a LineReader
+   *  \param instream reference to a std::istream
+   *  \param delimiter a character delimiter
+   *  \param split_func a function which describes how to split a csv row
+   *  \param has_header specify that this csv has a header
+   *  \param strict_columns specify that an exception should be thrown in case of a column length mismatch
+   */
   CSVReader(
-      std::istream& instream, const char delimiter = ',',
+      LineReader& line_reader, const char delimiter = ',',
       std::function<RowContainer<std::string>(std::string_view, const char)> split_func =
-          VectorSplit::delimiter_esc_split,
+          VectorSplit::delim_split_unescaped,
       bool has_header = false, bool strict_columns = true)
-      : m_csv_line_reader(instream),
+      : m_csv_line_reader(line_reader),
         m_delim(delimiter),
         m_split_func(split_func),
         m_has_header(has_header),
         m_strict_columns(strict_columns) {}
 
+  /** \brief destroy a CSVReader
+   *
+   *  Does nothing special currently
+   */
   ~CSVReader() {}
 
-  void set_delimiter(char delim) { m_delim = delim; }
+  /** \brief set the delimiter to a different character
+   *  \param delim new delimiter
+   */
+  void set_delimiter(const char delim) { m_delim = delim; }
+
+  /** \brief get the current delimiter
+   *  \return constant char delimiter value
+   */
   const char get_delimiter() const { return m_delim; }
 
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
   bool good() { return m_csv_line_reader.good(); }
 
+  /** \brief Get the csv headers if they exist
+   *  \return a reference to the RowContainer of headers, otherwise a RowContainer with one blank element
+   */
+  RowContainer<std::string>& get_header_names() { return m_header_names; }
+
+  /** \brief Return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
   RowContainer<std::string>& current() { return m_current; }
 
+  /** \brief Advance to the next row and return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
   RowContainer<std::string>& read() {
     advance();
     return current();
   }
 
 private:
+  /** \brief advance the current string and parse it
+   */
   void advance() {
     m_current_str_line = m_csv_line_reader.readline();
+    std::cout << m_current_str_line << '\n';
     parse_current_str();
   }
 
+  /** \brief parse the current string line to a RowContainer
+   */
   void parse_current_str() {
     if (m_current_str_line.empty()) {
       m_current.clear();
+      m_current.push_back("");
       return;
     }
     m_current = m_split_func(m_current_str_line, m_delim);
@@ -348,6 +415,8 @@ private:
     }
   }
 
+  /** \brief handle reading and parsing the header if has_header is true
+   */
   void handle_header() {
     m_header_names = m_split_func(m_current_str_line, m_delim);
     m_num_columns = m_header_names.size();
@@ -356,16 +425,17 @@ private:
   char m_delim;
 
   std::function<RowContainer<std::string>(std::string_view, const char)> m_split_func;
+
   bool m_has_header;
   bool m_strict_columns;
 
   std::string m_current_str_line;
   long m_num_columns{-1};
 
-  RowContainer<std::string> m_header_names;
-  RowContainer<std::string> m_current;
+  RowContainer<std::string> m_header_names{""};
+  RowContainer<std::string> m_current{""};
 
-  LineReader m_csv_line_reader;
+  LineReader& m_csv_line_reader;
 };
 
 /**

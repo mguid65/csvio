@@ -32,6 +32,15 @@ TEST(CSVLineReaderTest, ReadOneSampleCSVLine) {
   EXPECT_EQ(true, csv_lr.good());
 }
 
+TEST(CSVLineReaderTest, ReadOneSampleNoNewline) {
+  std::istringstream data("1,1,1,1,1,1,1,1");
+  CSVLineReader csv_lr(data);
+
+  EXPECT_EQ("1,1,1,1,1,1,1,1", csv_lr.readline());
+  EXPECT_EQ(1u, csv_lr.lcount());
+  EXPECT_EQ(false, csv_lr.good());
+}
+
 TEST(CSVLineReaderTest, CheckGood) {
   std::istringstream data("1,1,1,1,1,1,1,1\n");
   CSVLineReader csv_lr(data);
