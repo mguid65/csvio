@@ -9,7 +9,6 @@
 #include <string_view>
 #include <vector>
 
-
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
  */
@@ -20,17 +19,18 @@ struct has_push_back {
       "Second template parameter needs to be of function type.");
 };
 
+/** \class has_push_back
+ *  \brief Specialization of has_push_back
+ */
 template <typename C, typename Ret, typename... Args>
 struct has_push_back<C, Ret(Args...)> {
 private:
-
   /** \brief check if a type T has method push_back
    *  \return boolean whether T has a method push_back
    */
   template <typename T>
   static constexpr auto check(T*) -> typename std::is_same<
       decltype(std::declval<T>().push_back(std::declval<Args>()...)), Ret>::type;
-
 
   /** \brief overload which returns false
    *  \return false
@@ -61,9 +61,10 @@ namespace csvio::util {
  *  \param data string to escape
  *  \return escaped csv field if necessary, otherwise the string
  */
-inline std::string escape(std::string_view data, char delim=',', bool force_escape=false) {
+inline std::string escape(std::string_view data, char delim = ',', bool force_escape = false) {
   std::string result;
-  result.reserve(data.length()); // avoid lots of allocations by setting a reasonable initial allocation
+  result.reserve(
+      data.length());  // avoid lots of allocations by setting a reasonable initial allocation
 
   bool needs_escape{false};
   for (const char& c : data) {
@@ -74,7 +75,7 @@ inline std::string escape(std::string_view data, char delim=',', bool force_esca
         needs_escape = true;
         break;
       default:
-        if (c == delim) needs_escape = true; // special handle for alternative delimiters
+        if (c == delim) needs_escape = true;  // special handle for alternative delimiters
     }
     result.push_back(c);
   }
@@ -87,7 +88,6 @@ inline std::string escape(std::string_view data, char delim=',', bool force_esca
   return result;
 }
 
-
 /** \brief unescape a csv escaped string according to RFC 4180
  *
  *  Generally O(n) avg time and space complexity
@@ -99,7 +99,7 @@ inline std::string unescape(std::string_view data) {
   std::string result;
   int quotes_seen = 0;
 
-  if (data[0] == '\"') { // if the first char is a quote, then the string is assumed to be quoted
+  if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
     data = data.substr(1, data.size() - 2);
   }
 
@@ -122,23 +122,26 @@ inline std::string unescape(std::string_view data) {
 
 }  // namespace csvio::util
 
-
 /** \class SplitFunction
- *  \brief 
+ *  \brief Class of functions to split a csv row into a non map container
+ *
+ *  These functions assume the container has a push_back
  */
-template <typename RowContainer>
+template <template <class...> class RowContainer>
 struct SplitFunction {
-
-  /** \brief 
-   *  \param input
-   *  \param delim
-   *  \return
+  /** \brief Split string_view csv row based on a delimiter
+   *  \param input string_view to split by delimiter
+   *  \param delim delimiter to split on
+   *  \return RowContainer of split csv fields
    */
-  static RowContainer delimiter_split(std::string_view input, std::string_view delim) {
+  static RowContainer<std::string> delimiter_split(const std::string& input, const char delim) {
     static_assert(
-        has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
+        has_push_back<
+            RowContainer<std::string>,
+            void(const typename RowContainer<std::string>::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
-    RowContainer output;
+    RowContainer<std::string> output;
+
     size_t first = 0;
     while (first < input.size()) {
       const auto second = input.find_first_of(delim, first);
@@ -149,34 +152,124 @@ struct SplitFunction {
     return output;
   }
 
+  enum Scope { LINE, QUOTE };
 
-  /** \brief 
-   *  \param input
-   *  \param delim
-   *  \return
+  /** \brief Split string_view csv row based on a delimiter with escaped fields
+   *  \param input string_view to split by delimiter
+   *  \param delim delimiter to split on
+   *  \return RowContainer of split csv fields
    */
-  static RowContainer delimiter_esc_split(std::string_view input, std::string_view delim) {
+  static RowContainer<std::string> delimiter_esc_split(std::string_view input, const char delim) {
     static_assert(
-        has_push_back<RowContainer, void(const typename RowContainer::value_type&)>::value,
+        has_push_back<
+            RowContainer<std::string>,
+            void(const typename RowContainer<std::string>::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
-    RowContainer output;
+    RowContainer<std::string> output;
 
-    size_t first = 0;
-    while (first < input.size()) {
-      const auto second = input.find_first_of(delim, first);
-      if (first != second) output.push_back(input.substr(first, second - first));
-      if (second == std::string_view::npos) break;
-      first = second + 1;
+    Scope state{LINE};
+    char buf[256]{0};
+    char* buf_end = buf + 255;
+    char* pos = buf;
+
+    std::string chunk;
+    for (const auto& c : input) {
+      switch (state) {
+        case LINE:
+          switch (c) {
+            case '\"':
+              state = QUOTE;
+            default:
+              if (c == delim || c == '\n') {
+                chunk.append(buf);
+                output.push_back(chunk);
+                chunk.clear();
+                std::fill(buf, buf + 256, '\0');
+                pos = buf;
+              } else {
+                pos[0] = c;
+                pos++;
+              }
+          }
+          break;
+        case QUOTE:
+          switch (c) {
+            case '\"':
+              state = LINE;
+            default:
+              pos[0] = c;
+              pos++;
+          }
+          break;
+      }
+      if (pos > buf_end) {
+        chunk.append(buf);
+        std::fill(buf, buf + 256, '\0');
+        pos = buf;
+      }
     }
+    chunk.append(buf);
+    if (!chunk.empty()) output.push_back(chunk);
     return output;
   }
 };
 
-using VectorSplitSV = SplitFunction<std::vector<std::string_view>>;
-using VectorSplitS = SplitFunction<std::vector<std::string>>;
-using ListSplitSV = SplitFunction<std::list<std::string_view>>;
-using ListSplitS = SplitFunction<std::list<std::string>>;
+using VectorSplit = SplitFunction<std::vector>;
+using ListSplit = SplitFunction<std::list>;
 
+class CSVLineReader {
+public:
+  enum Scope { LINE, QUOTE };
+
+  CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
+
+  std::string readline() {
+    m_result.clear();
+
+    char buf[1024]{0};
+    char* buf_end = buf + 1023;
+    char* pos = buf;
+
+    while (m_csv_stream.good()) {
+      m_csv_stream.get(*pos);
+      if (m_state == LINE && pos[0] == '\n') {
+        m_result.append(buf);
+        break;
+      } else if (m_state == LINE && pos[0] == '\"') {
+        m_state = QUOTE;
+      } else if (m_state == QUOTE && pos[0] == '\"') {
+        m_state = LINE;
+      } else if (m_state == QUOTE && pos[0] == EOF) {
+        std::cerr << "Unexpected EOF\n" << '\n';  // maybe change to do something else
+        m_result = "";
+        pos = buf;
+        break;
+      } else if (m_state == LINE && pos[0] == EOF) {
+        m_result.append(buf);
+        break;
+      }
+      pos++;
+
+      if (pos >= buf_end) {
+        pos = buf;
+        m_result.append(buf);
+        std::fill(buf, buf + 1024, '\0');
+      }
+    }
+    m_lines_read++;
+    return m_result;
+  }
+
+  const size_t lcount() const { return m_lines_read; }
+
+  bool good() { return m_csv_stream.good(); }
+
+private:
+  Scope m_state{LINE};
+  std::istream& m_csv_stream;
+  std::string m_result;
+  size_t m_lines_read{0};
+};
 
 /** \class ColumnMismatchException
  *  \brief exception to describe mismatch in number of csv columns
@@ -185,44 +278,41 @@ class ColumnMismatchException : public std::exception {
   virtual const char* what() const throw() { return "CSV column number mismatch detected"; }
 } ColumnMismatchException;
 
-// maybe implement a class which gives the option of returning a raw line in strict conformance to RFC 4180 or
-// in a mode where it only returns lines whether or not they are valid csv
+// maybe implement a class which gives the option of returning a raw line in strict conformance to
+// RFC 4180 or in a mode where it only returns lines whether or not they are valid csv
 
-
-template <typename RowContainer = std::vector<std::string_view>>
+template <template <class...> class RowContainer = std::vector, typename LineReader = CSVLineReader>
 class CSVReader {
 public:
   CSVReader() {}
   CSVReader(
-      const std::string& filename, const std::string& delimiter = ",",
-      std::ios_base::openmode flags = std::ios::in,
-      std::function<RowContainer(std::string_view, std::string_view)> split_func =
-          VectorSplitSV::delimiter_split,
+      std::istream& instream, const char delimiter = ',',
+      std::function<RowContainer<std::string>(std::string_view, const char)> split_func =
+          VectorSplit::delimiter_esc_split,
       bool has_header = false, bool strict_columns = true)
-      : m_infile(filename, flags),
-        m_filename(filename),
+      : m_csv_line_reader(instream),
         m_delim(delimiter),
         m_split_func(split_func),
         m_has_header(has_header),
         m_strict_columns(strict_columns) {}
 
-  ~CSVReader() { m_infile.close(); }
-  void set_delimiter(std::string_view sv) { m_delim = sv; }
-  std::string_view get_delimiter() { return m_delim; }
-  const std::string_view get_delimiter() const { return m_delim; }
+  ~CSVReader() {}
 
-  bool good() { return m_infile.good(); }
+  void set_delimiter(char delim) { m_delim = delim; }
+  const char get_delimiter() const { return m_delim; }
 
-  RowContainer& current() { return m_current; }
+  bool good() { return m_csv_line_reader.good(); }
 
-  RowContainer& read() {
+  RowContainer<std::string>& current() { return m_current; }
+
+  RowContainer<std::string>& read() {
     advance();
     return current();
   }
 
 private:
   void advance() {
-    std::getline(m_infile, m_current_str_line);
+    m_current_str_line = m_csv_line_reader.readline();
     parse_current_str();
   }
 
@@ -244,22 +334,23 @@ private:
     m_num_columns = m_header_names.size();
   }
 
-  std::ifstream m_infile;
-  std::string_view m_filename;
-  std::string_view m_delim;
+  char m_delim;
 
-  std::function<RowContainer(std::string_view, std::string_view)> m_split_func;
+  std::function<RowContainer<std::string>(std::string_view, const char)> m_split_func;
   bool m_has_header;
   bool m_strict_columns;
 
   std::string m_current_str_line;
   long m_num_columns{-1};
 
-  RowContainer m_header_names;
-  RowContainer m_current;
+  RowContainer<std::string> m_header_names;
+  RowContainer<std::string> m_current;
+
+  LineReader m_csv_line_reader;
 };
 
-template <typename RowContainer = std::vector<std::string_view>>
+/**
+template <template<class...> class RowContainer = std::vector>
 class CSVWriter {
 public:
   CSVWriter() {}
@@ -347,65 +438,4 @@ private:
 
   RowContainer m_current;
 };
-
-class CSVLineReader {
- public:
-  enum Scope {
-    LINE,
-    QUOTE
-  };
-
-  CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
-
-  std::string readline() {
-      m_result.clear();
-
-      char buf[1024]{0};
-      char * buf_end = buf + 1023;
-      char * pos = buf;
-
-      while(m_csv_stream.good()) {
-        m_csv_stream.get(*pos);
-        if (m_state == LINE && pos[0] == '\n') {
-          m_result.append(buf);
-          break;
-        } else if (m_state == LINE && pos[0] == '\"') {
-          m_state = QUOTE;
-        } else if (m_state == QUOTE && pos[0] == '\"') {
-          m_state = LINE;
-        } else if (m_state == QUOTE && pos[0] == EOF) {
-          std::cerr << "Unexpected EOF\n" << '\n'; // maybe change to do something else
-          m_result = "";
-          pos = buf;
-          break;
-        } else if (m_state == LINE && pos[0] == EOF) {
-          m_result.append(buf);
-          break;
-        }
-        pos++;
-
-        if(pos >= buf_end) {
-          pos = buf;
-          m_result.append(buf);
-          std::fill(buf, buf + 1024, '\0');
-        }
-      }
-      m_lines_read++;
-    return m_result;
-  }
-
-  const size_t lcount() const {
-    return m_lines_read;
-  }
-
-  bool good() {
-    return m_csv_stream.good();
-  }
-
- private:
-  Scope m_state{LINE};
-  std::istream& m_csv_stream;
-  std::string m_result;
-  size_t m_lines_read{0};
-};
-
+*/
