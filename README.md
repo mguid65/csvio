@@ -1,12 +1,19 @@
 # CSVIO
 
-experimental csv reader/writer with some modern c++ features
+experimental header only csv io classes using some modern c++ features
 
-plan to make more stl like and to follow the ABNF grammar
+partial support for RFC 4180
 
+RFC 4180 specifies that CR and LF must be escaped within fields
 
-does not currently support:
-  quoted fields
-  escaped characters
-  header inference
-  
+## Features
+  -Reading/Writing std::iostreams
+  -Alternate delimiters
+  -Custom Split Functions
+  -Custom Line Readers
+  -Custom CSV Row Containers
+  -Custom Escape Utilities
+
+## Work In Progress
+  -header inference
+  -associative row containers
