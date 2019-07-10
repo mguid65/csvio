@@ -71,6 +71,7 @@ inline std::string escape(std::string_view data, char delim = ',', bool force_es
     switch (c) {
       case '\"':
         result.push_back(c);
+      case '\r':
       case '\n':
         needs_escape = true;
         break;
@@ -149,17 +150,22 @@ struct SplitFunction {
       if (second == std::string_view::npos) break;
       first = second + 1;
     }
+    if(output.empty()) output.push_back("");
     return output;
   }
 
   enum Scope { LINE, QUOTE };
 
   /** \brief Split string_view csv row based on a delimiter with escaped fields
+   *
+   *  Please Refactor
+   *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
+   *  \param unescape_output whether to unescape all fields in output
    *  \return RowContainer of split csv fields
    */
-  static RowContainer<std::string> delimiter_esc_split(std::string_view input, const char delim) {
+  static RowContainer<std::string> delimiter_esc_split(std::string_view input, const char delim, bool unescape_output=true) {
     static_assert(
         has_push_back<
             RowContainer<std::string>,
@@ -173,6 +179,7 @@ struct SplitFunction {
     char* pos = buf;
 
     std::string chunk;
+    int num_cols{0};
     for (const auto& c : input) {
       switch (state) {
         case LINE:
@@ -181,8 +188,11 @@ struct SplitFunction {
               state = QUOTE;
             default:
               if (c == delim || c == '\n') {
+                if (c == delim) num_cols++;
                 chunk.append(buf);
+
                 output.push_back(chunk);
+
                 chunk.clear();
                 std::fill(buf, buf + 256, '\0');
                 pos = buf;
@@ -208,8 +218,17 @@ struct SplitFunction {
         pos = buf;
       }
     }
+
     chunk.append(buf);
-    if (!chunk.empty()) output.push_back(chunk);
+    if (!chunk.empty() || output.size() == num_cols) output.push_back(chunk);
+
+    auto& last_element = output.back();
+    if (last_element.back() == '\r') { // remove trailing carriage return
+      last_element.pop_back();
+    }
+
+    if (unescape_output) for(auto& field : output) field = csvio::util::unescape(field);
+
     return output;
   }
 };

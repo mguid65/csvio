@@ -9,7 +9,7 @@ namespace {
 
 TEST(SplitFunctionTest, SplitEmptyStringToVector) {
   std::string to_split{""};
-  std::vector<std::string> expected{};
+  std::vector<std::string> expected{""};
   EXPECT_EQ(expected, VectorSplit::delimiter_split(to_split, ','));
 }
 
@@ -19,11 +19,37 @@ TEST(SplitFunctionTest, SplitSampleStringToVector) {
   EXPECT_EQ(expected, VectorSplit::delimiter_split(to_split, ','));
 }
 
-TEST(SplitFunctionTest, SplitEscSVToVector) {
-  std::string_view to_split{"\"a\",\"b\",\"c\""};
-  std::vector<std::string> expected{"\"a\"","\"b\"","\"c\""};
+TEST(SplitFunctionTest, SplitEscEmptySVToVector) {
+  std::string_view to_split{""};
+  std::vector<std::string> expected{""};
   EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
 }
+
+TEST(SplitFunctionTest, SplitEscSVToVector) {
+  std::string_view to_split{"\"a\",\"b\",\"c\""};
+  std::vector<std::string> expected{"a","b","c"};
+  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
+}
+
+TEST(SplitFunctionTest, SplitEscSVToVectorNoUnescape) {
+  std::string_view to_split{"\"a\",\"b\",\"c\""};
+  std::vector<std::string> expected{"\"a\"","\"b\"","\"c\""};
+  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ',', false));
+}
+
+TEST(SplitFunctionTest, SplitEscSVToVectorWithCommas) {
+  std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
+  std::vector<std::string> expected{"a,","b,","c,"};
+  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ','));
+}
+
+TEST(SplitFunctionTest, SplitEscSVToVectorNoUnescapeWithCommas) {
+  std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
+  std::vector<std::string> expected{"\"a,\"","\"b,\"","\"c,\""};
+  EXPECT_EQ(expected, VectorSplit::delimiter_esc_split(to_split, ',', false));
+}
+
+
 
 } // namespace
 

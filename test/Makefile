@@ -1,4 +1,4 @@
-CXXFLAGS = -I$(PWD)/../include -lgtest -lpthread -std=c++17 
+CXXFLAGS = -I$(PWD)/../include -lgtest -lpthread -std=c++17 -ggdb3
 
 
 all: bin_dir
