@@ -1,5 +1,5 @@
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
 #include "csv_io.hpp"
 #include "gtest/gtest.h"
@@ -40,8 +40,9 @@ TEST(CSVReaderTest, ReadOneCSVLine) {
 }
 
 TEST(CSVReaderTest, ColumnMismatchExceptionTest) {
-  std::istringstream instream("a,b,c,d,e\n"
-                              "a,b,c,d\n");
+  std::istringstream instream(
+      "a,b,c,d,e\n"
+      "a,b,c,d\n");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader csv_reader(csv_lr);
 
@@ -61,7 +62,8 @@ TEST(CSVReaderTest, ReadOneEscapedCSVLine) {
 }
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLineWithEscapedQuotes) {
-  std::istringstream instream("\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
+  std::istringstream instream(
+      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader csv_reader(csv_lr);
 
@@ -91,7 +93,8 @@ TEST(CSVReaderTest, ReadOneEscapedCSVLineAltDelim) {
 }
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelim) {
-  std::istringstream instream("\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
+  std::istringstream instream(
+      "\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader csv_reader(csv_lr, '|');
 
@@ -134,8 +137,9 @@ TEST(CSVReaderTest, ReadOneCSVLineAltContainer) {
 }
 
 TEST(CSVReaderTest, ColumnMismatchExceptionTestAltContainer) {
-  std::istringstream instream("a,b,c,d,e\n"
-                              "a,b,c,d\n");
+  std::istringstream instream(
+      "a,b,c,d,e\n"
+      "a,b,c,d\n");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader<std::list> csv_reader(csv_lr);
 
@@ -155,7 +159,8 @@ TEST(CSVReaderTest, ReadOneEscapedCSVLineAltContainer) {
 }
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainer) {
-  std::istringstream instream("\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
+  std::istringstream instream(
+      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader<std::list> csv_reader(csv_lr);
 
@@ -185,7 +190,8 @@ TEST(CSVReaderTest, ReadOneEscapedCSVLineAltDelimAltContainer) {
 }
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelimAltContainer) {
-  std::istringstream instream("\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
+  std::istringstream instream(
+      "\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader<std::list> csv_reader(csv_lr, '|');
 
@@ -194,10 +200,9 @@ TEST(CSVReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelimAltContainer) 
   EXPECT_EQ(false, csv_reader.good());
 }
 
-} // namespace
+}  // namespace
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

@@ -40,10 +40,9 @@ TEST(EscapeTest, EscapeStringForceEscape) {
   EXPECT_EQ("\"somevalue\"", csvio::util::escape(to_escape, ',', true));
 }
 
-} // namespace
+}  // namespace
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

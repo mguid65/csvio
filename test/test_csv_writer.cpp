@@ -1,7 +1,7 @@
-#include <string>
-#include <sstream>
-#include <vector>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 #include "csv_io.hpp"
 #include "gtest/gtest.h"
 
@@ -37,12 +37,9 @@ TEST(CSVWriterTest, WriteVectorOfQuotedSampleStrings) {
   EXPECT_EQ(true, csv_writer.good());
 }
 
+}  // namespace
 
-
-} // namespace
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-
