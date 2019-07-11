@@ -11,6 +11,11 @@
 #include <memory>
 #include <istream>
 
+#ifdef __GNUC__
+#define likely(expr)    (__builtin_expect(!!(expr), 1))
+#define unlikely(expr)  (__builtin_expect(!!(expr), 0))
+#endif
+
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
  */
@@ -448,93 +453,111 @@ private:
 
 };
 
-/**
+class CSVLineWriter {
+ public:
+  CSVLineWriter(std::ofstream& outstream) : m_outstream(outstream) {}
+
+  void writeline(std::string_view line) {
+    if (good()) m_outstream.write(line.data(), line.length());
+  }
+
+  bool good() { return m_outstream.good(); }
+
+  const size_t lcount() const { return m_lines_written; }
+ private:
+  std::ofstream& m_outstream;
+  size_t m_lines_written{0};
+};
+
 template <template<class...> class RowContainer = std::vector>
+struct CSVOutputFormatter {
+  static std::string delim_join_escaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
+    std::string result;
+    result.reserve(csv_row.size() * 2);
+
+    bool first{true};
+    for (auto& s: csv_row) {
+#ifdef __GNUC__
+      if(unlikely(first)) {
+#else
+      if(first) {
+#endif
+        result.append(csvio::util::escape(s));
+        first = false;
+      } else {
+        result.push_back(delim);
+        result.append(csvio::util::escape(s));
+      }
+    }
+    result.append("\r\n");
+    return result;
+  }
+
+  static std::string delim_join_unescaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
+    std::string result;
+    result.reserve(csv_row.size() * 2);
+
+    bool first{true};
+    for (auto& s: csv_row) {
+#ifdef __GNUC__
+      if(unlikely(first)) {
+#else
+      if(first) {
+#endif
+        result.append(s);
+        first = false;
+      } else {
+        result.push_back(delim);
+        result.append(s);
+      }
+    }
+    result.append("\r\n");
+    return result;
+  }
+};
+
+template <template<class...> class RowContainer = std::vector, class LineWriter = CSVLineWriter>
 class CSVWriter {
 public:
-  CSVWriter() {}
   CSVWriter(
-      const std::string& filename, const std::string& delimiter = ",",
-      std::ios_base::openmode flags = std::ios::out, bool strict_columns = true)
-      : m_outfile(filename, flags),
-        m_filename(filename),
+      LineWriter& line_writer,
+      const char delimiter = ',',
+      bool strict_columns = true, std::function<std::string(RowContainer<std::string>, const char)> format_func = CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
+      : m_csv_line_writer(line_writer),
         m_delim(delimiter),
-        m_strict_columns(strict_columns) {}
+        m_strict_columns(strict_columns),
+        m_csv_output_formatter(format_func) {}
 
-  ~CSVWriter() { m_outfile.close(); }
-  void set_delimiter(std::string_view sv) { m_delim = sv; }
-  std::string_view get_delimiter() { return m_delim; }
-  const std::string_view get_delimiter() const { return m_delim; }
+  void set_delimiter(const char delim) { m_delim = delim; }
+  const char get_delimiter() const { return m_delim; }
 
-  bool good() { return m_outfile.good(); }
+  bool good() { return m_outstream.good(); }
 
-  void write_header(const RowContainer& header) {
+  void write_header(const RowContainer<std::string>& header) {
     if (header.empty()) return;
     m_num_columns = header.size();
-    bool first = true;
-    for (auto& s : header) {
-      if (!first) {
-        m_outfile << m_delim << s;
-      } else {
-        m_outfile << s;
-        first = false;
-      }
-    }
-    m_outfile << "\r\n";
+    m_outstream.write(m_csv_output_formatter(header));
   }
 
-  void write_row() {
-    if (m_current.empty()) return;
-    if (m_num_columns == -1) {
-      m_num_columns = m_current.size();
-    } else if (m_strict_columns && (m_current.size() != m_num_columns)) {
-      throw ColumnMismatchException;
-    }
-    bool first = true;
-    for (auto& s : m_current) {
-      if (!first) {
-        m_outfile << m_delim << s;
-      } else {
-        m_outfile << s;
-        first = false;
-      }
-    }
-    m_outfile << "\r\n";
-  }
-
-  void write_row(const RowContainer& values) {
+  void write(const RowContainer<std::string>& values) {
     if (values.empty()) return;
     if (m_num_columns == -1) {
       m_num_columns = values.size();
     } else if (m_strict_columns && (values.size() != m_num_columns)) {
-      throw ColumnMismatchException;
+      throw ColumnMismatchException();
     }
-    bool first = true;
-    for (auto& s : values) {
-      if (!first) {
-        m_outfile << m_delim << s;
-      } else {
-        m_outfile << s;
-        first = false;
-      }
-    }
-    m_outfile << "\r\n";
+    m_outstream.write(m_csv_output_formatter(values));
   }
 
-  void write_raw_csv_row(std::string_view raw_csv) { m_outfile << raw_csv << "\r\n"; }
-
-  void push_back(std::string_view sv) { m_current.push_back(sv); }
-
-  void next_row() { m_current.clear(); }
-
 private:
-  std::ofstream m_outfile;
-  std::string_view m_filename;
-  std::string_view m_delim;
+  std::ofstream m_outstream;
+  char m_delim;
 
   bool m_strict_columns;
   long m_num_columns{-1};
 
-  RowContainer m_current;
+  std::function<std::string(RowContainer<std::string>, const char)> m_csv_output_formatter;
+
+  LineWriter& m_csv_line_writer;
 };
-*/
+
