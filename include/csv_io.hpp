@@ -16,6 +16,19 @@
 #define unlikely(expr)  (__builtin_expect(!!(expr), 0))
 #endif
 
+namespace csvio::exceptional {
+/** \class ColumnMismatchException
+ *  \brief exception to describe mismatch in number of csv columns
+ */
+class ColumnMismatchException : public std::exception {
+ public:
+  ColumnMismatchException() {}
+  virtual const char* what() const noexcept { return "CSV column number mismatch detected"; }
+};
+
+} // namespace csvio::exceptional
+
+namespace csvio::util {
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
  */
@@ -51,8 +64,6 @@ public:
   static constexpr bool value = type::value;
 };
 
-namespace csvio::util {
-
 /** \brief function to escape characters in csv fields according to RFC 4180
  *
  *  Source: https://tools.ietf.org/html/rfc4180
@@ -66,6 +77,8 @@ namespace csvio::util {
  *  Generally O(n) avg time and space complexity
  *
  *  \param data string to escape
+ *  \param delim used to check if a delimiter is in the field. if so, it should be escaped
+ *  \param force_escape wrap the string in quotes even if not needed
  *  \return escaped csv field if necessary, otherwise the string
  */
 inline std::string escape(std::string_view data, char delim = ',', bool force_escape = false) {
@@ -128,15 +141,15 @@ inline std::string unescape(std::string_view data) {
   return result;
 }
 
-}  // namespace csvio::util
+enum CSVParserScope { LINE, QUOTE };
 
-/** \class SplitFunction
- *  \brief Class of functions to split a csv row into a non map container
+/** \class CSVInputParser
+ *  \brief Class of functions to parse a csv row into a non map container
  *
- *  These functions assume the container has a push_back
+ *  These functions assume the container has a push_back method
  */
 template <template <class...> class RowContainer>
-struct SplitFunction {
+struct CSVInputParser {
   /** \brief Split string_view csv row based on a delimiter
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
@@ -161,11 +174,9 @@ struct SplitFunction {
     return output;
   }
 
-  enum Scope { LINE, QUOTE };
-
   /** \brief Split string_view csv row based on a delimiter with escaped fields
    *
-   *  Please Refactor
+   *  TODO(mguid65) Please Refactor
    *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
@@ -180,7 +191,7 @@ struct SplitFunction {
         "The template parameter needs to be a container type with an push_back function.");
     RowContainer<std::string> output;
 
-    Scope state{LINE};
+    CSVParserScope state{LINE};
     char buf[256]{0};
     char* buf_end = buf + 255;
     char* pos = buf;
@@ -239,21 +250,63 @@ struct SplitFunction {
 
   static RowContainer<std::string> delim_split_unescaped(std::string_view input, const char delim) {
     RowContainer<std::string> result = delim_split_escaped(input, delim);
-    for(auto& field : result) field = csvio::util::unescape(field);
+    for(auto& field : result) field = unescape(field);
     return result;
   }
 };
 
-using VectorSplit = SplitFunction<std::vector>;
-using ListSplit = SplitFunction<std::list>;
+template <template<class...> class RowContainer = std::vector>
+struct CSVOutputFormatter {
+  static std::string delim_join_escaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
+    std::string result;
+    result.reserve(csv_row.size() * 2);
+
+    bool first{true};
+    for (auto& s: csv_row) {
+#ifdef __GNUC__
+      if(unlikely(first)) {
+#else
+      if(first) {
+#endif
+        result.append(escape(s));
+        first = false;
+      } else {
+        result.push_back(delim);
+        result.append(escape(s));
+      }
+    }
+    result.append("\r\n");
+    return result;
+  }
+
+  static std::string delim_join_unescaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
+    std::string result;
+    result.reserve(csv_row.size() * 2);
+
+    bool first{true};
+    for (auto& s: csv_row) {
+#ifdef __GNUC__
+      if(unlikely(first)) {
+#else
+      if(first) {
+#endif
+        result.append(s);
+        first = false;
+      } else {
+        result.push_back(delim);
+        result.append(s);
+      }
+    }
+    result.append("\r\n");
+    return result;
+  }
+};
 
 /** \class CSVLineReader
  *  \brief Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180
  */
 class CSVLineReader {
 public:
-  enum Scope { LINE, QUOTE };
-
   /** \brief Construct a CSVLineReader from a reference to a std::istream
    *  \param instream reference to a std::istream
    */
@@ -312,28 +365,36 @@ public:
   bool good() { return m_csv_stream.good(); }
 
 private:
-  Scope m_state{LINE};
+  CSVParserScope m_state{LINE};
   std::istream& m_csv_stream;
   std::string m_result;
   size_t m_lines_read{0};
 };
 
-/** \class ColumnMismatchException
- *  \brief exception to describe mismatch in number of csv columns
- */
-class ColumnMismatchException : public std::exception {
+class CSVLineWriter {
  public:
-  ColumnMismatchException() {}
-  virtual const char* what() const noexcept { return "CSV column number mismatch detected"; }
+  CSVLineWriter(std::ofstream& outstream) : m_outstream(outstream) {}
+
+  void writeline(std::string_view line) {
+    if (good()) m_outstream.write(line.data(), line.length());
+  }
+
+  bool good() { return m_outstream.good(); }
+
+  const size_t lcount() const { return m_lines_written; }
+ private:
+  std::ofstream& m_outstream;
+  size_t m_lines_written{0};
 };
 
-// maybe implement a class which gives the option of returning a raw line in strict conformance to
-// RFC 4180 or in a mode where it only returns lines whether or not they are valid csv
+}  // namespace csvio::util
+
+namespace csvio {
 
 /** \class CSVReader
  *  \brief Reader to read a stream as CSV
  */
-template <template <class...> class RowContainer = std::vector, typename LineReader = CSVLineReader>
+template <template <class...> class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader>
 class CSVReader {
 public:
   /** \brief Construct a CSVReader from a reference to a generic LineReader
@@ -346,7 +407,7 @@ public:
   CSVReader(
       LineReader& line_reader, const char delimiter = ',',
       bool has_header = false, bool strict_columns = true, std::function<RowContainer<std::string>(std::string_view, const char)> split_func =
-          SplitFunction<RowContainer>::delim_split_unescaped)
+          csvio::util::CSVInputParser<RowContainer>::delim_split_unescaped)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
         m_has_header(has_header),
@@ -395,7 +456,7 @@ public:
     try {
       advance();
       return current();
-    } catch (ColumnMismatchException& e) {
+    } catch (csvio::exceptional::ColumnMismatchException& e) {
       throw;
     }
   }
@@ -407,7 +468,7 @@ private:
     m_current_str_line = m_csv_line_reader.readline();
     try {
       parse_current_str();
-    } catch (ColumnMismatchException& e) {
+    } catch (csvio::exceptional::ColumnMismatchException& e) {
       throw;
     }
   }
@@ -425,7 +486,7 @@ private:
     if (m_num_columns == -1) {
       m_num_columns = m_current.size();
     } else if (m_strict_columns && (m_current.size() != m_num_columns)) {
-      throw ColumnMismatchException();
+      throw csvio::exceptional::ColumnMismatchException();
     }
   }
 
@@ -453,76 +514,13 @@ private:
 
 };
 
-class CSVLineWriter {
- public:
-  CSVLineWriter(std::ofstream& outstream) : m_outstream(outstream) {}
-
-  void writeline(std::string_view line) {
-    if (good()) m_outstream.write(line.data(), line.length());
-  }
-
-  bool good() { return m_outstream.good(); }
-
-  const size_t lcount() const { return m_lines_written; }
- private:
-  std::ofstream& m_outstream;
-  size_t m_lines_written{0};
-};
-
-template <template<class...> class RowContainer = std::vector>
-struct CSVOutputFormatter {
-  static std::string delim_join_escaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
-    std::string result;
-    result.reserve(csv_row.size() * 2);
-
-    bool first{true};
-    for (auto& s: csv_row) {
-#ifdef __GNUC__
-      if(unlikely(first)) {
-#else
-      if(first) {
-#endif
-        result.append(csvio::util::escape(s));
-        first = false;
-      } else {
-        result.push_back(delim);
-        result.append(csvio::util::escape(s));
-      }
-    }
-    result.append("\r\n");
-    return result;
-  }
-
-  static std::string delim_join_unescaped_fmt(RowContainer<std::string>& csv_row, const char delim) {
-    std::string result;
-    result.reserve(csv_row.size() * 2);
-
-    bool first{true};
-    for (auto& s: csv_row) {
-#ifdef __GNUC__
-      if(unlikely(first)) {
-#else
-      if(first) {
-#endif
-        result.append(s);
-        first = false;
-      } else {
-        result.push_back(delim);
-        result.append(s);
-      }
-    }
-    result.append("\r\n");
-    return result;
-  }
-};
-
-template <template<class...> class RowContainer = std::vector, class LineWriter = CSVLineWriter>
+template <template<class...> class RowContainer = std::vector, class LineWriter = csvio::util::CSVLineWriter>
 class CSVWriter {
 public:
   CSVWriter(
       LineWriter& line_writer,
       const char delimiter = ',',
-      bool strict_columns = true, std::function<std::string(RowContainer<std::string>, const char)> format_func = CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
+      bool strict_columns = true, std::function<std::string(RowContainer<std::string>, const char)> format_func = csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
         m_strict_columns(strict_columns),
@@ -544,7 +542,7 @@ public:
     if (m_num_columns == -1) {
       m_num_columns = values.size();
     } else if (m_strict_columns && (values.size() != m_num_columns)) {
-      throw ColumnMismatchException();
+      throw csvio::exceptional::ColumnMismatchException();
     }
     m_outstream.write(m_csv_output_formatter(values));
   }
@@ -561,3 +559,4 @@ private:
   LineWriter& m_csv_line_writer;
 };
 
+} // namespace csvio

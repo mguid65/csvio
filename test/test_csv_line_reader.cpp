@@ -7,7 +7,7 @@ namespace {
 
 TEST(CSVLineReaderTest, ConstructorFromIStream) {
   std::istringstream data("");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ(0u, csv_lr.lcount());
   EXPECT_EQ(true, csv_lr.good());
@@ -16,7 +16,7 @@ TEST(CSVLineReaderTest, ConstructorFromIStream) {
 
 TEST(CSVLineReaderTest, ReadOneBlankLine) {
   std::istringstream data("");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
@@ -25,7 +25,7 @@ TEST(CSVLineReaderTest, ReadOneBlankLine) {
 
 TEST(CSVLineReaderTest, ReadOneSampleCSVLine) {
   std::istringstream data("1,1,1,1,1,1,1,1\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
@@ -34,7 +34,7 @@ TEST(CSVLineReaderTest, ReadOneSampleCSVLine) {
 
 TEST(CSVLineReaderTest, ReadOneSampleNoNewline) {
   std::istringstream data("1,1,1,1,1,1,1,1");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("1,1,1,1,1,1,1,1", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
@@ -43,7 +43,7 @@ TEST(CSVLineReaderTest, ReadOneSampleNoNewline) {
 
 TEST(CSVLineReaderTest, CheckGood) {
   std::istringstream data("1,1,1,1,1,1,1,1\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
   EXPECT_EQ("", csv_lr.readline());
@@ -54,7 +54,7 @@ TEST(CSVLineReaderTest, CheckGood) {
 TEST(CSVLineReaderTest, ReadTwoSampleCSVLines) {
   std::istringstream data("1,1,1,1,1,1,1,1\n"
                           "2,2,2,2,2,2,2,2\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
   EXPECT_EQ("2,2,2,2,2,2,2,2\n", csv_lr.readline());
@@ -64,7 +64,7 @@ TEST(CSVLineReaderTest, ReadTwoSampleCSVLines) {
 
 TEST(CSVLineReaderTest, ReadOneSampleCSVLineAllNewLines) {
   std::istringstream data("\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\"\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\"\n", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
@@ -77,7 +77,7 @@ TEST(CSVLineReaderTest, ReadOneSampleLineHardParse) {
                           "ee\"\"\",\"\"\"fo\n"
                           "u\"\"r\"\"\",5,6,7,8\n");
 
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("\"\"\"one\"\"\",\"tw\n"
             "o\",\"\"\"th,r\n"
@@ -90,7 +90,7 @@ TEST(CSVLineReaderTest, ReadOneSampleLineHardParse) {
 
 TEST(CSVLineReaderTest, ReadOnePrematureEOF) {
   std::istringstream data("1,1,1,\"1\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("", csv_lr.readline());
   EXPECT_EQ(0u, csv_lr.lcount());
@@ -105,7 +105,7 @@ TEST(CSVLineReaderTest, ReadMultiMixed) {
                           "o\",\"\"\"th,r\n"
                           "ee\"\"\",\"\"\"fo\n"
                           "u\"\"r\"\"\",5,6,7,8\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\"\n", csv_lr.readline());
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
@@ -122,7 +122,7 @@ TEST(CSVLineReaderTest, ReadMultiMixed) {
 TEST(CSVLineReaderTest, ReadTwoLinesCRLF) {
   std::istringstream data("1,1,1,1,1,1,1,1\r\n"
                           "2,2,2,2,2,2,2,2\r\n");
-  CSVLineReader csv_lr(data);
+  csvio::util::CSVLineReader csv_lr(data);
 
   EXPECT_EQ("1,1,1,1,1,1,1,1\r\n", csv_lr.readline());
   EXPECT_EQ("2,2,2,2,2,2,2,2\r\n", csv_lr.readline());
