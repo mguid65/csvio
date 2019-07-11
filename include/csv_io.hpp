@@ -317,8 +317,10 @@ private:
  *  \brief exception to describe mismatch in number of csv columns
  */
 class ColumnMismatchException : public std::exception {
-  virtual const char* what() const throw() { return "CSV column number mismatch detected"; }
-} ColumnMismatchException;
+ public:
+  ColumnMismatchException() {}
+  virtual const char* what() const noexcept { return "CSV column number mismatch detected"; }
+};
 
 // maybe implement a class which gives the option of returning a raw line in strict conformance to
 // RFC 4180 or in a mode where it only returns lines whether or not they are valid csv
@@ -329,23 +331,26 @@ class ColumnMismatchException : public std::exception {
 template <template <class...> class RowContainer = std::vector, typename LineReader = CSVLineReader>
 class CSVReader {
 public:
-  /** \brief Construct a CSVReader from a reference to a LineReader
-   *  \param instream reference to a std::istream
+  /** \brief Construct a CSVReader from a reference to a generic LineReader
+   *  \param line_reader reference to a LineReader
    *  \param delimiter a character delimiter
-   *  \param split_func a function which describes how to split a csv row
    *  \param has_header specify that this csv has a header
    *  \param strict_columns specify that an exception should be thrown in case of a column length mismatch
+   *  \param split_func a function which describes how to split a csv row
    */
   CSVReader(
       LineReader& line_reader, const char delimiter = ',',
-      std::function<RowContainer<std::string>(std::string_view, const char)> split_func =
-          VectorSplit::delim_split_unescaped,
-      bool has_header = false, bool strict_columns = true)
+      bool has_header = false, bool strict_columns = true, std::function<RowContainer<std::string>(std::string_view, const char)> split_func =
+          SplitFunction<RowContainer>::delim_split_unescaped)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
-        m_split_func(split_func),
         m_has_header(has_header),
-        m_strict_columns(strict_columns) {}
+        m_strict_columns(strict_columns),
+        m_split_func(split_func) {
+    if (m_has_header) {
+      handle_header();
+    }
+  }
 
   /** \brief destroy a CSVReader
    *
@@ -382,8 +387,12 @@ public:
    *  \return a reference to the current RowContainer
    */
   RowContainer<std::string>& read() {
-    advance();
-    return current();
+    try {
+      advance();
+      return current();
+    } catch (ColumnMismatchException& e) {
+      throw;
+    }
   }
 
 private:
@@ -391,7 +400,11 @@ private:
    */
   void advance() {
     m_current_str_line = m_csv_line_reader.readline();
-    parse_current_str();
+    try {
+      parse_current_str();
+    } catch (ColumnMismatchException& e) {
+      throw;
+    }
   }
 
   /** \brief parse the current string line to a RowContainer
@@ -403,26 +416,29 @@ private:
       return;
     }
     m_current = m_split_func(m_current_str_line, m_delim);
+
     if (m_num_columns == -1) {
       m_num_columns = m_current.size();
-    } else if (m_strict_columns && (m_num_columns != m_current.size())) {
-      throw ColumnMismatchException;
+    } else if (m_strict_columns && (m_current.size() != m_num_columns)) {
+      throw ColumnMismatchException();
     }
   }
 
   /** \brief handle reading and parsing the header if has_header is true
    */
   void handle_header() {
+    m_current_str_line = m_csv_line_reader.readline();
     m_header_names = m_split_func(m_current_str_line, m_delim);
     m_num_columns = m_header_names.size();
+    m_current_str_line = "";
   }
 
+  LineReader& m_csv_line_reader;
+
   char m_delim;
-
-  std::function<RowContainer<std::string>(std::string_view, const char)> m_split_func;
-
   bool m_has_header;
   bool m_strict_columns;
+  std::function<RowContainer<std::string>(std::string_view, const char)> m_split_func;
 
   std::string m_current_str_line;
   long m_num_columns{-1};
@@ -430,7 +446,6 @@ private:
   RowContainer<std::string> m_header_names{""};
   RowContainer<std::string> m_current{""};
 
-  LineReader& m_csv_line_reader;
 };
 
 /**
