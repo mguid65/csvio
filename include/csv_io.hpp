@@ -299,7 +299,7 @@ struct CSVOutputFormatter {
    *  \return delimited, escaped csv row
    */
   static std::string delim_join_escaped_fmt(
-      const RowContainer<std::string>& csv_row, const char delim) {
+      const RowContainer<std::string>& csv_row, const char delim, const std::string& line_terminator) {
     std::string result;
     result.reserve(csv_row.size() * 2);
 
@@ -317,7 +317,7 @@ struct CSVOutputFormatter {
         result.append(escape(s));
       }
     }
-    result.append("\r\n");
+    result.append(line_terminator);
     return result;
   }
 
@@ -329,7 +329,7 @@ struct CSVOutputFormatter {
    *  \return delimited  csv row
    */
   static std::string delim_join_unescaped_fmt(
-      const RowContainer<std::string>& csv_row, const char delim) {
+      const RowContainer<std::string>& csv_row, const char delim, const std::string& line_terminator) {
     std::string result;
     result.reserve(csv_row.size() * 2);
 
@@ -347,7 +347,7 @@ struct CSVOutputFormatter {
         result.append(s);
       }
     }
-    result.append("\r\n");
+    result.append(line_terminator);
     return result;
   }
 };
@@ -602,15 +602,17 @@ public:
    *  \param line_writer reference to a LineWriter object
    *  \param delimiter output delimiter to use to delimit ouput
    *  \param strict_columns whether same length columns should be enforced
+   *  \param line_terminator sequence that denotes the end of a csv row
    *  \param format_func a function to format a container to an output csv string
    */
   CSVWriter(
-      LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true,
-      std::function<std::string(const RowContainer<std::string>&, const char)> format_func =
+      LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true, const std::string& line_terminator = "\r\n",
+      std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)> format_func =
           csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
         m_strict_columns(strict_columns),
+        m_line_terminator(line_terminator),
         m_csv_output_formatter(format_func) {}
 
   /** \brief set a new delimiter for this writer
@@ -634,7 +636,7 @@ public:
   void write_header(const RowContainer<std::string>& header) {
     if (header.empty()) return;
     m_num_columns = header.size();
-    m_csv_line_writer.writeline(m_csv_output_formatter(header, m_delim));
+    m_csv_line_writer.writeline(m_csv_output_formatter(header, m_delim, m_line_terminator));
   }
 
   /** \brief write a csv row, may set initial number of columns
@@ -647,7 +649,7 @@ public:
     } else if (m_strict_columns && (values.size() != m_num_columns)) {
       throw csvio::exceptional::ColumnMismatchException();
     }
-    m_csv_line_writer.writeline(m_csv_output_formatter(values, m_delim));
+    m_csv_line_writer.writeline(m_csv_output_formatter(values, m_delim, m_line_terminator));
   }
 
 private:
@@ -655,8 +657,9 @@ private:
 
   bool m_strict_columns;
   long m_num_columns{-1};
+  std::string m_line_terminator;
 
-  std::function<std::string(const RowContainer<std::string>&, const char)> m_csv_output_formatter;
+  std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)> m_csv_output_formatter;
 
   LineWriter& m_csv_line_writer;
 };
