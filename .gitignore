@@ -6,3 +6,25 @@ doc/*
 
 benchmark/bin
 benchmark/bin/*
+
+test/Makefile
+test/src/Makefile
+test/CMakeFiles
+test/CMakeFiles/*
+test/CMakeCache.txt
+test/cmake_install.cmake
+test/src/CMakeFiles
+test/src/CMakeFiles/*
+test/src/CMakeCache.txt
+test/src/cmake_install.cmake
+
+benchmark/Makefile
+benchmark/src/Makefile
+benchmark/CMakeFiles
+benchmark/CMakeFiles/*
+benchmark/CMakeCache.txt
+benchmark/cmake_install.cmake
+benchmark/src/CMakeFiles
+benchmark/src/CMakeFiles/*
+benchmark/src/CMakeCache.txt
+benchmark/src/cmake_install.cmake
