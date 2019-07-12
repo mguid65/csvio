@@ -217,58 +217,32 @@ struct CSVInputParser {
     RowContainer<std::string> output;
 
     CSVParserScope state{LINE};
-    char buf[256]{0};
-    char* buf_end = buf + 255;
-    char* pos = buf;
 
     std::string chunk;
-    int num_cols{0};
+    chunk.reserve(512);
+    int num_cols{1};
+
     for (const auto& c : input) {
-      switch (state) {
-        case LINE:
-          switch (c) {
-            case '\"':
-              state = QUOTE;
-            default:
-              if (c == delim || c == '\n') {
-                if (c == delim) num_cols++;
-                chunk.append(buf);
-
-                output.push_back(chunk);
-
-                chunk.clear();
-                std::fill(buf, buf + 256, '\0');
-                pos = buf;
-              } else {
-                pos[0] = c;
-                pos++;
-              }
+      if (state == LINE) {
+        if (c == '\"') {
+          state = QUOTE;
+          chunk.push_back(c);
+        } else {
+          if (c == delim || c == '\n') {
+            if (c == delim) num_cols++;
+            output.push_back(chunk);
+            chunk.clear();
+          } else {
+            chunk.push_back(c);
           }
-          break;
-        case QUOTE:
-          switch (c) {
-            case '\"':
-              state = LINE;
-            default:
-              pos[0] = c;
-              pos++;
-          }
-          break;
-      }
-      if (pos > buf_end) {
-        chunk.append(buf);
-        std::fill(buf, buf + 256, '\0');
-        pos = buf;
+        }
+      } else {
+        if (c == '\"') state = LINE;
+        chunk.push_back(c);
       }
     }
-
-    chunk.append(buf);
-    if (!chunk.empty() || output.size() == num_cols) output.push_back(chunk);
-
-    auto& last_element = output.back();
-    if (last_element.back() == '\r') {  // remove trailing carriage return
-      last_element.pop_back();
-    }
+    if (!chunk.empty() || output.size() < num_cols) output.push_back(chunk);
+    if (auto& last_element = output.back(); last_element.back() == '\r') last_element.pop_back();
 
     return output;
   }
@@ -299,7 +273,8 @@ struct CSVOutputFormatter {
    *  \return delimited, escaped csv row
    */
   static std::string delim_join_escaped_fmt(
-      const RowContainer<std::string>& csv_row, const char delim, const std::string& line_terminator) {
+      const RowContainer<std::string>& csv_row, const char delim,
+      const std::string& line_terminator) {
     std::string result;
     result.reserve(csv_row.size() * 2);
 
@@ -329,7 +304,8 @@ struct CSVOutputFormatter {
    *  \return delimited  csv row
    */
   static std::string delim_join_unescaped_fmt(
-      const RowContainer<std::string>& csv_row, const char delim, const std::string& line_terminator) {
+      const RowContainer<std::string>& csv_row, const char delim,
+      const std::string& line_terminator) {
     std::string result;
     result.reserve(csv_row.size() * 2);
 
@@ -606,9 +582,10 @@ public:
    *  \param format_func a function to format a container to an output csv string
    */
   CSVWriter(
-      LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true, const std::string& line_terminator = "\r\n",
-      std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)> format_func =
-          csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
+      LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true,
+      const std::string& line_terminator = "\r\n",
+      std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)>
+          format_func = csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
         m_strict_columns(strict_columns),
@@ -659,7 +636,8 @@ private:
   long m_num_columns{-1};
   std::string m_line_terminator;
 
-  std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)> m_csv_output_formatter;
+  std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)>
+      m_csv_output_formatter;
 
   LineWriter& m_csv_line_writer;
 };

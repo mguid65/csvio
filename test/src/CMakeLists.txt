@@ -1,0 +1,17 @@
+include_directories(${test_csvio_SOURCE_DIR}/../include)
+add_executable(test_csv_input_parser test_csv_input_parser.cpp)
+add_executable(test_csv_line_reader test_csv_line_reader.cpp)
+add_executable(test_csv_line_writer test_csv_line_writer.cpp)
+add_executable(test_csv_output_formatter test_csv_output_formatter.cpp)
+add_executable(test_csv_reader test_csv_reader.cpp)
+add_executable(test_csv_writer test_csv_writer.cpp)
+add_executable(test_escape_utils test_escape_utils.cpp)
+
+TARGET_LINK_LIBRARIES(test_csv_input_parser gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_line_reader gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_line_writer gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_output_formatter gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_reader gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_writer gtest pthread)
+TARGET_LINK_LIBRARIES(test_escape_utils gtest pthread)
+
