@@ -3,3 +3,6 @@ test/bin/*
 
 doc
 doc/*
+
+benchmark/bin
+benchmark/bin/*
