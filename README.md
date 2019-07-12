@@ -1,19 +1,29 @@
 # CSVIO
 
-experimental header only csv io classes using some modern c++ features
+Experimental header-only CSV IO classes using some modern C++17 features
 
-partial support for RFC 4180
+Support for RFC 4180
 
-RFC 4180 specifies that CR and LF must be escaped within fields
+## Why?
+
+A quick search for C++ csv library yields many responses along the lines of:
+
+`Write your own`
+
+Even though CSV isn't very complicated and isn't fully standardized,
+why should you *have* to write your own. Why waste your time writing some boilerplate code.
+
 
 ## Features
   * Reading/Writing std::iostreams
   * Alternate delimiters
-  * Custom Split Functions
+  * Custom Row Input Parsing Functions
+  * Custom Row Output Formatting Functions
   * Custom Line Readers
-  * Custom CSV Row Containers
+  * Custom Line Writers
+  * Custom Swappable Row Containers
   * Custom Escape Utilities
 
 ## Work In Progress
   * header inference
-  * associative row containers
+  * Specialization for using Associative Container types
