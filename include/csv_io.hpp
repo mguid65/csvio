@@ -180,9 +180,8 @@ struct CSVInputParser {
    *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
-   *  \param unescape_output whether to unescape all fields in output
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
-   * emty string
+   * empty string
    */
   static RowContainer<std::string> delim_split_escaped(std::string_view input, const char delim) {
     static_assert(
@@ -249,6 +248,12 @@ struct CSVInputParser {
     return output;
   }
 
+  /** \brief split a csv row on a delimiter escaping the output strings
+   *  \param input string_view to split by delimiter
+   *  \param delim delimiter to split on
+   *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
+   * empty string
+   */
   static RowContainer<std::string> delim_split_unescaped(std::string_view input, const char delim) {
     RowContainer<std::string> result = delim_split_escaped(input, delim);
     for (auto& field : result) field = unescape(field);
@@ -256,8 +261,18 @@ struct CSVInputParser {
   }
 };
 
+/** \class CSVOutputFormatter
+ *  \brief a class describing how csv output should be formatted
+ */
 template <template <class...> class RowContainer = std::vector>
 struct CSVOutputFormatter {
+  /** \brief Output formatter which joins the elements in a container
+   *  with a delimiter while escaping fields
+   *
+   *  \param csv_row generic container of csv row values
+   *  \param delim delimiter to delimit the output csv string fields
+   *  \return delimited, escaped csv row
+   */
   static std::string delim_join_escaped_fmt(
       const RowContainer<std::string>& csv_row, const char delim) {
     std::string result;
@@ -281,6 +296,13 @@ struct CSVOutputFormatter {
     return result;
   }
 
+  /** \brief Output formatter which joins the elements in a container
+   *  with a delimiter
+   *
+   *  \param csv_row generic container of csv row values
+   *  \param delim delimiter to delimit the output csv string fields
+   *  \return delimited  csv row
+   */
   static std::string delim_join_unescaped_fmt(
       const RowContainer<std::string>& csv_row, const char delim) {
     std::string result;
@@ -374,10 +396,23 @@ private:
   size_t m_lines_read{0};
 };
 
+/** \class CSVLineWriter
+ *  \brief Writes a csv line to a stream, provides a written lines counter
+ *
+ *  doesnt do much other than make the implementation symmetrical
+ *  also allows for ever greater custom behavior,
+ *  maybe some kind of custom format that prepends or appends some string before writing
+ */
 class CSVLineWriter {
 public:
+  /** \brief Construct a CSVLineWriter from an outstream
+   *  \param outstream ostream to write lines to
+   */
   CSVLineWriter(std::ostream& outstream) : m_csv_stream(outstream) {}
 
+  /** \brief write a csv line to the stream
+   *  \param line line to write to stream
+   */
   void writeline(std::string_view line) {
     if (good()) {
       m_csv_stream.write(line.data(), line.length());
@@ -385,8 +420,14 @@ public:
     }
   }
 
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
   bool good() { return m_csv_stream.good(); }
 
+  /** \brief Get number of csv lines written so far
+   *  \return number of csv lines written so far
+   */
   const size_t lcount() const { return m_lines_written; }
 
 private:
@@ -524,11 +565,20 @@ private:
   RowContainer<std::string> m_current{""};
 };
 
+/** \class CSVWriter
+ *  \brief Writes data as csv
+ */
 template <
     template <class...> class RowContainer = std::vector,
     class LineWriter = csvio::util::CSVLineWriter>
 class CSVWriter {
 public:
+  /** \brief construct a CSVWriter from a LineWriter
+   *  \param line_writer reference to a LineWriter object
+   *  \param delimiter output delimiter to use to delimit ouput
+   *  \param strict_columns whether same length columns should be enforced
+   *  \param format_func a function to format a container to an output csv string
+   */
   CSVWriter(
       LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true,
       std::function<std::string(const RowContainer<std::string>&, const char)> format_func =
@@ -538,17 +588,33 @@ public:
         m_strict_columns(strict_columns),
         m_csv_output_formatter(format_func) {}
 
+  /** \brief set a new delimiter for this writer
+   *  \param delim new delimiter
+   */
   void set_delimiter(const char delim) { m_delim = delim; }
+
+  /** \brief get the current delimiter from this writer
+   *  \return constant character delimiter
+   */
   const char get_delimiter() const { return m_delim; }
 
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
   bool good() { return m_csv_line_writer.good(); }
 
+  /** \brief write the csv header, sets number of columns
+   *  \param header RowContainer of string header names
+   */
   void write_header(const RowContainer<std::string>& header) {
     if (header.empty()) return;
     m_num_columns = header.size();
     m_csv_line_writer.writeline(m_csv_output_formatter(header, m_delim));
   }
 
+  /** \brief write a csv row, may set initial number of columns
+   *  \param header RowContainer of string values
+   */
   void write(const RowContainer<std::string>& values) {
     if (values.empty()) return;
     if (m_num_columns == -1) {
