@@ -28,3 +28,5 @@ benchmark/src/CMakeFiles
 benchmark/src/CMakeFiles/*
 benchmark/src/CMakeCache.txt
 benchmark/src/cmake_install.cmake
+
+benchmark/CSV_WRITER_BENCHMARK_001.csv

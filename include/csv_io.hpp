@@ -139,7 +139,7 @@ inline std::string escape(std::string_view data, char delim = ',', bool force_es
 
 /** \brief unescape a csv escaped string according to RFC 4180
  *
- *  Generally O(n) avg time and space complexity
+ *  Generally linear avg time and space complexity
  *
  *  \param data string_view csv data to unescape
  *  \return unquoted csv field
@@ -180,6 +180,9 @@ template <template <class...> class RowContainer>
 struct CSVInputParser {
   static RowContainer<std::string> m_data;
   /** \brief Split string_view csv row based on a delimiter
+   *
+   *  Linear time complexity with respect to the size of input
+   *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
    *  \return RowContainer of split csv fields
@@ -203,6 +206,8 @@ struct CSVInputParser {
   }
 
   /** \brief implementation of delim_split_escaped
+   *
+   *  Linear time complexity with respect to the size of input
    *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
@@ -260,6 +265,9 @@ struct CSVInputParser {
   }
 
   /** \brief implementation of delim_split_unescaped
+   *
+   *  O(2N) where n is the size of the input
+   *
    *  \param input string_view to split by delimiter
    *  \param delim delimiter to split on
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
@@ -664,76 +672,5 @@ protected:
 };
 
 }  // namespace csvio
-
-namespace csvio::helper {
-
-/** \class CSVFileReader
- *  \brief helper class to wrap the construction of intermediate objects needed to create a
- * CSVReader for an ifstream
- */
-template <
-    template <class...> class RowContainer = std::vector,
-    class LineReader = csvio::util::CSVLineReader,
-    template <class...> class Reader = csvio::CSVReader>
-class CSVFileReader {
-public:
-  /** \brief Construct a CSVFileReader from a file name
-   *  \param filename name of csv file to read
-   *  \param delimiter a character delimiter
-   *  \param has_header specify that this csv has a header
-   *  \param strict_columns specify that an exception should be thrown in case of a column length
-   * mismatch
-   *  \param parse_func a function which describes how to split a csv row
-   */
-  explicit CSVFileReader(
-      std::string_view filename, const char delimiter = ',', bool has_header = false,
-      bool strict_columns = true,
-      std::function<RowContainer<std::string>(std::string_view, const char)> parse_func =
-          csvio::util::CSVInputParser<RowContainer>::delim_split_unescaped) {
-    m_infile.open(filename.data(), std::ios_base::in);
-    m_csv_line_reader = std::make_unique<LineReader>(m_infile);
-    m_csv_reader = std::make_unique<Reader>(
-        *m_csv_line_reader, delimiter, has_header, strict_columns, parse_func);
-  }
-  ~CSVFileReader() { m_infile.close(); }
-
-  /** \brief set the delimiter to a different character
-   *  \param delim new delimiter
-   */
-  void set_delimiter(const char delim) { m_csv_reader->set_delimiter(delim); }
-
-  /** \brief get the current delimiter
-   *  \return constant char delimiter value
-   */
-  const char get_delimiter() const { return m_csv_reader->get_delimiter(); }
-
-  /** \brief check if the underlying stream is still good
-   *  \return true if good, otherwise false
-   */
-  bool good() { return m_csv_reader->good(); }
-
-  /** \brief Get the csv headers if they exist
-   *  \return a reference to the RowContainer of headers, otherwise a RowContainer with one blank
-   * element
-   */
-  RowContainer<std::string>& get_header_names() { return m_csv_reader->get_header_names(); }
-
-  /** \brief Return the current RowContainer of CSV values
-   *  \return a reference to the current RowContainer
-   */
-  RowContainer<std::string>& current() { return m_csv_reader->current(); }
-
-  /** \brief Advance to the next row and return the current RowContainer of CSV values
-   *  \return a reference to the current RowContainer
-   */
-  RowContainer<std::string>& read() { return m_csv_reader->read(); }
-
-private:
-  std::ifstream m_infile;
-  std::unique_ptr<LineReader> m_csv_line_reader;
-  std::unique_ptr<Reader<RowContainer<std::string>, LineReader>> m_csv_reader;
-};
-
-}  // namespace csvio::helper
 
 #endif // CSV_IO_HPP
