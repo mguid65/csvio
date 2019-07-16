@@ -4,7 +4,7 @@ Experimental header-only CSV IO classes using some modern C++17 features
 
 Support for RFC 4180
 
-## Why?
+## Why
 
 A quick search for C++ csv library yields many responses along the lines of:
 
@@ -15,15 +15,15 @@ why should you *have* to write your own. Why waste your time writing some boiler
 
 
 ## Features
-  * Reading/Writing std::iostreams
-  * Alternate delimiters
-  * Custom Row Input Parsing Functions
-  * Custom Row Output Formatting Functions
-  * Custom Line Readers
-  * Custom Line Writers
-  * Custom Swappable Row Containers
-  * Custom Escape Utilities
+ * Reading/Writing std::iostreams
+ * Alternate delimiters
+ * Custom Row Input Parsing Functions
+ * Custom Row Output Formatting Functions
+ * Custom Line Readers
+ * Custom Line Writers
+ * Custom Swappable Row Containers
+ * Custom Escape Utilities
 
 ## Work In Progress
-  * header inference
-  * Specialization for using Associative Container types
+ * header inference
+ * Specialization for using Associative Container types
