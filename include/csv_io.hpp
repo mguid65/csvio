@@ -50,7 +50,7 @@ namespace csvio::exceptional {
  */
 class ColumnMismatchException : public std::exception {
 public:
-  ColumnMismatchException() {}
+  ColumnMismatchException() = default;
   virtual const char* what() const noexcept { return "CSV column number mismatch detected"; }
 };
 
@@ -86,7 +86,7 @@ private:
   template <typename>
   static constexpr std::false_type check(...);
 
-  typedef decltype(check<C>(0)) type;
+  using type = decltype(check<C>(0));
 
 public:
   static constexpr bool value = type::value;
@@ -362,7 +362,7 @@ public:
   /** \brief Construct a CSVLineReader from a reference to a std::istream
    *  \param instream reference to a std::istream
    */
-  CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
+  explicit CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
 
   /** \brief read a csv line
    *  \return a string with the contents of the csv line
@@ -376,7 +376,7 @@ public:
 
     while (m_csv_stream.good()) {
       m_csv_stream.get(*pos);
-      if (m_state == LINE && pos[0] == '\n' || pos[0] == EOF) {
+      if ((m_state == LINE && pos[0] == '\n') || pos[0] == EOF) {
         m_result.append(buf);
         pos = buf;
         std::fill(buf, buf + 1024, '\0');
@@ -435,7 +435,7 @@ public:
   /** \brief Construct a CSVLineWriter from an outstream
    *  \param outstream ostream to write lines to
    */
-  CSVLineWriter(std::ostream& outstream) : m_csv_stream(outstream) {}
+  explicit CSVLineWriter(std::ostream& outstream) : m_csv_stream(outstream) {}
 
   /** \brief write a csv line to the stream
    *  \param line line to write to stream
@@ -482,7 +482,7 @@ public:
    * mismatch
    *  \param parse_func a function which describes how to split a csv row
    */
-  CSVReader(
+  explicit CSVReader(
       LineReader& line_reader, const char delimiter = ',', bool has_header = false,
       bool strict_columns = true,
       std::function<RowContainer<std::string>(std::string_view, const char)> parse_func =
@@ -496,12 +496,6 @@ public:
       handle_header();
     }
   }
-
-  /** \brief destroy a CSVReader
-   *
-   *  Does nothing special currently
-   */
-  ~CSVReader() {}
 
   /** \brief set the delimiter to a different character
    *  \param delim new delimiter
@@ -608,15 +602,15 @@ public:
    *  \param line_terminator sequence that denotes the end of a csv row
    *  \param format_func a function to format a container to an output csv string
    */
-  CSVWriter(
+  explicit CSVWriter(
       LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true,
-      const std::string& line_terminator = "\r\n",
+      std::string line_terminator = "\r\n",
       std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)>
           format_func = csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
         m_strict_columns(strict_columns),
-        m_line_terminator(line_terminator),
+        m_line_terminator(std::move(line_terminator)),
         m_csv_output_formatter(format_func) {}
 
   /** \brief set a new delimiter for this writer
@@ -691,7 +685,7 @@ public:
    * mismatch
    *  \param parse_func a function which describes how to split a csv row
    */
-  CSVFileReader(
+  explicit CSVFileReader(
       std::string_view filename, const char delimiter = ',', bool has_header = false,
       bool strict_columns = true,
       std::function<RowContainer<std::string>(std::string_view, const char)> parse_func =
@@ -742,4 +736,4 @@ private:
 
 }  // namespace csvio::helper
 
-#endif _CSV_IO_HPP_
+#endif // CSV_IO_HPP
