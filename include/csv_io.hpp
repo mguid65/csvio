@@ -1,3 +1,6 @@
+#ifndef _CSV_IO_HPP_
+#define _CSV_IO_HPP_
+
 /*
  * MIT License
  *
@@ -22,9 +25,6 @@
  * SOFTWARE.
  *
  */
-
-#ifndef CSV_IO_HPP
-#define CSV_IO_HPP
 
 #include <algorithm>
 #include <cassert>
