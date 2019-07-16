@@ -1,3 +1,6 @@
+#ifndef _CSV_IO_HPP_
+#define _CSV_IO_HPP_
+
 /*
  * MIT License
  *
@@ -738,3 +741,5 @@ private:
 };
 
 }  // namespace csvio::helper
+
+#endif _CSV_IO_HPP_
