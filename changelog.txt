@@ -1,0 +1,36 @@
+2019-7-2 v0.0.1
+ - Add initial experimental implementations
+ - Add README.md
+ - Add some naive tests
+
+2019-7-3 v0.0.2
+ - Add escape/unescape utils 
+ - Add experimental CSVLineReader
+
+2019-7-8 v0.0.3
+ - Add doc to functions
+ - Start testing with google test
+ - Add tests for several components
+
+2019-7-10 v0.0.4
+ - Implement delimiter split with escapes
+ - Change behavior of split
+ - Fix line reader when encountering premature EOF
+ - Add tests for alternate containers
+
+2019-7-11 v0.1.0
+ - Major Refactor
+ - Add Doxyfile
+ - Add .clang-format
+ - Input Parsers and Output Formatters
+
+2019-7-12 v0.1.1
+ - Add parameter to writer for alternate line_terminator
+ - Change build system to cmake
+ - Misc updates
+
+2019-7-16 v0.1.2
+ - Improve read performance
+ - Add inclusion guards to a header file
+ - Make some clang-tidy recommended changes
+ - Backfill changelog
