@@ -37,6 +37,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <thread>
 #include <vector>
 
 #ifdef __GNUC__
@@ -289,6 +290,41 @@ struct CSVInputParser {
     delim_split_unescaped_impl(input, delim);
     return m_data;
   }
+
+  /** \brief implementation of delim_split_unescaped_threaded
+   *
+   *  \param input string_view to split by delimiter
+   *  \param delim delimiter to split on
+   *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
+   * empty string
+   */
+  static void delim_split_unescaped_threaded_impl(std::string_view input, const char delim) {
+    delim_split_escaped_impl(input, delim);
+    std::vector<std::thread> threads; //would be better to use a thread pool
+
+    for(auto& field : m_data) {
+      threads.push_back([&]() {
+        field = unescape(field);
+      });
+    }
+
+    for(auto& worker : threads) {
+      if(worker.joinable()) worker.join();
+    }
+  }
+
+  /** \brief split a csv row on a delimiter escaping the output strings threaded
+   *  \param input string_view to split by delimiter
+   *  \param delim delimiter to split on
+   *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
+   * empty string
+   */
+  static RowContainer<std::string> delim_split_unescaped_threaded(std::string_view input, const char delim) {
+    m_data.clear();
+    delim_split_unescaped_impl(input, delim);
+    return m_data;
+  }
+
 };
 
 template <template <class...> class RowContainer>
@@ -673,4 +709,4 @@ protected:
 
 }  // namespace csvio
 
-#endif // CSV_IO_HPP
+#endif  // CSV_IO_HPP
