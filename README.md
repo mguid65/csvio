@@ -29,3 +29,6 @@ why should you *have* to write your own. Why waste your time writing some boiler
 ## Work In Progress
  *  Header inference
  *  Specialization for using Associative Container types
+
+## Documentation
+ *  View generated Doxygen documentation [here](https://mguid65.github.io/csvio/docs/html)
