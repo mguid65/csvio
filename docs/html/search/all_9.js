@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quote',['QUOTE',['../namespacecsvio_1_1util.html#ab103147266337a93ba9e064332ea7e8fa9d930b995e0ff9ca4b272be4c676d117',1,'csvio::util']]]
+  ['parse_5fcurrent_5fstr',['parse_current_str',['../classcsvio_1_1CSVReader.html#a8a51c2cbf4954bc975a7881c243a40a1',1,'csvio::CSVReader']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['read',['read',['../classcsvio_1_1CSVReader.html#a389c18ca82c28ffa78c278a0576f12fc',1,'csvio::CSVReader']]],
-  ['readline',['readline',['../classcsvio_1_1util_1_1CSVLineReader.html#a6f1e15a1fd2ec7c1c346c6f2a74398e2',1,'csvio::util::CSVLineReader']]]
+  ['quote',['QUOTE',['../namespacecsvio_1_1util.html#ab103147266337a93ba9e064332ea7e8fa9d930b995e0ff9ca4b272be4c676d117',1,'csvio::util']]]
 ];

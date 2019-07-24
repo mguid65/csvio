@@ -1,12 +1,17 @@
 var searchData=
 [
-  ['delim_5fjoin_5fescaped_5ffmt',['delim_join_escaped_fmt',['../structcsvio_1_1util_1_1CSVOutputFormatter.html#a6fa3221b7d8de110273415d24d5e87e2',1,'csvio::util::CSVOutputFormatter']]],
-  ['delim_5fjoin_5funescaped_5ffmt',['delim_join_unescaped_fmt',['../structcsvio_1_1util_1_1CSVOutputFormatter.html#a026a8973fbc36526a2ed1141b3fd831d',1,'csvio::util::CSVOutputFormatter']]],
-  ['delim_5fsplit_5fescaped',['delim_split_escaped',['../structcsvio_1_1util_1_1CSVInputParser.html#a070d2bbc1f0b72d2c390310ed5272273',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5fescaped_5fimpl',['delim_split_escaped_impl',['../structcsvio_1_1util_1_1CSVInputParser.html#a09223945cc9e4fa21a7c1d61759c1d1d',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5fnaive',['delim_split_naive',['../structcsvio_1_1util_1_1CSVInputParser.html#a8bf049a13afa2045be1c8ae701b41a75',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5funescaped',['delim_split_unescaped',['../structcsvio_1_1util_1_1CSVInputParser.html#a6440779cb5cb6492302bb31d0af723bf',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5funescaped_5fimpl',['delim_split_unescaped_impl',['../structcsvio_1_1util_1_1CSVInputParser.html#ad1317618ea1603f5085b7da5716681f7',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5funescaped_5fthreaded',['delim_split_unescaped_threaded',['../structcsvio_1_1util_1_1CSVInputParser.html#a203f6bd23f4d0bf4f84b4e215c9a78d7',1,'csvio::util::CSVInputParser']]],
-  ['delim_5fsplit_5funescaped_5fthreaded_5fimpl',['delim_split_unescaped_threaded_impl',['../structcsvio_1_1util_1_1CSVInputParser.html#a424a15e29ec6e1598740aee8460fe5f6',1,'csvio::util::CSVInputParser']]]
+  ['columnmismatchexception',['ColumnMismatchException',['../classcsvio_1_1exceptional_1_1ColumnMismatchException.html',1,'csvio::exceptional::ColumnMismatchException'],['../classcsvio_1_1exceptional_1_1ColumnMismatchException.html#ae516d8337b94f97b34a4a34d98a7db75',1,'csvio::exceptional::ColumnMismatchException::ColumnMismatchException()']]],
+  ['csv_5fio_2ehpp',['csv_io.hpp',['../csv__io_8hpp.html',1,'']]],
+  ['csvinputparser',['CSVInputParser',['../structcsvio_1_1util_1_1CSVInputParser.html',1,'csvio::util']]],
+  ['csvio',['csvio',['../namespacecsvio.html',1,'']]],
+  ['csvlinereader',['CSVLineReader',['../classcsvio_1_1util_1_1CSVLineReader.html',1,'csvio::util::CSVLineReader'],['../classcsvio_1_1util_1_1CSVLineReader.html#a5b031b060e12a0ebcc61f940fa34d861',1,'csvio::util::CSVLineReader::CSVLineReader()']]],
+  ['csvlinewriter',['CSVLineWriter',['../classcsvio_1_1util_1_1CSVLineWriter.html',1,'csvio::util::CSVLineWriter'],['../classcsvio_1_1util_1_1CSVLineWriter.html#a9982b2e3ee51703e65065971b7991f63',1,'csvio::util::CSVLineWriter::CSVLineWriter()']]],
+  ['csvoutputformatter',['CSVOutputFormatter',['../structcsvio_1_1util_1_1CSVOutputFormatter.html',1,'csvio::util']]],
+  ['csvparserscope',['CSVParserScope',['../namespacecsvio_1_1util.html#ab103147266337a93ba9e064332ea7e8f',1,'csvio::util']]],
+  ['csvreader',['CSVReader',['../classcsvio_1_1CSVReader.html',1,'csvio::CSVReader&lt; RowContainer, LineReader &gt;'],['../classcsvio_1_1CSVReader.html#a96d87aaaecee03ce012996850627978a',1,'csvio::CSVReader::CSVReader()']]],
+  ['csvwriter',['CSVWriter',['../classcsvio_1_1CSVWriter.html',1,'csvio::CSVWriter&lt; RowContainer, LineWriter &gt;'],['../classcsvio_1_1CSVWriter.html#a82b1e260e14da4b0664ef22c46b71762',1,'csvio::CSVWriter::CSVWriter()']]],
+  ['current',['current',['../classcsvio_1_1CSVReader.html#a4c24f5b13d33737e949f4df51b8f2e4b',1,'csvio::CSVReader']]],
+  ['exceptional',['exceptional',['../namespacecsvio_1_1exceptional.html',1,'csvio']]],
+  ['csvio',['CSVIO',['../index.html',1,'']]],
+  ['util',['util',['../namespacecsvio_1_1util.html',1,'csvio']]]
 ];

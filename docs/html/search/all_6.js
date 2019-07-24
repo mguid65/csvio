@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['lcount',['lcount',['../classcsvio_1_1util_1_1CSVLineReader.html#a34bbc1c74dfe1539428b8f48bb7fe087',1,'csvio::util::CSVLineReader::lcount()'],['../classcsvio_1_1util_1_1CSVLineWriter.html#afde5459c33316fcf10a385e57f4afc3f',1,'csvio::util::CSVLineWriter::lcount()']]],
-  ['line',['LINE',['../namespacecsvio_1_1util.html#ab103147266337a93ba9e064332ea7e8fa15552d29440d10ad7d2dd78c44f4f560',1,'csvio::util']]]
+  ['handle_5fheader',['handle_header',['../classcsvio_1_1CSVReader.html#a48f0e06996963af0ca909d6687e83279',1,'csvio::CSVReader']]],
+  ['has_5fpush_5fback',['has_push_back',['../structcsvio_1_1util_1_1has__push__back.html',1,'csvio::util']]],
+  ['has_5fpush_5fback_3c_20c_2c_20ret_28args_2e_2e_2e_29_3e',['has_push_back&lt; C, Ret(Args...)&gt;',['../structcsvio_1_1util_1_1has__push__back_3_01C_00_01Ret_07Args_8_8_8_08_4.html',1,'csvio::util']]]
 ];
