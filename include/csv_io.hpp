@@ -188,17 +188,20 @@ struct CSVInputParser {
    *  \param delim delimiter to split on
    *  \return RowContainer of split csv fields
    */
-  static RowContainer<std::string> delim_split_naive(const std::string& input, const char delim) {
+  static RowContainer<std::string> delim_split_naive(std::string_view input, const char delim) {
     static_assert(
         has_push_back<
             RowContainer<std::string>,
             void(const typename RowContainer<std::string>::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
     m_data.clear();
+
+    std::string tmp(input.data(), input.length());
+
     size_t first = 0;
-    while (first < input.size()) {
-      const auto second = input.find_first_of(delim, first);
-      if (first != second) m_data.push_back(input.substr(first, second - first));
+    while (first < tmp.size()) {
+      const auto second = tmp.find_first_of(delim, first);
+      if (first != second) m_data.push_back(tmp.substr(first, second - first));
       if (second == std::string_view::npos) break;
       first = second + 1;
     }
@@ -420,31 +423,34 @@ public:
 
     while (m_csv_stream.good()) {
       m_csv_stream.get(*pos);
-      if ((m_state == LINE && pos[0] == '\n') || pos[0] == EOF) {
+      if (m_state == LINE && (pos[0] == '\n' || pos[0] == EOF)) {
+        *(++pos) = '\0';
         m_result.append(buf);
         pos = buf;
-        std::fill(buf, buf + 1024, '\0');
+//        std::fill(buf, buf + 1024, '\0');
         break;
       } else if (m_state == LINE && pos[0] == '\"') {
         m_state = QUOTE;
       } else if (m_state == QUOTE && pos[0] == '\"') {
         m_state = LINE;
       } else if (m_state == QUOTE && !m_csv_stream.good()) {
-        std::cerr << "Unexpected EOF" << '\n';  // maybe change to do something else
         m_result = "";
         return m_result;
       }
       pos++;
 
       if (pos >= buf_end) {
-        pos = buf;
+        *(pos++) = '\0';
         m_result.append(buf);
-        std::fill(buf, buf + 1024, '\0');
+        pos = buf;
+        //std::fill(buf, buf + 1024, '\0');
       }
     }
     if (pos != buf) {
+      *(pos++) = '\0';
       m_result.append(buf);
     }
+
     m_lines_read++;
     m_state = LINE;
     return m_result;
@@ -579,6 +585,11 @@ public:
     }
   }
 
+  /** \brief Get number of csv lines read so far
+   *  \return number of csv lines read so far
+   */
+  const size_t lcount() const { return m_csv_line_reader.lcount(); }
+
 protected:
   /** \brief advance the current string and parse it
    */
@@ -693,6 +704,11 @@ public:
     }
     m_csv_line_writer.writeline(m_csv_output_formatter(values, m_delim, m_line_terminator));
   }
+
+  /** \brief Get number of csv lines written so far
+   *  \return number of csv lines written so far
+   */
+  const size_t lcount() const { return m_csv_line_writer.lcount(); }
 
 protected:
   char m_delim;
