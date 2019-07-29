@@ -640,7 +640,7 @@ protected:
 
   RowContainer<std::string> m_header_names{""};
   RowContainer<std::string> m_current{""};
-};  // namespace csvio
+};
 
 /** \class CSVWriter
  *  \brief Writes data as csv
@@ -723,6 +723,106 @@ protected:
   LineWriter& m_csv_line_writer;
 };
 
+/** \class CSVMapReader
+ *  \brief Reader to read a stream as CSV into a map like container
+ */
+template <
+    template <class...> class RowMapContainer = std::map,
+    typename LineReader = csvio::util::CSVLineReader>
+class CSVMapReader {
+public:
+  /** \brief Construct a CSVReader from a reference to a generic LineReader
+   *  \param line_reader reference to a LineReader
+   *  \param delimiter a character delimiter
+   *  \param has_header specify that this csv has a header
+   *  \param strict_columns specify that an exception should be thrown in case of a column length
+   * mismatch
+   *  \param parse_func a function which describes how to split a csv row
+   */
+  explicit CSVMapReader(
+      LineReader& line_reader, const char delimiter = ','
+      std::function<RowMapContainer<std::string, std::string>(std::string_view, const char)> parse_func =
+          csvio::util::CSVMapInputParser<RowMapContainer>::map_delim_split_unescaped)
+      : m_csv_line_reader(line_reader),
+        m_delim(delimiter),
+        m_strict_columns(strict_columns),
+        m_parse_func(parse_func) {
+    handle_header();
+  }
+
+  /** \brief set the delimiter to a different character
+   *  \param delim new delimiter
+   */
+  void set_delimiter(const char delim) { m_delim = delim; }
+
+  /** \brief get the current delimiter
+   *  \return constant char delimiter value
+   */
+  const char get_delimiter() const { return m_delim; }
+
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
+  bool good() { return m_csv_line_reader.good(); }
+
+  /** \brief Return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
+  RowMapContainer<std::string, std::string>& current() { return m_current; }
+
+  /** \brief Advance to the next row and return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
+  RowMapContainer<std::string, std::string>& read() {
+    advance();
+    return current();
+  }
+
+  /** \brief Get number of csv lines read so far
+   *  \return number of csv lines read so far
+   */
+  const size_t lcount() const { return m_csv_line_reader.lcount(); }
+
+protected:
+  /** \brief advance the current string and parse it
+   */
+  void advance() {
+	m_current_str_line = m_csv_line_reader.readline();
+    parse_current_str();
+  }
+
+  /** \brief parse the current string line to a RowContainer
+   */
+  void parse_current_str() {
+    if (m_current_str_line.empty()) {
+      m_current.clear();
+      return;
+    }
+    m_current = m_parse_func(m_current_str_line, m_delim);
+  }
+
+  /** \brief handle reading and parsing the header if has_header is true
+   */
+  void handle_header() {
+    m_current_str_line = m_csv_line_reader.readline();
+    m_header_names = m_parse_func(m_current_str_line, m_delim);
+    m_num_columns = m_header_names.size();
+    m_current_str_line.clear();
+  }
+
+  LineReader& m_csv_line_reader;
+
+  char m_delim;
+  bool m_has_header;
+  bool m_strict_columns;
+  std::function<RowContainer<std::string>(std::string_view, const char)> m_parse_func;
+
+  std::string m_current_str_line;
+  long m_num_columns{-1};
+
+  RowMapContainer<std::string, std::string> m_header_names{};
+  RowMapContainer<std::string, std::string> m_current{};
+};
 }  // namespace csvio
 
 #endif  // CSV_IO_HPP
