@@ -39,6 +39,7 @@
 #include <string_view>
 #include <thread>
 #include <vector>
+#include <map>
 
 #ifdef __GNUC__
 #define likely(expr) (__builtin_expect(!!(expr), 1))
@@ -330,8 +331,25 @@ struct CSVInputParser {
 
 };
 
+
 template <template <class...> class RowContainer>
 RowContainer<std::string> CSVInputParser<RowContainer>::m_data;
+
+template<template <class...> class RowMapContainer = std::map>
+struct CSVMapInputParser {
+  static RowMapContainer<std::string, std::string> m_data;
+
+  static RowMapContainer<std::string, std::string> delim_split_escaped_impl(std::vector<std::string>& header_names) {
+
+  }
+
+  static RowMapContainer<std::string, std::string> delim_split_unescaped_impl(std::vector<std::string>& header_names) {
+
+  }
+};
+
+template <template <class...> class RowMapContainer>
+RowMapContainer<std::string, std::string> CSVMapInputParser<RowMapContainer>::m_data;
 
 /** \class CSVOutputFormatter
  *  \brief a class describing how csv output should be formatted
@@ -740,12 +758,11 @@ public:
    *  \param parse_func a function which describes how to split a csv row
    */
   explicit CSVMapReader(
-      LineReader& line_reader, const char delimiter = ','
+      LineReader& line_reader, const char delimiter = ',',
       std::function<RowMapContainer<std::string, std::string>(std::string_view, const char)> parse_func =
           csvio::util::CSVMapInputParser<RowMapContainer>::map_delim_split_unescaped)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
-        m_strict_columns(strict_columns),
         m_parse_func(parse_func) {
     handle_header();
   }
@@ -813,9 +830,7 @@ protected:
   LineReader& m_csv_line_reader;
 
   char m_delim;
-  bool m_has_header;
-  bool m_strict_columns;
-  std::function<RowContainer<std::string>(std::string_view, const char)> m_parse_func;
+  std::function<RowMapContainer<std::string, std::string>(std::string_view, const char)> m_parse_func;
 
   std::string m_current_str_line;
   long m_num_columns{-1};
@@ -823,6 +838,7 @@ protected:
   RowMapContainer<std::string, std::string> m_header_names{};
   RowMapContainer<std::string, std::string> m_current{};
 };
+
 }  // namespace csvio
 
 #endif  // CSV_IO_HPP
