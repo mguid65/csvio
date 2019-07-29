@@ -64,6 +64,16 @@ TEST(CSVReaderTest, ReadOneCSVLine) {
   EXPECT_EQ(false, csv_reader.good());
 }
 
+TEST(CSVReaderTest, ReadBlankCSVFields) {
+  std::istringstream instream(",,,,");
+  csvio::util::CSVLineReader csv_lr(instream);
+  csvio::CSVReader csv_reader(csv_lr);
+
+  std::vector<std::string> expected{"", "", "", "", ""};
+  EXPECT_EQ(expected, csv_reader.read());
+  EXPECT_EQ(false, csv_reader.good());
+}
+
 TEST(CSVReaderTest, ColumnMismatchExceptionTest) {
   std::istringstream instream(
       "a,b,c,d,e\n"
