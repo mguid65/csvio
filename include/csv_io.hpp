@@ -339,12 +339,70 @@ template<template <class...> class RowMapContainer = std::map>
 struct CSVMapInputParser {
   static RowMapContainer<std::string, std::string> m_data;
 
-  static RowMapContainer<std::string, std::string> delim_split_escaped_impl(std::vector<std::string>& header_names) {
+  static void delim_split_escaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    CSVParserScope state{LINE};
 
+    std::string chunk;
+    chunk.reserve(512);
+    int num_cols{1};
+
+    auto& current_header = header_names.begin();
+    std::string last_header;
+    for (const auto& c : input) {
+      if (state == LINE) {
+        if (c == '\"') {
+          state = QUOTE;
+          chunk.push_back(c);
+        } else {
+          if (c == delim || c == '\n') {
+            if (c == delim) num_cols++;
+            m_data.emplace_back(*current_header, chunk);
+            chunk.clear();
+          } else {
+            chunk.push_back(c);
+          }
+        }
+      } else {
+        if (c == '\"') state = LINE;
+        chunk.push_back(c);
+      }
+      ++current_header;
+      if(current_header != header_names.end()) last_header = *current_header;
+    }
+    if (!chunk.empty() || m_data.size() < num_cols) m_data.emplace_back(chunk);
+    if (auto& last_element = m_data.at(last_header); last_element.back() == '\r') last_element.pop_back();
   }
 
-  static RowMapContainer<std::string, std::string> delim_split_unescaped_impl(std::vector<std::string>& header_names) {
+  static RowMapContainer<std::string, std::string> delim_split_escaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_escaped_impl(input, delim, header_names);
+    return m_data;
+  }
 
+  static void delim_split_unescaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    delim_split_escaped_impl(input, delim, header_names);
+    for (auto& key_field : m_data) key_field->second = unescape(key_field->second);
+  }
+
+  static RowMapContainer<std::string, std::string> delim_split_unescaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_unescaped_impl(input, delim, header_names);
+    return m_data;
+  }
+
+  static void delim_split_unescaped_threaded_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    delim_split_escaped_impl(input, delim, header_names);
+    std::vector<std::thread> threads; //would be better to use a thread pool
+
+    for (auto& key_field : m_data) {
+      threads.emplace_back([&]() {
+        key_field->second = unescape(key_field->second);
+      });
+    }
+
+    for(auto& worker : threads) {
+      if(worker.joinable()) worker.join();
+    }
   }
 };
 
@@ -759,11 +817,14 @@ public:
    */
   explicit CSVMapReader(
       LineReader& line_reader, const char delimiter = ',',
-      std::function<RowMapContainer<std::string, std::string>(std::string_view, const char)> parse_func =
-          csvio::util::CSVMapInputParser<RowMapContainer>::map_delim_split_unescaped)
+      std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>)> parse_func =
+          csvio::util::CSVMapInputParser<RowMapContainer>::map_delim_split_unescaped,
+      std::function<std::vector<std::string>(std::string_view, const char)> header_parse_func =
+          csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
-        m_parse_func(parse_func) {
+        m_parse_func(parse_func),
+        m_header_parse_func(header_parse_func) {
     handle_header();
   }
 
@@ -804,7 +865,7 @@ protected:
   /** \brief advance the current string and parse it
    */
   void advance() {
-	m_current_str_line = m_csv_line_reader.readline();
+    m_current_str_line = m_csv_line_reader.readline();
     parse_current_str();
   }
 
@@ -815,27 +876,30 @@ protected:
       m_current.clear();
       return;
     }
-    m_current = m_parse_func(m_current_str_line, m_delim);
+    m_current = m_parse_func(m_current_str_line, m_delim, m_stream_order_header_names);
   }
 
   /** \brief handle reading and parsing the header if has_header is true
    */
   void handle_header() {
     m_current_str_line = m_csv_line_reader.readline();
-    m_header_names = m_parse_func(m_current_str_line, m_delim);
-    m_num_columns = m_header_names.size();
+    m_stream_order_header_names = m_header_parse_func(m_current_str_line, m_delim);
+    //m_num_columns = m_header_names.size();
     m_current_str_line.clear();
   }
 
   LineReader& m_csv_line_reader;
 
   char m_delim;
-  std::function<RowMapContainer<std::string, std::string>(std::string_view, const char)> m_parse_func;
+  std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>&)> m_parse_func;
+  std::function<std::vector<std::string>(std::string_view, const char)> m_header_parse_func;
 
   std::string m_current_str_line;
-  long m_num_columns{-1};
+  //long m_num_columns{-1};
 
-  RowMapContainer<std::string, std::string> m_header_names{};
+  // this will store header names in the canonical order from the source stream
+  // in case a map type is used that does some arbitrary reordering
+  std::vector<std::string> m_stream_order_header_names;
   RowMapContainer<std::string, std::string> m_current{};
 };
 
