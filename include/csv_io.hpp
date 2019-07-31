@@ -524,6 +524,33 @@ template <
     typename LineReader = csvio::util::CSVLineReader>
 class CSVReader {
 public:
+  struct iterator {
+    iterator() {
+      m_good = false;
+    }
+
+    iterator(CSVReader * ptr) : m_ptr(ptr) {
+      m_ptr->read();
+      m_good = m_ptr->good();
+    }
+
+    iterator operator++() {
+      m_ptr->read();
+      m_good = m_ptr->good();
+      return *this;
+    }
+
+    bool operator!= (const iterator & other) const { return m_good != other.m_good; }
+    RowContainer<std::string>& operator*() const { return m_ptr->current(); }
+    RowContainer<std::string>* operator->() const { return &m_ptr->current(); }
+
+    CSVReader * m_ptr;
+    bool m_good{true};
+  };
+
+  iterator begin() { return iterator(this); }
+  iterator end() const { return iterator(); }
+
   /** \brief Construct a CSVReader from a reference to a generic LineReader
    *  \param line_reader reference to a LineReader
    *  \param delimiter a character delimiter
