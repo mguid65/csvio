@@ -810,10 +810,9 @@ public:
   /** \brief Construct a CSVReader from a reference to a generic LineReader
    *  \param line_reader reference to a LineReader
    *  \param delimiter a character delimiter
-   *  \param has_header specify that this csv has a header
-   *  \param strict_columns specify that an exception should be thrown in case of a column length
-   * mismatch
    *  \param parse_func a function which describes how to split a csv row
+   *  \param header_parse_func a function to parse the header
+   *  because it doesn't go into the map (default is csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
    */
   explicit CSVMapReader(
       LineReader& line_reader, const char delimiter = ',',
