@@ -346,7 +346,7 @@ struct CSVMapInputParser {
     chunk.reserve(512);
     int num_cols{1};
 
-    auto& current_header = header_names.begin();
+    auto current_header = header_names.begin();
     std::string last_header;
     for (const auto& c : input) {
       if (state == LINE) {
