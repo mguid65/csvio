@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['set_5fdelimiter',['set_delimiter',['../classcsvio_1_1CSVReader.html#ab9aa13651a152f35a45070c1660bf90b',1,'csvio::CSVReader::set_delimiter()'],['../classcsvio_1_1CSVWriter.html#ae917539a27dc14ea343f905bddc43235',1,'csvio::CSVWriter::set_delimiter()']]]
+  ['quote',['QUOTE',['../namespacecsvio_1_1util.html#ab103147266337a93ba9e064332ea7e8fa9d930b995e0ff9ca4b272be4c676d117',1,'csvio::util']]]
 ];

@@ -82,20 +82,24 @@ $(function() {
 <div class="dynheader">
 Collaboration diagram for csvio::CSVWriter&lt; RowContainer, LineWriter &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classcsvio_1_1CSVWriter__coll__graph.svg" width="238" height="516"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classcsvio_1_1CSVWriter__coll__graph.svg" width="238" height="531"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a82b1e260e14da4b0664ef22c46b71762"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a82b1e260e14da4b0664ef22c46b71762">CSVWriter</a> (LineWriter &amp;line_writer, const char delimiter=',', bool strict_columns=true, std::string line_terminator=&quot;\r\n&quot;, std::function&lt; std::string(const RowContainer&lt; std::string &gt; &amp;, const char, const std::string &amp;)&gt; format_func=<a class="el" href="structcsvio_1_1util_1_1CSVOutputFormatter.html">csvio::util::CSVOutputFormatter</a>&lt; RowContainer &gt;::delim_join_escaped_fmt)</td></tr>
-<tr class="memdesc:a82b1e260e14da4b0664ef22c46b71762"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a <a class="el" href="classcsvio_1_1CSVWriter.html" title="Writes data as csv.">CSVWriter</a> from a LineWriter  <a href="classcsvio_1_1CSVWriter.html#a82b1e260e14da4b0664ef22c46b71762">More...</a><br /></td></tr>
-<tr class="separator:a82b1e260e14da4b0664ef22c46b71762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8de809ab5fe75a81ad0a3c005dfcfc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a7d8de809ab5fe75a81ad0a3c005dfcfc">CSVWriter</a> (LineWriter &amp;line_writer, const char delimiter=',', bool warn_columns=true, std::string line_terminator=&quot;\r\n&quot;, std::function&lt; std::string(const RowContainer&lt; std::string &gt; &amp;, const char, const std::string &amp;)&gt; format_func=<a class="el" href="structcsvio_1_1util_1_1CSVOutputFormatter.html">csvio::util::CSVOutputFormatter</a>&lt; RowContainer &gt;::delim_join_escaped_fmt)</td></tr>
+<tr class="memdesc:a7d8de809ab5fe75a81ad0a3c005dfcfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a <a class="el" href="classcsvio_1_1CSVWriter.html" title="Writes data as csv.">CSVWriter</a> from a LineWriter  <a href="classcsvio_1_1CSVWriter.html#a7d8de809ab5fe75a81ad0a3c005dfcfc">More...</a><br /></td></tr>
+<tr class="separator:a7d8de809ab5fe75a81ad0a3c005dfcfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a134291fa763f2f9725ed5dbbc62116"><td class="memItemLeft" align="right" valign="top">const char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a5a134291fa763f2f9725ed5dbbc62116">get_delimiter</a> () const</td></tr>
 <tr class="memdesc:a5a134291fa763f2f9725ed5dbbc62116"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the current delimiter from this writer  <a href="classcsvio_1_1CSVWriter.html#a5a134291fa763f2f9725ed5dbbc62116">More...</a><br /></td></tr>
 <tr class="separator:a5a134291fa763f2f9725ed5dbbc62116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c7113aef9f62729162350a4db8a2d25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a9c7113aef9f62729162350a4db8a2d25">good</a> ()</td></tr>
 <tr class="memdesc:a9c7113aef9f62729162350a4db8a2d25"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if the underlying stream is still good  <a href="classcsvio_1_1CSVWriter.html#a9c7113aef9f62729162350a4db8a2d25">More...</a><br /></td></tr>
 <tr class="separator:a9c7113aef9f62729162350a4db8a2d25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bb060373389a3838c7217dae86d792f"><td class="memItemLeft" align="right" valign="top">const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a5bb060373389a3838c7217dae86d792f">lcount</a> () const</td></tr>
+<tr class="memdesc:a5bb060373389a3838c7217dae86d792f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of csv lines written so far.  <a href="classcsvio_1_1CSVWriter.html#a5bb060373389a3838c7217dae86d792f">More...</a><br /></td></tr>
+<tr class="separator:a5bb060373389a3838c7217dae86d792f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae917539a27dc14ea343f905bddc43235"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#ae917539a27dc14ea343f905bddc43235">set_delimiter</a> (const char delim)</td></tr>
 <tr class="memdesc:ae917539a27dc14ea343f905bddc43235"><td class="mdescLeft">&#160;</td><td class="mdescRight">set a new delimiter for this writer  <a href="classcsvio_1_1CSVWriter.html#ae917539a27dc14ea343f905bddc43235">More...</a><br /></td></tr>
 <tr class="separator:ae917539a27dc14ea343f905bddc43235"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,8 +122,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:af2462c8239061fb97e18dbc40f415e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8825cc0508ec552edd372abe1ccb7b07"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#a8825cc0508ec552edd372abe1ccb7b07">m_num_columns</a> {-1}</td></tr>
 <tr class="separator:a8825cc0508ec552edd372abe1ccb7b07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa30182691708e34376ee02daf7de47be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#aa30182691708e34376ee02daf7de47be">m_strict_columns</a></td></tr>
-<tr class="separator:aa30182691708e34376ee02daf7de47be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7be7c7e419dd275da2ae9d7b55fdd73"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html#ab7be7c7e419dd275da2ae9d7b55fdd73">m_warn_columns</a></td></tr>
+<tr class="separator:ab7be7c7e419dd275da2ae9d7b55fdd73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;template&lt; class... &gt; class RowContainer = std::vector, class LineWriter = csvio::util::CSVLineWriter&gt;<br />
@@ -127,10 +131,10 @@ class csvio::CSVWriter&lt; RowContainer, LineWriter &gt;</h3>
 
 <p>Writes data as csv. </p>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00640">640</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00657">657</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a82b1e260e14da4b0664ef22c46b71762"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82b1e260e14da4b0664ef22c46b71762">&#9670;&nbsp;</a></span>CSVWriter()</h2>
+<a id="a7d8de809ab5fe75a81ad0a3c005dfcfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d8de809ab5fe75a81ad0a3c005dfcfc">&#9670;&nbsp;</a></span>CSVWriter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -156,7 +160,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>strict_columns</em> = <code>true</code>, </td>
+          <td class="paramname"><em>warn_columns</em> = <code>true</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -200,14 +204,14 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
   <table class="params">
     <tr><td class="paramname">line_writer</td><td>reference to a LineWriter object </td></tr>
     <tr><td class="paramname">delimiter</td><td>output delimiter to use to delimit ouput </td></tr>
-    <tr><td class="paramname">strict_columns</td><td>whether same length columns should be enforced </td></tr>
+    <tr><td class="paramname">warn_columns</td><td>whether warning should be printed in the case of column mismatch </td></tr>
     <tr><td class="paramname">line_terminator</td><td>sequence that denotes the end of a csv row </td></tr>
     <tr><td class="paramname">format_func</td><td>a function to format a container to an output csv string </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00649">649</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00666">666</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -240,7 +244,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 <p>get the current delimiter from this writer </p>
 <dl class="section return"><dt>Returns</dt><dd>constant character delimiter </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00668">668</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00685">685</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -272,7 +276,39 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 <p>check if the underlying stream is still good </p>
 <dl class="section return"><dt>Returns</dt><dd>true if good, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00673">673</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00690">690</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a5bb060373389a3838c7217dae86d792f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bb060373389a3838c7217dae86d792f">&#9670;&nbsp;</a></span>lcount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class... &gt; class RowContainer = std::vector, class LineWriter = csvio::util::CSVLineWriter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const size_t <a class="el" href="classcsvio_1_1CSVWriter.html">csvio::CSVWriter</a>&lt; RowContainer, LineWriter &gt;::lcount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get number of csv lines written so far. </p>
+<dl class="section return"><dt>Returns</dt><dd>number of csv lines written so far </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00717">717</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -310,7 +346,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00663">663</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00680">680</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -348,14 +384,13 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00687">687</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00704">704</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="benchmark__csv__write_8cpp_source.html#l00005">BM_CSVWrite()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classcsvio_1_1CSVWriter_a50daac450717352fbdc1c45ed2dfe26f_icgraph.svg" width="327" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
-</div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classcsvio_1_1CSVWriter_a50daac450717352fbdc1c45ed2dfe26f_icgraph.svg" width="327" height="38"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 
 </div>
@@ -394,7 +429,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00678">678</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00695">695</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -421,7 +456,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00707">707</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00729">729</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -447,7 +482,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00705">705</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00727">727</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -473,7 +508,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00698">698</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00720">720</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -499,7 +534,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00702">702</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00724">724</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
@@ -525,12 +560,12 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00701">701</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00723">723</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa30182691708e34376ee02daf7de47be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa30182691708e34376ee02daf7de47be">&#9670;&nbsp;</a></span>m_strict_columns</h2>
+<a id="ab7be7c7e419dd275da2ae9d7b55fdd73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7be7c7e419dd275da2ae9d7b55fdd73">&#9670;&nbsp;</a></span>m_warn_columns</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -541,7 +576,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVWriter.html">csvio::CSVWriter</a>&lt; RowContainer, LineWriter &gt;::m_strict_columns</td>
+          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVWriter.html">csvio::CSVWriter</a>&lt; RowContainer, LineWriter &gt;::m_warn_columns</td>
         </tr>
       </table>
   </td>
@@ -551,7 +586,7 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, class L
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00700">700</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00722">722</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>

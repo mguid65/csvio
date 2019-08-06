@@ -64,17 +64,16 @@ TEST(CSVReaderTest, ReadOneCSVLine) {
   EXPECT_EQ(false, csv_reader.good());
 }
 
-TEST(CSVReaderTest, ColumnMismatchExceptionTest) {
-  std::istringstream instream(
-      "a,b,c,d,e\n"
-      "a,b,c,d\n");
+TEST(CSVReaderTest, ReadBlankCSVFields) {
+  std::istringstream instream(",,,,");
   csvio::util::CSVLineReader csv_lr(instream);
   csvio::CSVReader csv_reader(csv_lr);
 
-  std::vector<std::string> expected{"a", "b", "c", "d", "e"};
+  std::vector<std::string> expected{"", "", "", "", ""};
   EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_ANY_THROW(csv_reader.read());
+  EXPECT_EQ(false, csv_reader.good());
 }
+
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLine) {
   std::istringstream instream("\"a\",\"b\",\"c\",\"d\",\"e\"");
@@ -170,18 +169,6 @@ TEST(CSVReaderTest, ReadOneCSVLineAltContainer) {
   std::list<std::string> expected{"a", "b", "c", "d", "e"};
   EXPECT_EQ(expected, csv_reader.read());
   EXPECT_EQ(false, csv_reader.good());
-}
-
-TEST(CSVReaderTest, ColumnMismatchExceptionTestAltContainer) {
-  std::istringstream instream(
-      "a,b,c,d,e\n"
-      "a,b,c,d\n");
-  csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr);
-
-  std::list<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_ANY_THROW(csv_reader.read());
 }
 
 TEST(CSVReaderTest, ReadOneEscapedCSVLineAltContainer) {

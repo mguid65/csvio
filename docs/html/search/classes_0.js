@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['columnmismatchexception',['ColumnMismatchException',['../classcsvio_1_1exceptional_1_1ColumnMismatchException.html',1,'csvio::exceptional']]],
   ['csvinputparser',['CSVInputParser',['../structcsvio_1_1util_1_1CSVInputParser.html',1,'csvio::util']]],
   ['csvlinereader',['CSVLineReader',['../classcsvio_1_1util_1_1CSVLineReader.html',1,'csvio::util']]],
   ['csvlinewriter',['CSVLineWriter',['../classcsvio_1_1util_1_1CSVLineWriter.html',1,'csvio::util']]],

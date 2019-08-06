@@ -93,9 +93,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a09223945cc9e4fa21a7c1d61759c1d1d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html#a09223945cc9e4fa21a7c1d61759c1d1d">delim_split_escaped_impl</a> (std::string_view input, const char delim)</td></tr>
 <tr class="memdesc:a09223945cc9e4fa21a7c1d61759c1d1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">implementation of delim_split_escaped  <a href="structcsvio_1_1util_1_1CSVInputParser.html#a09223945cc9e4fa21a7c1d61759c1d1d">More...</a><br /></td></tr>
 <tr class="separator:a09223945cc9e4fa21a7c1d61759c1d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bf049a13afa2045be1c8ae701b41a75"><td class="memItemLeft" align="right" valign="top">static RowContainer&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html#a8bf049a13afa2045be1c8ae701b41a75">delim_split_naive</a> (const std::string &amp;input, const char delim)</td></tr>
-<tr class="memdesc:a8bf049a13afa2045be1c8ae701b41a75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split string_view csv row based on a delimiter.  <a href="structcsvio_1_1util_1_1CSVInputParser.html#a8bf049a13afa2045be1c8ae701b41a75">More...</a><br /></td></tr>
-<tr class="separator:a8bf049a13afa2045be1c8ae701b41a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b0ded8b4c9e1072d91147d7eb832d21"><td class="memItemLeft" align="right" valign="top">static RowContainer&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html#a7b0ded8b4c9e1072d91147d7eb832d21">delim_split_naive</a> (std::string_view input, const char delim)</td></tr>
+<tr class="memdesc:a7b0ded8b4c9e1072d91147d7eb832d21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split string_view csv row based on a delimiter.  <a href="structcsvio_1_1util_1_1CSVInputParser.html#a7b0ded8b4c9e1072d91147d7eb832d21">More...</a><br /></td></tr>
+<tr class="separator:a7b0ded8b4c9e1072d91147d7eb832d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6440779cb5cb6492302bb31d0af723bf"><td class="memItemLeft" align="right" valign="top">static RowContainer&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html#a6440779cb5cb6492302bb31d0af723bf">delim_split_unescaped</a> (std::string_view input, const char delim)</td></tr>
 <tr class="memdesc:a6440779cb5cb6492302bb31d0af723bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">split a csv row on a delimiter escaping the output strings  <a href="structcsvio_1_1util_1_1CSVInputParser.html#a6440779cb5cb6492302bb31d0af723bf">More...</a><br /></td></tr>
 <tr class="separator:a6440779cb5cb6492302bb31d0af723bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,7 +121,7 @@ class csvio::util::CSVInputParser&lt; RowContainer &gt;</h3>
 <p>Class of functions to parse a csv row into a non map container. </p>
 <p>These functions assume the container has a push_back method </p>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00181">181</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00169">169</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a070d2bbc1f0b72d2c390310ed5272273"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a070d2bbc1f0b72d2c390310ed5272273">&#9670;&nbsp;</a></span>delim_split_escaped()</h2>
@@ -169,9 +169,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00262">262</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00253">253</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00218">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00209">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -227,11 +227,11 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00218">218</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00209">209</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00173">csvio::util::LINE</a>, <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00173">csvio::util::QUOTE</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00161">csvio::util::LINE</a>, <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00161">csvio::util::QUOTE</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00262">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00277">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00301">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded_impl()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00253">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00268">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00292">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded_impl()</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -240,8 +240,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a8bf049a13afa2045be1c8ae701b41a75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf049a13afa2045be1c8ae701b41a75">&#9670;&nbsp;</a></span>delim_split_naive()</h2>
+<a id="a7b0ded8b4c9e1072d91147d7eb832d21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0ded8b4c9e1072d91147d7eb832d21">&#9670;&nbsp;</a></span>delim_split_naive()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -254,7 +254,7 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
         <tr>
           <td class="memname">static RowContainer&lt;std::string&gt; <a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html">csvio::util::CSVInputParser</a>&lt; RowContainer &gt;::delim_split_naive </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">std::string_view&#160;</td>
           <td class="paramname"><em>input</em>, </td>
         </tr>
         <tr>
@@ -287,9 +287,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00191">191</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00179">179</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
 
 </div>
 </div>
@@ -339,9 +339,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00288">288</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00279">279</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00277">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00268">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -397,11 +397,11 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00277">277</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00268">268</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00218">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00148">csvio::util::unescape()</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00209">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00136">csvio::util::unescape()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00288">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00322">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00279">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00313">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -461,9 +461,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00322">322</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00313">313</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00277">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00268">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -518,9 +518,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>RowContainer of split csv fields, if input string empty, return RowContainer with one empty string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00301">301</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00292">292</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00218">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00182">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00148">csvio::util::unescape()</a>.</p>
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00209">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00170">csvio::util::CSVInputParser&lt; RowContainer &gt;::m_data</a>, and <a class="el" href="csv__io_8hpp_source.html#l00136">csvio::util::unescape()</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -552,9 +552,9 @@ template&lt;template&lt; class... &gt; class RowContainer&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00182">182</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00170">170</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00262">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00218">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00191">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_naive()</a>, <a class="el" href="csv__io_8hpp_source.html#l00288">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00277">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00322">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00301">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded_impl()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00253">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00209">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_escaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00179">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_naive()</a>, <a class="el" href="csv__io_8hpp_source.html#l00279">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped()</a>, <a class="el" href="csv__io_8hpp_source.html#l00268">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_impl()</a>, <a class="el" href="csv__io_8hpp_source.html#l00313">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded()</a>, and <a class="el" href="csv__io_8hpp_source.html#l00292">csvio::util::CSVInputParser&lt; RowContainer &gt;::delim_split_unescaped_threaded_impl()</a>.</p>
 
 </div>
 </div>

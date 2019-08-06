@@ -7,10 +7,12 @@ var searchData=
   ['m_5fcurrent_5fstr_5fline',['m_current_str_line',['../classcsvio_1_1CSVReader.html#a54c3fc71181078257d99ec7a22d29693',1,'csvio::CSVReader']]],
   ['m_5fdata',['m_data',['../structcsvio_1_1util_1_1CSVInputParser.html#a21b8723057a4ca7f8006431f05f555e7',1,'csvio::util::CSVInputParser']]],
   ['m_5fdelim',['m_delim',['../classcsvio_1_1CSVReader.html#a74afeedf4e0238d6f0f071f376e719ec',1,'csvio::CSVReader::m_delim()'],['../classcsvio_1_1CSVWriter.html#a6e7ef1b24be2bc536790bde4fd2a0978',1,'csvio::CSVWriter::m_delim()']]],
+  ['m_5fgood',['m_good',['../structcsvio_1_1CSVReader_1_1iterator.html#a7a54319f1645c0a5313bb830e38d7291',1,'csvio::CSVReader::iterator']]],
   ['m_5fhas_5fheader',['m_has_header',['../classcsvio_1_1CSVReader.html#a91165820998c96072e73bdf69a86e89e',1,'csvio::CSVReader']]],
   ['m_5fheader_5fnames',['m_header_names',['../classcsvio_1_1CSVReader.html#af9940f36c5d2e5488307c0ddf4a3a3be',1,'csvio::CSVReader']]],
   ['m_5fline_5fterminator',['m_line_terminator',['../classcsvio_1_1CSVWriter.html#af2462c8239061fb97e18dbc40f415e4d',1,'csvio::CSVWriter']]],
   ['m_5fnum_5fcolumns',['m_num_columns',['../classcsvio_1_1CSVReader.html#adb7452cf8872095e6fff886be173a0ed',1,'csvio::CSVReader::m_num_columns()'],['../classcsvio_1_1CSVWriter.html#a8825cc0508ec552edd372abe1ccb7b07',1,'csvio::CSVWriter::m_num_columns()']]],
   ['m_5fparse_5ffunc',['m_parse_func',['../classcsvio_1_1CSVReader.html#acb0a2ff730d89cb2586917533b3b9bd0',1,'csvio::CSVReader']]],
-  ['m_5fstrict_5fcolumns',['m_strict_columns',['../classcsvio_1_1CSVReader.html#a5c8bb0dada448f92913ff12c96b5689b',1,'csvio::CSVReader::m_strict_columns()'],['../classcsvio_1_1CSVWriter.html#aa30182691708e34376ee02daf7de47be',1,'csvio::CSVWriter::m_strict_columns()']]]
+  ['m_5fptr',['m_ptr',['../structcsvio_1_1CSVReader_1_1iterator.html#ace0fd11f74b5b2c11a8bc8d21558e171',1,'csvio::CSVReader::iterator']]],
+  ['m_5fwarn_5fcolumns',['m_warn_columns',['../classcsvio_1_1CSVReader.html#a256306b50c713a7d6714cd4c2645a68d',1,'csvio::CSVReader::m_warn_columns()'],['../classcsvio_1_1CSVWriter.html#ab7be7c7e419dd275da2ae9d7b55fdd73',1,'csvio::CSVWriter::m_warn_columns()']]]
 ];
