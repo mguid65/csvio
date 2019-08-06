@@ -45,18 +45,6 @@
 #define unlikely(expr) (__builtin_expect(!!(expr), 0))
 #endif
 
-namespace csvio::exceptional {
-/** \class ColumnMismatchException
- *  \brief exception to describe mismatch in number of csv columns
- */
-class ColumnMismatchException : public std::exception {
-public:
-  ColumnMismatchException() = default;
-  virtual const char* what() const noexcept { return "CSV column number mismatch detected"; }
-};
-
-}  // namespace csvio::exceptional
-
 namespace csvio::util {
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
@@ -555,19 +543,18 @@ public:
    *  \param line_reader reference to a LineReader
    *  \param delimiter a character delimiter
    *  \param has_header specify that this csv has a header
-   *  \param strict_columns specify that an exception should be thrown in case of a column length
-   * mismatch
+   *  \param warn_columns warn in case of mismatched columns
    *  \param parse_func a function which describes how to split a csv row
    */
   explicit CSVReader(
       LineReader& line_reader, const char delimiter = ',', bool has_header = false,
-      bool strict_columns = true,
+      bool warn_columns = true,
       std::function<RowContainer<std::string>(std::string_view, const char)> parse_func =
           csvio::util::CSVInputParser<RowContainer>::delim_split_unescaped)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
         m_has_header(has_header),
-        m_strict_columns(strict_columns),
+        m_warn_columns(warn_columns),
         m_parse_func(parse_func) {
     if (m_has_header) {
       handle_header();
@@ -604,12 +591,8 @@ public:
    *  \return a reference to the current RowContainer
    */
   RowContainer<std::string>& read() {
-    try {
-      advance();
-      return current();
-    } catch (csvio::exceptional::ColumnMismatchException& e) {
-      throw;
-    }
+    advance();
+    return current();
   }
 
   /** \brief Get number of csv lines read so far
@@ -622,11 +605,7 @@ protected:
    */
   void advance() {
     m_current_str_line = m_csv_line_reader.readline();
-    try {
-      parse_current_str();
-    } catch (csvio::exceptional::ColumnMismatchException& e) {
-      throw;
-    }
+    parse_current_str();
   }
 
   /** \brief parse the current string line to a RowContainer
@@ -641,8 +620,8 @@ protected:
 
     if (m_num_columns == -1) {
       m_num_columns = m_current.size();
-    } else if (m_strict_columns && (m_current.size() != m_num_columns)) {
-      throw csvio::exceptional::ColumnMismatchException();
+    } else if (m_warn_columns && (m_current.size() != m_num_columns)) {
+      std::cerr << "[warning] Column mismatch detected, further parsing may be malformed\n";
     }
   }
 
@@ -659,7 +638,7 @@ protected:
 
   char m_delim;
   bool m_has_header;
-  bool m_strict_columns;
+  bool m_warn_columns;
   std::function<RowContainer<std::string>(std::string_view, const char)> m_parse_func;
 
   std::string m_current_str_line;
@@ -680,18 +659,18 @@ public:
   /** \brief construct a CSVWriter from a LineWriter
    *  \param line_writer reference to a LineWriter object
    *  \param delimiter output delimiter to use to delimit ouput
-   *  \param strict_columns whether same length columns should be enforced
+   *  \param warn_columns whether warning should be printed in the case of column mismatch
    *  \param line_terminator sequence that denotes the end of a csv row
    *  \param format_func a function to format a container to an output csv string
    */
   explicit CSVWriter(
-      LineWriter& line_writer, const char delimiter = ',', bool strict_columns = true,
+      LineWriter& line_writer, const char delimiter = ',', bool warn_columns = true,
       std::string line_terminator = "\r\n",
       std::function<std::string(const RowContainer<std::string>&, const char, const std::string&)>
           format_func = csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
-        m_strict_columns(strict_columns),
+        m_warn_columns(warn_columns),
         m_line_terminator(std::move(line_terminator)),
         m_csv_output_formatter(format_func) {}
 
@@ -726,8 +705,8 @@ public:
     if (values.empty()) return;
     if (m_num_columns == -1) {
       m_num_columns = values.size();
-    } else if (m_strict_columns && (values.size() != m_num_columns)) {
-      throw csvio::exceptional::ColumnMismatchException();
+    } else if (m_warn_columns && (values.size() != m_num_columns)) {
+      std::cerr << "[Warning] Column mismatch detected\n";
     }
     m_csv_line_writer.writeline(m_csv_output_formatter(values, m_delim, m_line_terminator));
   }
@@ -740,7 +719,7 @@ public:
 protected:
   char m_delim;
 
-  bool m_strict_columns;
+  bool m_warn_columns;
   long m_num_columns{-1};
   std::string m_line_terminator;
 
