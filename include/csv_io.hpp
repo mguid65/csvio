@@ -26,6 +26,7 @@
  *
  */
 
+#include <type_traits>
 #include <algorithm>
 #include <cassert>
 #include <exception>
@@ -46,39 +47,10 @@
 #endif
 
 namespace csvio::util {
-/** \class has_push_back
- *  \brief SFINAE Helper to determine if T has a push_back method
- */
-template <typename, typename T>
-struct has_push_back {
-  static_assert(
-      std::integral_constant<T, false>::value,
-      "Second template parameter needs to be of function type.");
-};
 
-/** \class has_push_back
- *  \brief Specialization of has_push_back
- */
-template <typename C, typename Ret, typename... Args>
-struct has_push_back<C, Ret(Args...)> {
-private:
-  /** \brief check if a type T has method push_back
-   *  \return boolean whether T has a method push_back
-   */
-  template <typename T>
-  static constexpr auto check(T*) -> typename std::is_same<
-      decltype(std::declval<T>().push_back(std::declval<Args>()...)), Ret>::type;
-
-  /** \brief overload which returns false
-   *  \return false
-   */
-  template <typename>
-  static constexpr std::false_type check(...);
-
-  using type = decltype(check<C>(0));
-
-public:
-  static constexpr bool value = type::value;
+template<template <class...> class RowContainer, class ValueType = std::string>
+concept PushBackable = requires(RowContainer<ValueType> a, ValueType i) {
+  { a.push_back(i) } -> void; // strict constraint due to Concepts TS
 };
 
 /** \brief function to escape characters in csv fields according to RFC 4180
@@ -165,7 +137,7 @@ enum CSVParserScope { LINE, QUOTE };
  *
  *  These functions assume the container has a push_back method
  */
-template <template <class...> class RowContainer>
+template <PushBackable RowContainer>
 struct CSVInputParser {
   static RowContainer<std::string> m_data;
   /** \brief Split string_view csv row based on a delimiter
@@ -177,11 +149,6 @@ struct CSVInputParser {
    *  \return RowContainer of split csv fields
    */
   static RowContainer<std::string> delim_split_naive(std::string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<std::string>,
-            void(const typename RowContainer<std::string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
     m_data.clear();
 
     std::string tmp(input.data(), input.length());
@@ -207,12 +174,6 @@ struct CSVInputParser {
    * empty string
    */
   static void delim_split_escaped_impl(std::string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<std::string>,
-            void(const typename RowContainer<std::string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
-
     CSVParserScope state{LINE};
 
     std::string chunk;
