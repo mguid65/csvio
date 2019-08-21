@@ -36,7 +36,15 @@
 #include <list>
 #include <memory>
 #include <string>
+
+#ifdef __cpp_lib_experimental_string_view
 #include <string_view>
+#else
+namespace std {
+	using string_view = const string&;
+}
+#endif
+
 #include <thread>
 #include <vector>
 
@@ -137,11 +145,17 @@ inline std::string unescape(std::string_view data) {
   std::string result;
   int quotes_seen = 0;
 
-  if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
+#ifdef __cpp_lib_experimental_string_view
+	if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
     data = data.substr(1, data.size() - 2);
   }
+	std::string_view dat = data;
+#else
+	// keep const std::string& (which is string_view now) construction, and if statement.
+	std::string_view dat = (data[0] == '\"') ? data.substr(1, data.size() - 2) : data;
+#endif
 
-  for (const char& c : data) {
+  for (const char& c : dat) {
     switch (c) {
       case '\"':
         quotes_seen++;
@@ -190,7 +204,11 @@ struct CSVInputParser {
     while (first < tmp.size()) {
       const auto second = tmp.find_first_of(delim, first);
       if (first != second) m_data.push_back(tmp.substr(first, second - first));
+#ifdef __cpp_lib_experimental_string_view
       if (second == std::string_view::npos) break;
+#else
+			if (second == std::string::npos) break;
+#endif
       first = second + 1;
     }
     if (m_data.empty()) m_data.push_back("");
@@ -240,7 +258,8 @@ struct CSVInputParser {
     }
     if (!chunk.empty() || m_data.size() < num_cols) m_data.push_back(chunk);
 
-    if (auto& last_element = m_data.back(); last_element.back() == '\r') last_element.pop_back();
+		auto& last_element = m_data.back();
+		if (last_element.back() == '\r') last_element.pop_back();
   }
 
   /** \brief Split string_view csv row based on a delimiter with escaped fields
