@@ -7,6 +7,7 @@ add_executable(test_csv_reader test_csv_reader.cpp)
 add_executable(test_csv_writer test_csv_writer.cpp)
 add_executable(test_escape_utils test_escape_utils.cpp)
 add_executable(test_csv_reader_ifstream test_csv_reader_ifstream.cpp)
+add_executable(test_csv_map_reader test_csv_map_reader.cpp)
 
 TARGET_LINK_LIBRARIES(test_csv_input_parser gtest pthread)
 TARGET_LINK_LIBRARIES(test_csv_line_reader gtest pthread)
@@ -16,4 +17,5 @@ TARGET_LINK_LIBRARIES(test_csv_reader gtest pthread)
 TARGET_LINK_LIBRARIES(test_csv_writer gtest pthread)
 TARGET_LINK_LIBRARIES(test_escape_utils gtest pthread)
 TARGET_LINK_LIBRARIES(test_csv_reader_ifstream gtest pthread)
+TARGET_LINK_LIBRARIES(test_csv_map_reader gtest pthread)
 
