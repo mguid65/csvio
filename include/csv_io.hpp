@@ -154,13 +154,13 @@ inline string unescape(string_view data) {
 	if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
     data = data.substr(1, data.size() - 2);
   }
-	string_view dat = data;
+	string_view sv_data = data;
 #else
 	// keep const string& (which is "string_view" now) construction, and if statement.
-	string_view dat = (data[0] == '\"') ? data.substr(1, data.size() - 2) : data;
+	string_view sv_data = (data[0] == '\"') ? data.substr(1, data.size() - 2) : data;
 #endif
 
-  for (const char& c : dat) {
+  for (const char& c : sv_data) {
     switch (c) {
       case '\"':
         quotes_seen++;
