@@ -20,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 #include <sstream>
@@ -56,94 +55,82 @@ TEST(CSVMapReaderTest, ReadOneCSVLine) {
   EXPECT_EQ(true, csv_map_reader.good());
 }
 
-/**
 TEST(CSVMapReaderTest, ReadBlankCSVFields) {
-  std::istringstream instream(",,,,");
+  std::istringstream instream("a,b,c,d,e\r\n,,,,\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr);
+  csvio::CSVMapReader<std::map> csv_map_reader(csv_lr);
 
-  std::vector<std::string> expected{"", "", "", "", ""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"a",""}, {"b",""}, {"c",""}, {"d",""}, {"e",""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
-
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLine) {
-  std::istringstream instream("\"a\",\"b\",\"c\",\"d\",\"e\"");
+  std::istringstream instream("a,b,c,d,e\r\n\"a\",\"b\",\"c\",\"d\",\"e\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr);
+  csvio::CSVMapReader csv_map_reader(csv_lr);
 
-  std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"a","a"}, {"b","b"}, {"c","c"}, {"d","d"}, {"e","e"}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotes) {
-  std::istringstream instream(
-      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
+  std::istringstream instream("a,b,c,d,e\r\n"
+      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr);
+  csvio::CSVMapReader csv_map_reader(csv_lr);
 
-  std::vector<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
-}
-
-TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesThreaded) {
-  std::istringstream instream(
-      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
-  csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::vector> csv_reader(csv_lr, ',', false, true, csvio::util::CSVInputParser<std::vector>::delim_split_unescaped_threaded);
-
-  std::vector<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"a","\"a\""}, {"b","\"b\""}, {"c","\"c\""}, {"d","\"d\""}, {"e","\"e\""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneCSVLineAltDelim) {
-  std::istringstream instream("a|b|c|d|e");
+  std::istringstream instream("a|b|c|d|e\r\n1|2|3|4|5\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr, '|');
+  csvio::CSVMapReader csv_map_reader(csv_lr, '|');
 
-  std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"a", "1"}, {"b", "2"}, {"c", "3"}, {"d", "4"}, {"e", "5"}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelim) {
-  std::istringstream instream("\"a\"|\"b\"|\"c\"|\"d\"|\"e\"");
+  std::istringstream instream("a|b|c|d|e\r\n\"1\"|\"2\"|\"3\"|\"4\"|\"5\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr, '|');
+  csvio::CSVMapReader csv_map_reader(csv_lr, '|');
 
-  std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"a", "1"}, {"b","2"}, {"c","3"}, {"d","4"}, {"e","5"}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelim) {
-  std::istringstream instream(
-      "\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
+  std::istringstream instream("1|2|3|4|5\r\n"
+      "\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader csv_reader(csv_lr, '|');
+  csvio::CSVMapReader csv_map_reader(csv_lr, '|');
 
-  std::vector<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::map<std::string, std::string> expected{{"1", "\"a\""}, {"2", "\"b\""}, {"3", "\"c\""}, {"4", "\"d\""}, {"5", "\"e\""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ConstructorFromLineReaderAltContainer) {
   std::istringstream instream("");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr);
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr);
 
-  std::list<std::string> expected{""};
-  EXPECT_EQ(expected, csv_reader.current());
-  EXPECT_EQ(true, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected;
+  EXPECT_EQ(expected, csv_map_reader.current());
+  EXPECT_EQ(false, csv_map_reader.good());
 
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
+/**
 TEST(CSVMapReaderTest, ReadCSVHeaderAltContainer) {
   std::istringstream instream("a,b,c,d,e");
   csvio::util::CSVLineReader csv_lr(instream);
