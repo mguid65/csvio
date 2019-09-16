@@ -532,31 +532,60 @@ template <
     typename LineReader = csvio::util::CSVLineReader>
 class CSVReader {
 public:
+  /** \class iterator
+   *  \brief CSVReader iterator
+   */
   struct iterator {
+    /** \brief construct a CSVReader iterator
+     *
+     *  This default is used for the end iterator
+     */
     iterator() {
       m_good = false;
     }
 
+    /** \brief parameterized constructor that takes a pointer to a CSVReader
+     *  \param ptr pointer to a valid non-nullptr CSVReader iterator
+     */
     iterator(CSVReader * ptr) : m_ptr(ptr) {
       m_ptr->read();
       m_good = m_ptr->good();
     }
 
+    /** \brief increment this CSVReader iterator
+     *  \return the iteration of CSVReader
+     */
     iterator operator++() {
       m_ptr->read();
       m_good = m_ptr->good();
       return *this;
     }
 
+    /** \brief Comparison to check for end
+     *  \param other const ref to a CSVReader iterator
+     *  \return true if the iterator is still good; otherwise false
+     */
     bool operator!= (const iterator & other) const { return m_good != other.m_good; }
+
     RowContainer<string>& operator*() const { return m_ptr->current(); }
+
+    /** \brief return the current RowContainer pointed to by this iterator
+     *  \return a pointer to the current RowContainer
+     */
     RowContainer<string>* operator->() const { return &m_ptr->current(); }
 
     CSVReader * m_ptr;
     bool m_good{true};
   };
 
+  /** \brief the begin CSVReader iterator
+   *  \return iterator with the begin CSVReader
+   */
   iterator begin() { return iterator(this); }
+
+  /** \brief the end CSVReader iterator
+   *  \return default constructed end iterator
+   */
   iterator end() const { return iterator(); }
 
   /** \brief Construct a CSVReader from a reference to a generic LineReader
