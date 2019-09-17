@@ -358,6 +358,7 @@ struct CSVMapInputParser {
       if(current_header != header_names.end()) last_header = *current_header;
     }
     if (!chunk.empty() || m_data.size() < num_cols) m_data.emplace(*current_header, chunk);
+
     if (auto& last_element = m_data.at(last_header); last_element.back() == '\r') last_element.pop_back();
   }
 
@@ -840,6 +841,7 @@ public:
    */
   RowMapContainer<std::string, std::string>& current() { return m_current; }
 
+  const auto& get_header_names() const { return m_stream_order_header_names; }
   /** \brief Advance to the next row and return the current RowContainer of CSV values
    *  \return a reference to the current RowContainer
    */
