@@ -37,14 +37,16 @@ TEST(CSVOutputFormatterTest, SingleVectorBlankToStringEscaped) {
   std::vector<std::string> to_join{""};
   std::string expected{"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleVectorUnescapedToStringEscaped) {
   std::vector<std::string> to_join{"a", "b", "c", "d", "e"};
   std::string expected{"a,b,c,d,e\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, SingleVectorBlankToStringUnescaped) {
@@ -67,14 +69,16 @@ TEST(CSVOutputFormatterTest, JoinSampleVectorEscapedToStringEscaped) {
   std::vector<std::string> to_join{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
   std::string expected{"\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleVectorInFieldDelimiterEscapedToStringEscaped) {
   std::vector<std::string> to_join{",a", ",b", ",c", ",d", ",e"};
   std::string expected{"\",a\",\",b\",\",c\",\",d\",\",e\"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleVectorInFieldDelimiterEscapedToStringEscapedHardParse) {
@@ -86,49 +90,56 @@ TEST(CSVOutputFormatterTest, JoinSampleVectorInFieldDelimiterEscapedToStringEsca
       "ee\"\"\",\"\"\"fo\n"
       "u\"\"r\"\"\",5,6,7,8\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::vector>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, SingleListBlankToStringEscaped) {
   std::list<std::string> to_join{""};
   std::string expected{"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleListUnescapedToStringEscaped) {
   std::list<std::string> to_join{"a", "b", "c", "d", "e"};
   std::string expected{"a,b,c,d,e\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, SingleListBlankToStringUnescaped) {
   std::list<std::string> to_join{""};
   std::string expected{"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_unescaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_unescaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleListUnscapedToStringUnescaped) {
   std::list<std::string> to_join{"a", "b", "c", "d", "e"};
   std::string expected{"a,b,c,d,e\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_unescaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_unescaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleListEscapedToStringEscaped) {
   std::list<std::string> to_join{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
   std::string expected{"\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleListInFieldDelimiterEscapedToStringEscaped) {
   std::list<std::string> to_join{",a", ",b", ",c", ",d", ",e"};
   std::string expected{"\",a\",\",b\",\",c\",\",d\",\",e\"\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 TEST(CSVOutputFormatterTest, JoinSampleListInFieldDelimiterEscapedToStringEscapedHardParse) {
@@ -140,7 +151,8 @@ TEST(CSVOutputFormatterTest, JoinSampleListInFieldDelimiterEscapedToStringEscape
       "ee\"\"\",\"\"\"fo\n"
       "u\"\"r\"\"\",5,6,7,8\r\n"};
   EXPECT_EQ(
-      expected, csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
+      expected,
+      csvio::util::CSVOutputFormatter<std::list>::delim_join_escaped_fmt(to_join, ',', "\r\n"));
 }
 
 }  // namespace

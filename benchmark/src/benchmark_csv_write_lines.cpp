@@ -8,14 +8,14 @@ static void BM_CSVWriteLines(benchmark::State& state) {
   csvio::CSVWriter<std::vector> csv_writer(csv_line_writer);
 
   std::vector<std::string> data{"sometext", "sometext", "sometext", "sometext"};
-  for(auto _ : state) {
-    for(int i = 0; i < state.range(0); i++) {
+  for (auto _ : state) {
+    for (int i = 0; i < state.range(0); i++) {
       csv_writer.write(data);
     }
   }
   outfile.close();
 }
 
-BENCHMARK(BM_CSVWriteLines)->RangeMultiplier(2)->Range(8, 8<<10);
+BENCHMARK(BM_CSVWriteLines)->RangeMultiplier(2)->Range(8, 8 << 10);
 
 BENCHMARK_MAIN();

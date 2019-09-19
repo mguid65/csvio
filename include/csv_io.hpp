@@ -34,11 +34,11 @@
 #include <iostream>
 #include <istream>
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 #include <thread>
 #include <vector>
-#include <map>
 
 #if defined(__cpp_lib_string_view) || defined(__cpp_lib_experimental_string_view)
 #include <string_view>
@@ -47,12 +47,12 @@ using std::string_view;
 using string_view = const std::string&;
 #endif
 
-using std::string;
-using std::vector;
-using std::thread;
+using std::function;
 using std::istream;
 using std::ostream;
-using std::function;
+using std::string;
+using std::thread;
+using std::vector;
 
 #ifdef __GNUC__
 #define likely(expr) (__builtin_expect(!!(expr), 1))
@@ -152,13 +152,13 @@ inline string unescape(string_view data) {
   int quotes_seen = 0;
 
 #if defined(__cpp_lib_string_view) || defined(__cpp_lib_experimental_string_view)
-	if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
+  if (data[0] == '\"') {  // if the first char is a quote, then the string is assumed to be quoted
     data = data.substr(1, data.size() - 2);
   }
-	string_view sv_data = data;
+  string_view sv_data = data;
 #else
-	// keep const string& (which is "string_view" now) construction, and if statement.
-	string_view sv_data = (data[0] == '\"') ? data.substr(1, data.size() - 2) : data;
+  // keep const string& (which is "string_view" now) construction, and if statement.
+  string_view sv_data = (data[0] == '\"') ? data.substr(1, data.size() - 2) : data;
 #endif
 
   for (const char& c : sv_data) {
@@ -199,8 +199,7 @@ struct CSVInputParser {
   static RowContainer<string> delim_split_naive(string_view input, const char delim) {
     static_assert(
         has_push_back<
-            RowContainer<string>,
-            void(const typename RowContainer<string>::value_type&)>::value,
+            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
     m_data.clear();
 
@@ -210,7 +209,7 @@ struct CSVInputParser {
     while (first < tmp.size()) {
       const auto second = tmp.find_first_of(delim, first);
       if (first != second) m_data.push_back(tmp.substr(first, second - first));
-			if (second == string::npos) break;
+      if (second == string::npos) break;
       first = second + 1;
     }
     if (m_data.empty()) m_data.push_back("");
@@ -229,8 +228,7 @@ struct CSVInputParser {
   static void delim_split_escaped_impl(string_view input, const char delim) {
     static_assert(
         has_push_back<
-            RowContainer<string>,
-            void(const typename RowContainer<string>::value_type&)>::value,
+            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
         "The template parameter needs to be a container type with an push_back function.");
 
     CSVParserScope state{LINE};
@@ -260,8 +258,8 @@ struct CSVInputParser {
     }
     if (!chunk.empty() || m_data.size() < num_cols) m_data.push_back(chunk);
 
-		auto& last_element = m_data.back();
-		if (last_element.back() == '\r') last_element.pop_back();
+    auto& last_element = m_data.back();
+    if (last_element.back() == '\r') last_element.pop_back();
   }
 
   /** \brief Split string_view csv row based on a delimiter with escaped fields
@@ -312,16 +310,14 @@ struct CSVInputParser {
    */
   static void delim_split_unescaped_threaded_impl(string_view input, const char delim) {
     delim_split_escaped_impl(input, delim);
-    vector<thread> threads; //would be better to use a thread pool
+    vector<thread> threads;  // would be better to use a thread pool
 
-    for(auto& field : m_data) {
-      threads.push_back([&]() {
-        field = unescape(field);
-      });
+    for (auto& field : m_data) {
+      threads.push_back([&]() { field = unescape(field); });
     }
 
-    for(auto& worker : threads) {
-      if(worker.joinable()) worker.join();
+    for (auto& worker : threads) {
+      if (worker.joinable()) worker.join();
     }
   }
 
@@ -336,18 +332,17 @@ struct CSVInputParser {
     delim_split_unescaped_impl(input, delim);
     return m_data;
   }
-
 };
-
 
 template <template <class...> class RowContainer>
 RowContainer<string> CSVInputParser<RowContainer>::m_data;
 
-template<template <class...> class RowMapContainer = std::map>
+template <template <class...> class RowMapContainer = std::map>
 struct CSVMapInputParser {
   static RowMapContainer<std::string, std::string> m_data;
 
-  static void delim_split_escaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static void delim_split_escaped_impl(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     CSVParserScope state{LINE};
 
     std::string chunk;
@@ -375,46 +370,50 @@ struct CSVMapInputParser {
         if (c == '\"') state = LINE;
         chunk.push_back(c);
       }
-      if(current_header != header_names.end()) last_header = *current_header;
+      if (current_header != header_names.end()) last_header = *current_header;
     }
     if (!chunk.empty() || m_data.size() < num_cols) m_data.emplace(*current_header, chunk);
 
-    if (auto& last_element = m_data.at(last_header); last_element.back() == '\r') last_element.pop_back();
+    if (auto& last_element = m_data.at(last_header); last_element.back() == '\r')
+      last_element.pop_back();
   }
 
-  static RowMapContainer<std::string, std::string> delim_split_escaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static RowMapContainer<std::string, std::string> delim_split_escaped(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     m_data.clear();
     delim_split_escaped_impl(input, delim, header_names);
     return m_data;
   }
 
-  static void delim_split_unescaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static void delim_split_unescaped_impl(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     delim_split_escaped_impl(input, delim, header_names);
     for (auto& key_field : m_data) key_field.second = unescape(key_field.second);
   }
 
-  static RowMapContainer<std::string, std::string> delim_split_unescaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static RowMapContainer<std::string, std::string> delim_split_unescaped(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     m_data.clear();
     delim_split_unescaped_impl(input, delim, header_names);
     return m_data;
   }
 
-  static void delim_split_unescaped_threaded_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static void delim_split_unescaped_threaded_impl(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     delim_split_escaped_impl(input, delim, header_names);
-    std::vector<std::thread> threads; //would be better to use a thread pool
+    std::vector<std::thread> threads;  // would be better to use a thread pool
 
     for (auto& key_field : m_data) {
-      threads.emplace_back([&]() {
-        key_field.second = unescape(key_field.second);
-      });
+      threads.emplace_back([&]() { key_field.second = unescape(key_field.second); });
     }
 
-    for(auto& worker : threads) {
-      if(worker.joinable()) worker.join();
+    for (auto& worker : threads) {
+      if (worker.joinable()) worker.join();
     }
   }
 
-  static RowMapContainer<std::string, std::string> delim_split_unescaped_threaded(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+  static RowMapContainer<std::string, std::string> delim_split_unescaped_threaded(
+      std::string_view input, const char delim, std::vector<std::string>& header_names) {
     m_data.clear();
     delim_split_unescaped_threaded_impl(input, delim, header_names);
     return m_data;
@@ -437,8 +436,7 @@ struct CSVOutputFormatter {
    *  \return delimited, escaped csv row
    */
   static string delim_join_escaped_fmt(
-      const RowContainer<string>& csv_row, const char delim,
-      const string& line_terminator) {
+      const RowContainer<string>& csv_row, const char delim, const string& line_terminator) {
     string result;
     result.reserve(csv_row.size() * 2);
 
@@ -468,8 +466,7 @@ struct CSVOutputFormatter {
    *  \return delimited  csv row
    */
   static string delim_join_unescaped_fmt(
-      const RowContainer<string>& csv_row, const char delim,
-      const string& line_terminator) {
+      const RowContainer<string>& csv_row, const char delim, const string& line_terminator) {
     string result;
     result.reserve(csv_row.size() * 2);
 
@@ -610,14 +607,12 @@ public:
      *
      *  This default is used for the end iterator
      */
-    iterator() {
-      m_good = false;
-    }
+    iterator() { m_good = false; }
 
     /** \brief parameterized constructor that takes a pointer to a CSVReader
      *  \param ptr pointer to a valid non-nullptr CSVReader iterator
      */
-    iterator(CSVReader * ptr) : m_ptr(ptr) {
+    iterator(CSVReader* ptr) : m_ptr(ptr) {
       m_ptr->read();
       m_good = m_ptr->good();
     }
@@ -635,7 +630,7 @@ public:
      *  \param other const ref to a CSVReader iterator
      *  \return true if the iterator is still good; otherwise false
      */
-    bool operator!= (const iterator & other) const { return m_good != other.m_good; }
+    bool operator!=(const iterator& other) const { return m_good != other.m_good; }
 
     RowContainer<string>& operator*() const { return m_ptr->current(); }
 
@@ -644,7 +639,7 @@ public:
      */
     RowContainer<string>* operator->() const { return &m_ptr->current(); }
 
-    CSVReader * m_ptr;
+    CSVReader* m_ptr;
     bool m_good{true};
   };
 
@@ -765,15 +760,13 @@ protected:
 
   RowContainer<string> m_header_names{""};
   RowContainer<string> m_current{""};
-
 };
 
 /** \class CSVWriter
  *  \brief Writes data as csv
  */
 template <
-    template <class...> class RowContainer = vector,
-    class LineWriter = csvio::util::CSVLineWriter>
+    template <class...> class RowContainer = vector, class LineWriter = csvio::util::CSVLineWriter>
 class CSVWriter {
 public:
   /** \brief construct a CSVWriter from a LineWriter
@@ -786,8 +779,8 @@ public:
   explicit CSVWriter(
       LineWriter& line_writer, const char delimiter = ',', bool warn_columns = true,
       string line_terminator = "\r\n",
-      function<string(const RowContainer<string>&, const char, const string&)>
-          format_func = csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
+      function<string(const RowContainer<string>&, const char, const string&)> format_func =
+          csvio::util::CSVOutputFormatter<RowContainer>::delim_join_escaped_fmt)
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
         m_warn_columns(warn_columns),
@@ -843,8 +836,7 @@ protected:
   long m_num_columns{-1};
   string m_line_terminator;
 
-  function<string(const RowContainer<string>&, const char, const string&)>
-      m_csv_output_formatter;
+  function<string(const RowContainer<string>&, const char, const string&)> m_csv_output_formatter;
 
   LineWriter& m_csv_line_writer;
 };
@@ -862,12 +854,14 @@ public:
    *  \param delimiter a character delimiter
    *  \param parse_func a function which describes how to split a csv row
    *  \param header_parse_func a function to parse the header
-   *  because it doesn't go into the map (default is csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
+   *  because it doesn't go into the map (default is
+   * csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
    */
   explicit CSVMapReader(
       LineReader& line_reader, const char delimiter = ',',
-      std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>&)> parse_func =
-          csvio::util::CSVMapInputParser<RowMapContainer>::delim_split_unescaped,
+      std::function<RowMapContainer<std::string, std::string>(
+          std::string_view, const char, std::vector<std::string>&)>
+          parse_func = csvio::util::CSVMapInputParser<RowMapContainer>::delim_split_unescaped,
       std::function<std::vector<std::string>(std::string_view, const char)> header_parse_func =
           csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
       : m_csv_line_reader(line_reader),
@@ -940,7 +934,9 @@ protected:
   LineReader& m_csv_line_reader;
 
   char m_delim;
-  std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>&)> m_parse_func;
+  std::function<RowMapContainer<std::string, std::string>(
+      std::string_view, const char, std::vector<std::string>&)>
+      m_parse_func;
   std::function<std::vector<std::string>(std::string_view, const char)> m_header_parse_func;
 
   std::string m_current_str_line;

@@ -47,7 +47,7 @@ TEST(CSVReaderIfstream, ConstructorFromIfstreamWithHeader) {
     csvio::util::CSVLineReader csv_line_reader(infile);
     csvio::CSVReader csv_reader(csv_line_reader, ',', true);
 
-    std::vector<std::string> expected{"seq","name/first","age","city","pick","date"};
+    std::vector<std::string> expected{"seq", "name/first", "age", "city", "pick", "date"};
     EXPECT_EQ(true, csv_reader.good());
     EXPECT_EQ(1u, csv_reader.lcount());
     EXPECT_EQ(expected, csv_reader.get_header_names());
@@ -64,7 +64,7 @@ TEST(CSVReaderIfstream, ReadWholeFileNoHeader) {
     std::vector<std::string> expected{""};
     std::vector<std::string> row;
 
-    while(csv_reader.good()) {
+    while (csv_reader.good()) {
       row = csv_reader.read();
     }
 
@@ -80,11 +80,11 @@ TEST(CSVReaderIfstream, ReadWholeFileWithHeader) {
     csvio::util::CSVLineReader csv_line_reader(infile);
     csvio::CSVReader csv_reader(csv_line_reader, ',', true);
 
-    std::vector<std::string> expected_header{"seq","name/first","age","city","pick","date"};
+    std::vector<std::string> expected_header{"seq", "name/first", "age", "city", "pick", "date"};
     std::vector<std::string> expected{""};
     std::vector<std::string> row;
 
-    while(csv_reader.good()) {
+    while (csv_reader.good()) {
       row = csv_reader.read();
     }
 
@@ -101,4 +101,3 @@ int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

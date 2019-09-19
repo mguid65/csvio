@@ -63,7 +63,8 @@ TEST(CSVInputParserTest, SplitEscSVToVectorThreaded) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"a", "b", "c"};
   EXPECT_EQ(
-      expected, csvio::util::CSVInputParser<std::vector>::delim_split_unescaped_threaded(to_split, ','));
+      expected,
+      csvio::util::CSVInputParser<std::vector>::delim_split_unescaped_threaded(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVectorNoUnescape) {

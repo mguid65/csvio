@@ -19,12 +19,12 @@ int main() {
 
   auto t2 = std::chrono::high_resolution_clock::now();
 
-  auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>( t2 - t1 ).count();
+  auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
   double time_in_sec = static_cast<double>(duration) / static_cast<double>(1e9);
   int size_in_bytes = 1000000 * line_byte_size;
   double size_in_MB = size_in_bytes / 1e6;
 
-  std::cout << "Bytes Read         : " << size_in_bytes              << '\n'
-            << "Time(nanos)        : " << duration                   << '\n'
+  std::cout << "Bytes Read         : " << size_in_bytes << '\n'
+            << "Time(nanos)        : " << duration << '\n'
             << "Throughput(Megabytes/sec) : " << (size_in_MB / time_in_sec) << '\n';
 }
