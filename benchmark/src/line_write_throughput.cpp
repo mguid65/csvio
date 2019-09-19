@@ -23,9 +23,9 @@ int main() {
   auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>( t2 - t1 ).count();
   double time_in_sec = static_cast<double>(duration) / static_cast<double>(1e9);
   int size_in_bytes = 1000000 * line_byte_size;
-  double size_in_Mb = size_in_bytes / 1e6;
+  double size_in_MB = size_in_bytes / 1e6;
 
   std::cout << "Bytes Written      : " << size_in_bytes              << '\n'
             << "Time(nanos)        : " << duration                   << '\n'
-            << "Throughput(Mb/sec) : " << (size_in_Mb / time_in_sec) << '\n';
+            << "Throughput(Megabytes/sec) : " << (size_in_MB / time_in_sec) << '\n';
 }
