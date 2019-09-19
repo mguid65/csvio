@@ -2,8 +2,8 @@
 #include <fstream>
 #include "csv_io.hpp"
 
-static void BM_CSVWrite(benchmark::State& state) {
-  std::ofstream outfile("CSV_WRITER_BENCHMARK_001.csv");
+static void BM_CSVWriteLines(benchmark::State& state) {
+  std::ofstream outfile("data/CSV_WRITER_BENCHMARK_001.csv");
   csvio::util::CSVLineWriter csv_line_writer(outfile);
   csvio::CSVWriter<std::vector> csv_writer(csv_line_writer);
 
@@ -16,6 +16,6 @@ static void BM_CSVWrite(benchmark::State& state) {
   outfile.close();
 }
 
-BENCHMARK(BM_CSVWrite)->RangeMultiplier(2)->Range(8, 8<<10);
+BENCHMARK(BM_CSVWriteLines)->RangeMultiplier(2)->Range(8, 8<<10);
 
 BENCHMARK_MAIN();

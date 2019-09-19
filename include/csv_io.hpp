@@ -38,6 +38,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <map>
 
 #if defined(__cpp_lib_string_view) || defined(__cpp_lib_experimental_string_view)
 #include <string_view>
@@ -338,8 +339,90 @@ struct CSVInputParser {
 
 };
 
+
 template <template <class...> class RowContainer>
 RowContainer<string> CSVInputParser<RowContainer>::m_data;
+
+template<template <class...> class RowMapContainer = std::map>
+struct CSVMapInputParser {
+  static RowMapContainer<std::string, std::string> m_data;
+
+  static void delim_split_escaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    CSVParserScope state{LINE};
+
+    std::string chunk;
+    chunk.reserve(512);
+    int num_cols{1};
+
+    std::vector<std::string>::iterator current_header = header_names.begin();
+    std::string last_header;
+    for (const auto& c : input) {
+      if (state == LINE) {
+        if (c == '\"') {
+          state = QUOTE;
+          chunk.push_back(c);
+        } else {
+          if (c == delim || c == '\n') {
+            if (c == delim) num_cols++;
+            m_data.emplace(*current_header, chunk);
+            ++current_header;
+            chunk.clear();
+          } else {
+            chunk.push_back(c);
+          }
+        }
+      } else {
+        if (c == '\"') state = LINE;
+        chunk.push_back(c);
+      }
+      if(current_header != header_names.end()) last_header = *current_header;
+    }
+    if (!chunk.empty() || m_data.size() < num_cols) m_data.emplace(*current_header, chunk);
+
+    if (auto& last_element = m_data.at(last_header); last_element.back() == '\r') last_element.pop_back();
+  }
+
+  static RowMapContainer<std::string, std::string> delim_split_escaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_escaped_impl(input, delim, header_names);
+    return m_data;
+  }
+
+  static void delim_split_unescaped_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    delim_split_escaped_impl(input, delim, header_names);
+    for (auto& key_field : m_data) key_field.second = unescape(key_field.second);
+  }
+
+  static RowMapContainer<std::string, std::string> delim_split_unescaped(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_unescaped_impl(input, delim, header_names);
+    return m_data;
+  }
+
+  static void delim_split_unescaped_threaded_impl(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    delim_split_escaped_impl(input, delim, header_names);
+    std::vector<std::thread> threads; //would be better to use a thread pool
+
+    for (auto& key_field : m_data) {
+      threads.emplace_back([&]() {
+        key_field.second = unescape(key_field.second);
+      });
+    }
+
+    for(auto& worker : threads) {
+      if(worker.joinable()) worker.join();
+    }
+  }
+
+  static RowMapContainer<std::string, std::string> delim_split_unescaped_threaded(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_unescaped_threaded_impl(input, delim, header_names);
+    return m_data;
+  }
+};
+
+template <template <class...> class RowMapContainer>
+RowMapContainer<std::string, std::string> CSVMapInputParser<RowMapContainer>::m_data;
 
 /** \class CSVOutputFormatter
  *  \brief a class describing how csv output should be formatted
@@ -425,38 +508,25 @@ public:
   string readline() {
     m_result.clear();
 
-    char buf[1024]{0};
-    char* buf_end = buf + 1023;
-    char* pos = buf;
+    std::string buf;
+    buf.reserve(1024);
+
+    char c;
 
     while (m_csv_stream.good()) {
-      m_csv_stream.get(*pos);
-      if (m_state == LINE && (pos[0] == '\n' || pos[0] == EOF)) {
-        *(++pos) = '\0';
-        m_result.append(buf);
-        pos = buf;
-        // std::fill(buf, buf + 1024, '\0');
+      m_csv_stream.get(c);
+      if (m_state == LINE && (c == '\n' || c == EOF || !m_csv_stream.good())) {
+        if (c == '\n') m_result.push_back(c);
         break;
-      } else if (m_state == LINE && pos[0] == '\"') {
+      } else if (m_state == LINE && c == '\"') {
         m_state = QUOTE;
-      } else if (m_state == QUOTE && pos[0] == '\"') {
+      } else if (m_state == QUOTE && c == '\"') {
         m_state = LINE;
       } else if (m_state == QUOTE && !m_csv_stream.good()) {
         m_result = "";
         return m_result;
       }
-      pos++;
-
-      if (pos >= buf_end) {
-        *(pos++) = '\0';
-        m_result.append(buf);
-        pos = buf;
-        // std::fill(buf, buf + 1024, '\0');
-      }
-    }
-    if (pos != buf) {
-      *(pos++) = '\0';
-      m_result.append(buf);
+      m_result.push_back(c);
     }
 
     m_lines_read++;
@@ -532,31 +602,60 @@ template <
     typename LineReader = csvio::util::CSVLineReader>
 class CSVReader {
 public:
+  /** \class iterator
+   *  \brief CSVReader iterator
+   */
   struct iterator {
+    /** \brief construct a CSVReader iterator
+     *
+     *  This default is used for the end iterator
+     */
     iterator() {
       m_good = false;
     }
 
+    /** \brief parameterized constructor that takes a pointer to a CSVReader
+     *  \param ptr pointer to a valid non-nullptr CSVReader iterator
+     */
     iterator(CSVReader * ptr) : m_ptr(ptr) {
       m_ptr->read();
       m_good = m_ptr->good();
     }
 
+    /** \brief increment this CSVReader iterator
+     *  \return the iteration of CSVReader
+     */
     iterator operator++() {
       m_ptr->read();
       m_good = m_ptr->good();
       return *this;
     }
 
+    /** \brief Comparison to check for end
+     *  \param other const ref to a CSVReader iterator
+     *  \return true if the iterator is still good; otherwise false
+     */
     bool operator!= (const iterator & other) const { return m_good != other.m_good; }
+
     RowContainer<string>& operator*() const { return m_ptr->current(); }
+
+    /** \brief return the current RowContainer pointed to by this iterator
+     *  \return a pointer to the current RowContainer
+     */
     RowContainer<string>* operator->() const { return &m_ptr->current(); }
 
     CSVReader * m_ptr;
     bool m_good{true};
   };
 
+  /** \brief the begin CSVReader iterator
+   *  \return iterator with the begin CSVReader
+   */
   iterator begin() { return iterator(this); }
+
+  /** \brief the end CSVReader iterator
+   *  \return default constructed end iterator
+   */
   iterator end() const { return iterator(); }
 
   /** \brief Construct a CSVReader from a reference to a generic LineReader
@@ -666,7 +765,8 @@ protected:
 
   RowContainer<string> m_header_names{""};
   RowContainer<string> m_current{""};
-};  // namespace csvio
+
+};
 
 /** \class CSVWriter
  *  \brief Writes data as csv
@@ -747,6 +847,108 @@ protected:
       m_csv_output_formatter;
 
   LineWriter& m_csv_line_writer;
+};
+
+/** \class CSVMapReader
+ *  \brief Reader to read a stream as CSV into a map like container
+ */
+template <
+    template <class...> class RowMapContainer = std::map,
+    typename LineReader = csvio::util::CSVLineReader>
+class CSVMapReader {
+public:
+  /** \brief Construct a CSVReader from a reference to a generic LineReader
+   *  \param line_reader reference to a LineReader
+   *  \param delimiter a character delimiter
+   *  \param parse_func a function which describes how to split a csv row
+   *  \param header_parse_func a function to parse the header
+   *  because it doesn't go into the map (default is csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
+   */
+  explicit CSVMapReader(
+      LineReader& line_reader, const char delimiter = ',',
+      std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>&)> parse_func =
+          csvio::util::CSVMapInputParser<RowMapContainer>::delim_split_unescaped,
+      std::function<std::vector<std::string>(std::string_view, const char)> header_parse_func =
+          csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
+      : m_csv_line_reader(line_reader),
+        m_delim(delimiter),
+        m_parse_func(parse_func),
+        m_header_parse_func(header_parse_func) {
+    handle_header();
+  }
+
+  /** \brief set the delimiter to a different character
+   *  \param delim new delimiter
+   */
+  void set_delimiter(const char delim) { m_delim = delim; }
+
+  /** \brief get the current delimiter
+   *  \return constant char delimiter value
+   */
+  const char get_delimiter() const { return m_delim; }
+
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
+  bool good() { return m_csv_line_reader.good(); }
+
+  /** \brief Return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
+  RowMapContainer<std::string, std::string>& current() { return m_current; }
+
+  const auto& get_header_names() const { return m_stream_order_header_names; }
+  /** \brief Advance to the next row and return the current RowContainer of CSV values
+   *  \return a reference to the current RowContainer
+   */
+  RowMapContainer<std::string, std::string>& read() {
+    advance();
+    return current();
+  }
+
+  /** \brief Get number of csv lines read so far
+   *  \return number of csv lines read so far
+   */
+  const size_t lcount() const { return m_csv_line_reader.lcount(); }
+
+protected:
+  /** \brief advance the current string and parse it
+   */
+  void advance() {
+    m_current_str_line = m_csv_line_reader.readline();
+    parse_current_str();
+  }
+
+  /** \brief parse the current string line to a RowContainer
+   */
+  void parse_current_str() {
+    if (m_current_str_line.empty()) {
+      m_current.clear();
+      return;
+    }
+    m_current = m_parse_func(m_current_str_line, m_delim, m_stream_order_header_names);
+  }
+
+  /** \brief handle reading and parsing the header if has_header is true
+   */
+  void handle_header() {
+    m_current_str_line = m_csv_line_reader.readline();
+    m_stream_order_header_names = m_header_parse_func(m_current_str_line, m_delim);
+    m_current_str_line.clear();
+  }
+
+  LineReader& m_csv_line_reader;
+
+  char m_delim;
+  std::function<RowMapContainer<std::string, std::string>(std::string_view, const char, std::vector<std::string>&)> m_parse_func;
+  std::function<std::vector<std::string>(std::string_view, const char)> m_header_parse_func;
+
+  std::string m_current_str_line;
+
+  // this will store header names in the canonical order from the source stream
+  // in case a map type is used that does some arbitrary reordering
+  std::vector<std::string> m_stream_order_header_names;
+  RowMapContainer<std::string, std::string> m_current{};
 };
 
 }  // namespace csvio
