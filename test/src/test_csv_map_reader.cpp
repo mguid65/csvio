@@ -152,60 +152,58 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltContainer) {
   EXPECT_EQ(true, csv_map_reader.good());
 }
 
-/**
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainer) {
-  std::istringstream instream(
-      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
+  std::istringstream instream("a,b,c,d,e\r\n"
+      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr);
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr);
 
-  std::list<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected{{"a","\"a\""}, {"b","\"b\""}, {"c","\"c\""}, {"d","\"d\""}, {"e","\"e\""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainerThreaded) {
-  std::istringstream instream(
-      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"");
+  std::istringstream instream("a,b,c,d,e\r\n"
+      "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr, ',', false, true, csvio::util::CSVInputParser<std::list>::delim_split_unescaped_threaded);
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr, ',', csvio::util::CSVMapInputParser<std::unordered_map>::delim_split_unescaped_threaded);
 
-  std::list<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected{{"a","\"a\""}, {"b","\"b\""}, {"c","\"c\""}, {"d","\"d\""}, {"e","\"e\""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneCSVLineAltDelimAltContainer) {
-  std::istringstream instream("a|b|c|d|e");
+  std::istringstream instream("a|b|c|d|e\r\na|b|c|d|e\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr, '|');
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr, '|');
 
-  std::list<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected{{"a","a"}, {"b","b"}, {"c","c"}, {"d","d"}, {"e","e"}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelimAltContainer) {
-  std::istringstream instream("\"a\"|\"b\"|\"c\"|\"d\"|\"e\"");
+  std::istringstream instream("a|b|c|d|e\r\n\"a\"|\"b\"|\"c\"|\"d\"|\"e\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr, '|');
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr, '|');
 
-  std::list<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected{{"a","a"}, {"b","b"}, {"c","c"}, {"d","d"}, {"e","e"}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelimAltContainer) {
   std::istringstream instream(
-      "\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"");
+      "a|b|c|d|e\r\n\"\"\"a\"\"\"|\"\"\"b\"\"\"|\"\"\"c\"\"\"|\"\"\"d\"\"\"|\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVReader<std::list> csv_reader(csv_lr, '|');
+  csvio::CSVMapReader<std::unordered_map> csv_map_reader(csv_lr, '|');
 
-  std::list<std::string> expected{"\"a\"", "\"b\"", "\"c\"", "\"d\"", "\"e\""};
-  EXPECT_EQ(expected, csv_reader.read());
-  EXPECT_EQ(false, csv_reader.good());
+  std::unordered_map<std::string, std::string> expected{{"a","\"a\""}, {"b","\"b\""}, {"c","\"c\""}, {"d","\"d\""}, {"e","\"e\""}};
+  EXPECT_EQ(expected, csv_map_reader.read());
+  EXPECT_EQ(true, csv_map_reader.good());
 }
-*/
 
 }  // namespace
 

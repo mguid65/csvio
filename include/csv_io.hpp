@@ -393,6 +393,12 @@ struct CSVMapInputParser {
       if(worker.joinable()) worker.join();
     }
   }
+
+  static RowMapContainer<std::string, std::string> delim_split_unescaped_threaded(std::string_view input, const char delim, std::vector<std::string>& header_names) {
+    m_data.clear();
+    delim_split_unescaped_threaded_impl(input, delim, header_names);
+    return m_data;
+  }
 };
 
 template <template <class...> class RowMapContainer>
