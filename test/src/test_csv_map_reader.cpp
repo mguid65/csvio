@@ -177,13 +177,14 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainer) {
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainerThreaded) {
+  using CSVMapThreadedEscReader= csvio::CSVMapReader<std::unordered_map,
+                      csvio::util::CSVLineReader,
+                      csvio::util::MapDelimSplitUnescaped<std::unordered_map>>;
   std::istringstream instream(
       "a,b,c,d,e\r\n"
       "\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\",\"\"\"e\"\"\"\r\n");
   csvio::util::CSVLineReader csv_lr(instream);
-  csvio::CSVMapReader<std::unordered_map> csv_map_reader(
-      csv_lr, ',',
-      csvio::util::CSVMapInputParser<std::unordered_map>::delim_split_unescaped_threaded);
+  CSVMapThreadedEscReader csv_map_reader(csv_lr, ',');
 
   std::unordered_map<std::string, std::string> expected{
       {"a", "\"a\""}, {"b", "\"b\""}, {"c", "\"c\""}, {"d", "\"d\""}, {"e", "\"e\""}};

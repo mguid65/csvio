@@ -33,99 +33,131 @@
 
 namespace {
 
+namespace csvutil = csvio::util;
+
 TEST(CSVInputParserTest, SplitEmptyStringToVector) {
   std::string to_split{""};
   std::vector<std::string> expected{""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_naive(to_split, ','));
+  csvutil::DelimSplitNaive<std::vector> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitSampleStringToVector) {
   std::string to_split{"a,b,c,d,e"};
   std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_naive(to_split, ','));
+  csvutil::DelimSplitNaive<std::vector> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscEmptySVToVector) {
   std::string_view to_split{""};
   std::vector<std::string> expected{""};
+  csvutil::DelimSplitUnescaped<std::vector> parser;
+
   EXPECT_EQ(
-      expected, csvio::util::CSVInputParser<std::vector>::delim_split_unescaped(to_split, ','));
+      expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVector) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"a", "b", "c"};
+  csvutil::DelimSplitUnescaped<std::vector> parser;
+
   EXPECT_EQ(
-      expected, csvio::util::CSVInputParser<std::vector>::delim_split_unescaped(to_split, ','));
+      expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVectorThreaded) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"a", "b", "c"};
+  csvutil::DelimSplitUnescapedThreaded<std::vector> parser;
+
   EXPECT_EQ(
       expected,
-      csvio::util::CSVInputParser<std::vector>::delim_split_unescaped_threaded(to_split, ','));
+      parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVectorNoUnescape) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::vector<std::string> expected{"\"a\"", "\"b\"", "\"c\""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_escaped(to_split, ','));
+  csvutil::DelimSplitEscaped<std::vector> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVectorWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::vector<std::string> expected{"a,", "b,", "c,"};
+  csvutil::DelimSplitUnescaped<std::vector> parser;
+
   EXPECT_EQ(
-      expected, csvio::util::CSVInputParser<std::vector>::delim_split_unescaped(to_split, ','));
+      expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToVectorNoUnescapeWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::vector<std::string> expected{"\"a,\"", "\"b,\"", "\"c,\""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_escaped(to_split, ','));
+  csvutil::DelimSplitEscaped<std::vector> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEmptyStringToList) {
   std::string to_split{""};
-  std::vector<std::string> expected{""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_naive(to_split, ','));
+  std::list<std::string> expected{""};
+  csvutil::DelimSplitNaive<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitSampleStringToList) {
   std::string to_split{"a,b,c,d,e"};
-  std::vector<std::string> expected{"a", "b", "c", "d", "e"};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::vector>::delim_split_naive(to_split, ','));
+  std::list<std::string> expected{"a", "b", "c", "d", "e"};
+  csvutil::DelimSplitNaive<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscEmptySVToList) {
   std::string_view to_split{""};
   std::list<std::string> expected{""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::list>::delim_split_unescaped(to_split, ','));
+  csvutil::DelimSplitUnescaped<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToList) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::list<std::string> expected{"a", "b", "c"};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::list>::delim_split_unescaped(to_split, ','));
+  csvutil::DelimSplitUnescaped<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToListNoUnescape) {
   std::string_view to_split{"\"a\",\"b\",\"c\""};
   std::list<std::string> expected{"\"a\"", "\"b\"", "\"c\""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::list>::delim_split_escaped(to_split, ','));
+  csvutil::DelimSplitEscaped<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToListWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::list<std::string> expected{"a,", "b,", "c,"};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::list>::delim_split_unescaped(to_split, ','));
+  csvutil::DelimSplitUnescaped<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 TEST(CSVInputParserTest, SplitEscSVToListNoUnescapeWithCommas) {
   std::string_view to_split{"\"a,\",\"b,\",\"c,\""};
   std::list<std::string> expected{"\"a,\"", "\"b,\"", "\"c,\""};
-  EXPECT_EQ(expected, csvio::util::CSVInputParser<std::list>::delim_split_escaped(to_split, ','));
+  csvutil::DelimSplitEscaped<std::list> parser;
+
+  EXPECT_EQ(expected, parser(to_split, ','));
 }
 
 }  // namespace
