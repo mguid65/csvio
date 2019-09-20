@@ -40,6 +40,8 @@
 #include <thread>
 #include <vector>
 
+namespace csvio {
+
 #if defined(__cpp_lib_string_view) || defined(__cpp_lib_experimental_string_view)
 #include <string_view>
 using std::string_view;
@@ -60,7 +62,7 @@ using std::map;
 #define unlikely(expr) (__builtin_expect(!!(expr), 0))
 #endif
 
-namespace csvio::util {
+namespace util {
 /** \class has_push_back
  *  \brief SFINAE Helper to determine if T has a push_back method
  */
@@ -757,9 +759,7 @@ private:
   size_t m_lines_written{0};
 };
 
-}  // namespace csvio::util
-
-namespace csvio {
+}  // namespace util
 
 /** \class CSVReader
  *  \brief Reader to read a stream as CSV
@@ -1105,6 +1105,6 @@ protected:
   RowMapContainer<std::string, std::string> m_current{};
 };
 
-}  // namespace csvio
+} // namespace csvio
 
 #endif  // CSV_IO_HPP
