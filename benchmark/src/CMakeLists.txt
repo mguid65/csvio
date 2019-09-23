@@ -1,4 +1,12 @@
 include_directories(${benchmark_csvio_SOURCE_DIR}/../include)
-add_executable(benchmark_csv_write benchmark_csv_write.cpp)
-TARGET_LINK_LIBRARIES(benchmark_csv_write benchmark pthread)
+
+add_executable(benchmark_csv_write_lines benchmark_csv_write_lines.cpp)
+add_executable(benchmark_csv_read_lines benchmark_csv_read_lines.cpp)
+add_executable(line_read_throughput line_read_throughput.cpp)
+add_executable(line_write_throughput line_write_throughput.cpp)
+
+TARGET_LINK_LIBRARIES(benchmark_csv_write_lines benchmark pthread)
+TARGET_LINK_LIBRARIES(benchmark_csv_read_lines benchmark pthread)
+TARGET_LINK_LIBRARIES(line_read_throughput benchmark pthread)
+TARGET_LINK_LIBRARIES(line_write_throughput benchmark pthread)
 

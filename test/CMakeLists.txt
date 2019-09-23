@@ -4,9 +4,9 @@ project (test_csvio CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-option (BENCHMARK_DEBUG_MODE "Enable benchmarking the debug version of csvio." OFF)
+option (TEST_DEBUG_MODE "Enable testing the debug version of csvio." OFF)
 
-if(BENCHMARK_DEBUG_MODE)
+if(TEST_DEBUG_MODE)
   set(FLAGS "-O0 -ggdb3")
 else()
   set(FLAGS "-O3")
