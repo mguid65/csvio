@@ -104,37 +104,37 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;TEST(EscapeTest, EscapeEmptyString) {</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;  std::string to_escape{<span class="stringliteral">&quot;&quot;</span>};</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a>(to_escape));</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a>(to_escape));</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;TEST(EscapeTest, UnescapeEmptyString) {</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  std::string to_unescape{<span class="stringliteral">&quot;&quot;</span>};</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a089aafabb17e8a588ce85de77dc70231">csvio::util::unescape</a>(to_unescape));</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a5b723dd3c5c5166dc82284ae15d19ba4">csvio::util::unescape</a>(to_unescape));</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;TEST(EscapeTest, EscapeStringWithQuote) {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  std::string to_escape{<span class="stringliteral">&quot;some\&quot;value&quot;</span>};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some\&quot;\&quot;value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a>(to_escape));</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some\&quot;\&quot;value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a>(to_escape));</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;TEST(EscapeTest, UnescapeStringStringWithQuote) {</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  std::string to_unescape{<span class="stringliteral">&quot;\&quot;some\&quot;\&quot;value\&quot;&quot;</span>};</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;some\&quot;value&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a089aafabb17e8a588ce85de77dc70231">csvio::util::unescape</a>(to_unescape));</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;some\&quot;value&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a5b723dd3c5c5166dc82284ae15d19ba4">csvio::util::unescape</a>(to_unescape));</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;TEST(EscapeTest, EscapeStringWithComma) {</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  std::string to_escape{<span class="stringliteral">&quot;some,value&quot;</span>};</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some,value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a>(to_escape));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some,value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a>(to_escape));</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;TEST(EscapeTest, EscapeStringAltDelimiter) {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  std::string to_escape{<span class="stringliteral">&quot;some|value&quot;</span>};</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some|value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a>(to_escape, <span class="charliteral">&#39;|&#39;</span>));</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;some|value\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a>(to_escape, <span class="charliteral">&#39;|&#39;</span>));</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;TEST(EscapeTest, EscapeStringForceEscape) {</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  std::string to_escape{<span class="stringliteral">&quot;somevalue&quot;</span>};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;somevalue\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a>(to_escape, <span class="charliteral">&#39;,&#39;</span>, <span class="keyword">true</span>));</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  EXPECT_EQ(<span class="stringliteral">&quot;\&quot;somevalue\&quot;&quot;</span>, <a class="code" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a>(to_escape, <span class="charliteral">&#39;,&#39;</span>, <span class="keyword">true</span>));</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}  <span class="comment">// namespace</span></div>
@@ -144,8 +144,8 @@ $(function() {
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keywordflow">return</span> RUN_ALL_TESTS();</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="anamespacecsvio_1_1util_html_a089aafabb17e8a588ce85de77dc70231"><div class="ttname"><a href="namespacecsvio_1_1util.html#a089aafabb17e8a588ce85de77dc70231">csvio::util::unescape</a></div><div class="ttdeci">std::string unescape(std::string_view data)</div><div class="ttdoc">unescape a csv escaped string according to RFC 4180</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00136">csv_io.hpp:136</a></div></div>
-<div class="ttc" id="anamespacecsvio_1_1util_html_a151788a2ff4afe027e6306fbbc77be21"><div class="ttname"><a href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a></div><div class="ttdeci">std::string escape(std::string_view data, char delim=',', bool force_escape=false)</div><div class="ttdoc">function to escape characters in csv fields according to RFC 4180</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00101">csv_io.hpp:101</a></div></div>
+<div class="ttc" id="anamespacecsvio_1_1util_html_a5b723dd3c5c5166dc82284ae15d19ba4"><div class="ttname"><a href="namespacecsvio_1_1util.html#a5b723dd3c5c5166dc82284ae15d19ba4">csvio::util::unescape</a></div><div class="ttdeci">string unescape(string_view data)</div><div class="ttdoc">unescape a csv escaped string according to RFC 4180</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00153">csv_io.hpp:153</a></div></div>
+<div class="ttc" id="anamespacecsvio_1_1util_html_aacb4aa7906f7a35c8193201b2a40facc"><div class="ttname"><a href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a></div><div class="ttdeci">string escape(string_view data, char delim=',', bool force_escape=false)</div><div class="ttdoc">function to escape characters in csv fields according to RFC 4180</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00118">csv_io.hpp:118</a></div></div>
 <div class="ttc" id="atest__escape__utils_8cpp_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="test__escape__utils_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="test__escape__utils_8cpp_source.html#l00070">test_escape_utils.cpp:70</a></div></div>
 <div class="ttc" id="acsv__io_8hpp_html"><div class="ttname"><a href="csv__io_8hpp.html">csv_io.hpp</a></div></div>
 <!-- start footer part -->

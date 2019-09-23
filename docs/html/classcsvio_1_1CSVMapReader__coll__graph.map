@@ -1,0 +1,8 @@
+<map id="csvio::CSVMapReader&lt; RowMapContainer, LineReader, Parser, HeaderParser &gt;" name="csvio::CSVMapReader&lt; RowMapContainer, LineReader, Parser, HeaderParser &gt;">
+<area shape="rect" id="node1" title="Reader to read a stream as CSV into a map like container." alt="" coords="69,455,289,767"/>
+<area shape="rect" id="node2" title="STL class." alt="" coords="186,160,266,237"/>
+<area shape="rect" id="node4" title=" " alt="" coords="11,300,177,377"/>
+<area shape="rect" id="node3" title="STL class." alt="" coords="163,5,289,97"/>
+<area shape="rect" id="node5" title="STL class." alt="" coords="5,160,121,237"/>
+<area shape="rect" id="node6" title=" " alt="" coords="44,13,83,90"/>
+</map>

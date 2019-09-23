@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.16"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CSVIO: csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator Struct Reference</title>
+<title>CSVIO: csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,13 +71,16 @@ $(function() {
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structcsvio_1_1CSVReader_1_1iterator-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator Struct Reference</div>  </div>
+<div class="title">csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator.  
+ <a href="structcsvio_1_1CSVReader_1_1iterator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Collaboration diagram for csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator:</div>
+Collaboration diagram for csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator:</div>
 <div class="dyncontent">
 <div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="structcsvio_1_1CSVReader_1_1iterator__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
@@ -85,46 +88,53 @@ Collaboration diagram for csvio::CSVReader&lt; RowContainer, LineReader &gt;::it
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2edfa8c162db1bf9fa063f557e28b86"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#ad2edfa8c162db1bf9fa063f557e28b86">iterator</a> ()</td></tr>
-<tr class="separator:ad2edfa8c162db1bf9fa063f557e28b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2f24b5a448ac3b74178767fd958e06a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#af2f24b5a448ac3b74178767fd958e06a">iterator</a> (<a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a> *ptr)</td></tr>
-<tr class="separator:af2f24b5a448ac3b74178767fd958e06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbe1c5b83bc2566d7132746531177f53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#acbe1c5b83bc2566d7132746531177f53">operator!=</a> (const <a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a> &amp;other) const</td></tr>
-<tr class="separator:acbe1c5b83bc2566d7132746531177f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2faad6128c07c0fcbf5a863580e3f9dd"><td class="memItemLeft" align="right" valign="top">RowContainer&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a2faad6128c07c0fcbf5a863580e3f9dd">operator*</a> () const</td></tr>
-<tr class="separator:a2faad6128c07c0fcbf5a863580e3f9dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0827b0fd4e289c56b3f02387a952323b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a0827b0fd4e289c56b3f02387a952323b">operator++</a> ()</td></tr>
-<tr class="separator:a0827b0fd4e289c56b3f02387a952323b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18d4a218a2aca593c3a141c6de5f6d2b"><td class="memItemLeft" align="right" valign="top">RowContainer&lt; std::string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a18d4a218a2aca593c3a141c6de5f6d2b">operator-&gt;</a> () const</td></tr>
-<tr class="separator:a18d4a218a2aca593c3a141c6de5f6d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a549b4a67acaf67e770fcda45c74c8b80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a549b4a67acaf67e770fcda45c74c8b80">iterator</a> ()</td></tr>
+<tr class="memdesc:a549b4a67acaf67e770fcda45c74c8b80"><td class="mdescLeft">&#160;</td><td class="mdescRight">construct a <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator This default is used for the end iterator  <a href="structcsvio_1_1CSVReader_1_1iterator.html#a549b4a67acaf67e770fcda45c74c8b80">More...</a><br /></td></tr>
+<tr class="separator:a549b4a67acaf67e770fcda45c74c8b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920283e7193bef76c7c0b8234b4812ed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a920283e7193bef76c7c0b8234b4812ed">iterator</a> (<a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a> *ptr)</td></tr>
+<tr class="memdesc:a920283e7193bef76c7c0b8234b4812ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">parameterized constructor that takes a pointer to a <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a>  <a href="structcsvio_1_1CSVReader_1_1iterator.html#a920283e7193bef76c7c0b8234b4812ed">More...</a><br /></td></tr>
+<tr class="separator:a920283e7193bef76c7c0b8234b4812ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcc2b3145b464fbff5be93e4954413ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#abcc2b3145b464fbff5be93e4954413ec">operator!=</a> (const <a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a> &amp;other) const</td></tr>
+<tr class="memdesc:abcc2b3145b464fbff5be93e4954413ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison to check for end.  <a href="structcsvio_1_1CSVReader_1_1iterator.html#abcc2b3145b464fbff5be93e4954413ec">More...</a><br /></td></tr>
+<tr class="separator:abcc2b3145b464fbff5be93e4954413ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a537cd4bda069b6bf4f81b5cdb9122b6a"><td class="memItemLeft" align="right" valign="top">RowContainer&lt; string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a537cd4bda069b6bf4f81b5cdb9122b6a">operator*</a> () const</td></tr>
+<tr class="memdesc:a537cd4bda069b6bf4f81b5cdb9122b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the current RowContainer reference from this iterator  <a href="structcsvio_1_1CSVReader_1_1iterator.html#a537cd4bda069b6bf4f81b5cdb9122b6a">More...</a><br /></td></tr>
+<tr class="separator:a537cd4bda069b6bf4f81b5cdb9122b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71d99231370c2767dcc27d390ea5cf99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a71d99231370c2767dcc27d390ea5cf99">operator++</a> ()</td></tr>
+<tr class="memdesc:a71d99231370c2767dcc27d390ea5cf99"><td class="mdescLeft">&#160;</td><td class="mdescRight">increment this <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator  <a href="structcsvio_1_1CSVReader_1_1iterator.html#a71d99231370c2767dcc27d390ea5cf99">More...</a><br /></td></tr>
+<tr class="separator:a71d99231370c2767dcc27d390ea5cf99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada6f27482ffd022cd086d2c54d4b82c3"><td class="memItemLeft" align="right" valign="top">RowContainer&lt; string &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#ada6f27482ffd022cd086d2c54d4b82c3">operator-&gt;</a> () const</td></tr>
+<tr class="memdesc:ada6f27482ffd022cd086d2c54d4b82c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">return the current RowContainer pointed to by this iterator  <a href="structcsvio_1_1CSVReader_1_1iterator.html#ada6f27482ffd022cd086d2c54d4b82c3">More...</a><br /></td></tr>
+<tr class="separator:ada6f27482ffd022cd086d2c54d4b82c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7a54319f1645c0a5313bb830e38d7291"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a7a54319f1645c0a5313bb830e38d7291">m_good</a> {true}</td></tr>
-<tr class="separator:a7a54319f1645c0a5313bb830e38d7291"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace0fd11f74b5b2c11a8bc8d21558e171"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#ace0fd11f74b5b2c11a8bc8d21558e171">m_ptr</a></td></tr>
-<tr class="separator:ace0fd11f74b5b2c11a8bc8d21558e171"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0a328f19e94d7717b88ef064ab9b6ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#aa0a328f19e94d7717b88ef064ab9b6ff">m_good</a> {true}</td></tr>
+<tr class="separator:aa0a328f19e94d7717b88ef064ab9b6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a768ca7cd8af5fca46f2e9cf7dd2d9b2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html#a768ca7cd8af5fca46f2e9cf7dd2d9b2d">m_ptr</a></td></tr>
+<tr class="separator:a768ca7cd8af5fca46f2e9cf7dd2d9b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt;<br />
-struct csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator</h3>
+<div class="textblock"><h3>template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt;<br />
+class csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator</h3>
 
+<p><a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator. </p>
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00515">515</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00882">882</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad2edfa8c162db1bf9fa063f557e28b86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2edfa8c162db1bf9fa063f557e28b86">&#9670;&nbsp;</a></span>iterator() <span class="overload">[1/2]</span></h2>
+<a id="a549b4a67acaf67e770fcda45c74c8b80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a549b4a67acaf67e770fcda45c74c8b80">&#9670;&nbsp;</a></span>iterator() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::iterator </td>
+          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::iterator </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -137,23 +147,25 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00516">516</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>construct a <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator This default is used for the end iterator </p>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00886">886</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af2f24b5a448ac3b74178767fd958e06a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2f24b5a448ac3b74178767fd958e06a">&#9670;&nbsp;</a></span>iterator() <span class="overload">[2/2]</span></h2>
+<a id="a920283e7193bef76c7c0b8234b4812ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a920283e7193bef76c7c0b8234b4812ed">&#9670;&nbsp;</a></span>iterator() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::iterator </td>
+          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::iterator </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a> *&#160;</td>
           <td class="paramname"><em>ptr</em></td><td>)</td>
@@ -167,24 +179,32 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00520">520</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>parameterized constructor that takes a pointer to a <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ptr</td><td>pointer to a valid non-nullptr <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00891">891</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acbe1c5b83bc2566d7132746531177f53"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbe1c5b83bc2566d7132746531177f53">&#9670;&nbsp;</a></span>operator!=()</h2>
+<a id="abcc2b3145b464fbff5be93e4954413ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcc2b3145b464fbff5be93e4954413ec">&#9670;&nbsp;</a></span>operator!=()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::operator!= </td>
+          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::operator!= </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a> &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
@@ -198,25 +218,34 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00531">531</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>Comparison to check for end. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>const ref to a <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the iterator is still good; otherwise false </dd></dl>
 
-<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00536">csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator::m_good</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00909">909</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="csv__io_8hpp_source.html#l00922">csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator::m_good</a>.</p>
 
 </div>
 </div>
-<a id="a2faad6128c07c0fcbf5a863580e3f9dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2faad6128c07c0fcbf5a863580e3f9dd">&#9670;&nbsp;</a></span>operator*()</h2>
+<a id="a537cd4bda069b6bf4f81b5cdb9122b6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a537cd4bda069b6bf4f81b5cdb9122b6a">&#9670;&nbsp;</a></span>operator*()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RowContainer&lt;std::string&gt;&amp; <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::operator* </td>
+          <td class="memname">RowContainer&lt;string&gt;&amp; <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::operator* </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -229,23 +258,26 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00532">532</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>return the current RowContainer reference from this iterator </p>
+<dl class="section return"><dt>Returns</dt><dd>a reference to the current RowContainer </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00914">914</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0827b0fd4e289c56b3f02387a952323b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0827b0fd4e289c56b3f02387a952323b">&#9670;&nbsp;</a></span>operator++()</h2>
+<a id="a71d99231370c2767dcc27d390ea5cf99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71d99231370c2767dcc27d390ea5cf99">&#9670;&nbsp;</a></span>operator++()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a> <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::operator++ </td>
+          <td class="memname"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">iterator</a> <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::operator++ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -258,23 +290,26 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00525">525</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>increment this <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator </p>
+<dl class="section return"><dt>Returns</dt><dd>the iteration of <a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00899">899</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a18d4a218a2aca593c3a141c6de5f6d2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18d4a218a2aca593c3a141c6de5f6d2b">&#9670;&nbsp;</a></span>operator-&gt;()</h2>
+<a id="ada6f27482ffd022cd086d2c54d4b82c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada6f27482ffd022cd086d2c54d4b82c3">&#9670;&nbsp;</a></span>operator-&gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RowContainer&lt;std::string&gt;* <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::operator-&gt; </td>
+          <td class="memname">RowContainer&lt;string&gt;* <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::operator-&gt; </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -287,50 +322,53 @@ template&lt;template&lt; class... &gt; class RowContainer = std::vector, typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00533">533</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p>return the current RowContainer pointed to by this iterator </p>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to the current RowContainer </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00919">919</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a7a54319f1645c0a5313bb830e38d7291"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a54319f1645c0a5313bb830e38d7291">&#9670;&nbsp;</a></span>m_good</h2>
+<a id="aa0a328f19e94d7717b88ef064ab9b6ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0a328f19e94d7717b88ef064ab9b6ff">&#9670;&nbsp;</a></span>m_good</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::m_good {true}</td>
+          <td class="memname">bool <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::m_good {true}</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00536">536</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00922">922</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00531">csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator::operator!=()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="csv__io_8hpp_source.html#l00909">csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator::operator!=()</a>.</p>
 
 </div>
 </div>
-<a id="ace0fd11f74b5b2c11a8bc8d21558e171"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace0fd11f74b5b2c11a8bc8d21558e171">&#9670;&nbsp;</a></span>m_ptr</h2>
+<a id="a768ca7cd8af5fca46f2e9cf7dd2d9b2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a768ca7cd8af5fca46f2e9cf7dd2d9b2d">&#9670;&nbsp;</a></span>m_ptr</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;template&lt; class... &gt; class RowContainer = std::vector, typename LineReader = csvio::util::CSVLineReader&gt; </div>
+template&lt;template&lt; class... &gt; class RowContainer = vector, typename LineReader = csvio::util::CSVLineReader, typename Parser = csvio::util::DelimSplitUnescaped&lt;RowContainer&gt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a>* <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader &gt;::iterator::m_ptr</td>
+          <td class="memname"><a class="el" href="classcsvio_1_1CSVReader.html">CSVReader</a>* <a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a>&lt; RowContainer, LineReader, Parser &gt;::iterator::m_ptr</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00535">535</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="csv__io_8hpp_source.html#l00921">921</a> of file <a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="csv__io_8hpp_source.html">csv_io.hpp</a></li>
 </ul>
 </div><!-- contents -->

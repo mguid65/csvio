@@ -1,12 +1,16 @@
 <map id="include/csv_io.hpp" name="include/csv_io.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="741,5,872,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="1117,5,1248,32"/>
 <area shape="rect" id="node2" href="$test__csv__input__parser_8cpp.html" title=" " alt="" coords="5,80,160,121"/>
 <area shape="rect" id="node3" href="$test__csv__line__reader_8cpp.html" title=" " alt="" coords="184,80,331,121"/>
 <area shape="rect" id="node4" href="$test__csv__line__writer_8cpp.html" title=" " alt="" coords="355,80,501,121"/>
-<area shape="rect" id="node5" href="$test__csv__output__formatter_8cpp.html" title=" " alt="" coords="525,80,688,121"/>
-<area shape="rect" id="node6" href="$test__csv__reader_8cpp.html" title=" " alt="" coords="713,87,901,114"/>
-<area shape="rect" id="node7" href="$test__csv__reader__ifstream_8cpp.html" title=" " alt="" coords="925,80,1088,121"/>
-<area shape="rect" id="node8" href="$test__csv__writer_8cpp.html" title=" " alt="" coords="1112,87,1296,114"/>
-<area shape="rect" id="node9" href="$test__escape__utils_8cpp.html" title=" " alt="" coords="1320,80,1461,121"/>
-<area shape="rect" id="node10" href="$benchmark__csv__write_8cpp.html" title=" " alt="" coords="1485,80,1661,121"/>
+<area shape="rect" id="node5" href="$test__csv__map__reader_8cpp.html" title=" " alt="" coords="525,80,677,121"/>
+<area shape="rect" id="node6" href="$test__csv__output__formatter_8cpp.html" title=" " alt="" coords="701,80,864,121"/>
+<area shape="rect" id="node7" href="$test__csv__reader_8cpp.html" title=" " alt="" coords="889,87,1077,114"/>
+<area shape="rect" id="node8" href="$test__csv__reader__ifstream_8cpp.html" title=" " alt="" coords="1101,80,1264,121"/>
+<area shape="rect" id="node9" href="$test__csv__writer_8cpp.html" title=" " alt="" coords="1288,87,1472,114"/>
+<area shape="rect" id="node10" href="$test__escape__utils_8cpp.html" title=" " alt="" coords="1496,80,1637,121"/>
+<area shape="rect" id="node11" href="$benchmark__csv__read__lines_8cpp.html" title=" " alt="" coords="1661,80,1837,121"/>
+<area shape="rect" id="node12" href="$benchmark__csv__write__lines_8cpp.html" title=" " alt="" coords="1861,80,2037,121"/>
+<area shape="rect" id="node13" href="$line__read__throughput_8cpp.html" title=" " alt="" coords="2061,80,2208,121"/>
+<area shape="rect" id="node14" href="$line__write__throughput_8cpp.html" title=" " alt="" coords="2233,80,2383,121"/>
 </map>

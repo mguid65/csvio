@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['csvlinereader',['CSVLineReader',['../classcsvio_1_1util_1_1CSVLineReader.html#a5b031b060e12a0ebcc61f940fa34d861',1,'csvio::util::CSVLineReader']]],
-  ['csvlinewriter',['CSVLineWriter',['../classcsvio_1_1util_1_1CSVLineWriter.html#a9982b2e3ee51703e65065971b7991f63',1,'csvio::util::CSVLineWriter']]],
-  ['csvreader',['CSVReader',['../classcsvio_1_1CSVReader.html#a6ef243842ed5f0aff82a577dc5de9fab',1,'csvio::CSVReader']]],
-  ['csvwriter',['CSVWriter',['../classcsvio_1_1CSVWriter.html#a7d8de809ab5fe75a81ad0a3c005dfcfc',1,'csvio::CSVWriter']]],
-  ['current',['current',['../classcsvio_1_1CSVReader.html#a4c24f5b13d33737e949f4df51b8f2e4b',1,'csvio::CSVReader']]]
+  ['csvlinereader',['CSVLineReader',['../classcsvio_1_1util_1_1CSVLineReader.html#af9a390dcf632b9be11891b80fa0a2c65',1,'csvio::util::CSVLineReader']]],
+  ['csvlinewriter',['CSVLineWriter',['../classcsvio_1_1util_1_1CSVLineWriter.html#ac4835b0424d6db317637c226e7911a02',1,'csvio::util::CSVLineWriter']]],
+  ['csvmapreader',['CSVMapReader',['../classcsvio_1_1CSVMapReader.html#ad49305cd2e908b64b09595e5bf4ddf32',1,'csvio::CSVMapReader']]],
+  ['csvreader',['CSVReader',['../classcsvio_1_1CSVReader.html#a76883fa53d2c6d8c0b1d7d525e2bc84c',1,'csvio::CSVReader']]],
+  ['csvwriter',['CSVWriter',['../classcsvio_1_1CSVWriter.html#a2fbffc8b50d1788f8b3f754ca94ed049',1,'csvio::CSVWriter']]],
+  ['current',['current',['../classcsvio_1_1CSVReader.html#a61c7999fa872a0df3f6d65f41485f157',1,'csvio::CSVReader::current()'],['../classcsvio_1_1CSVMapReader.html#af18b5a158d5c1f77ee45442fa1a74345',1,'csvio::CSVMapReader::current()']]]
 ];

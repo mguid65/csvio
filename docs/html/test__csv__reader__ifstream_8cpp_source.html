@@ -119,7 +119,7 @@ $(function() {
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="classcsvio_1_1util_1_1CSVLineReader.html">csvio::util::CSVLineReader</a> csv_line_reader(infile);</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a> csv_reader(csv_line_reader, <span class="charliteral">&#39;,&#39;</span>, <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::vector&lt;std::string&gt; expected{<span class="stringliteral">&quot;seq&quot;</span>,<span class="stringliteral">&quot;name/first&quot;</span>,<span class="stringliteral">&quot;age&quot;</span>,<span class="stringliteral">&quot;city&quot;</span>,<span class="stringliteral">&quot;pick&quot;</span>,<span class="stringliteral">&quot;date&quot;</span>};</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::vector&lt;std::string&gt; expected{<span class="stringliteral">&quot;seq&quot;</span>, <span class="stringliteral">&quot;name/first&quot;</span>, <span class="stringliteral">&quot;age&quot;</span>, <span class="stringliteral">&quot;city&quot;</span>, <span class="stringliteral">&quot;pick&quot;</span>, <span class="stringliteral">&quot;date&quot;</span>};</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    EXPECT_EQ(<span class="keyword">true</span>, csv_reader.good());</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    EXPECT_EQ(1u, csv_reader.lcount());</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    EXPECT_EQ(expected, csv_reader.get_header_names());</div>
@@ -136,7 +136,7 @@ $(function() {
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::vector&lt;std::string&gt; expected{<span class="stringliteral">&quot;&quot;</span>};</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    std::vector&lt;std::string&gt; row;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">while</span>(csv_reader.good()) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">while</span> (csv_reader.good()) {</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;      row = csv_reader.read();</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
@@ -152,11 +152,11 @@ $(function() {
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="classcsvio_1_1util_1_1CSVLineReader.html">csvio::util::CSVLineReader</a> csv_line_reader(infile);</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a> csv_reader(csv_line_reader, <span class="charliteral">&#39;,&#39;</span>, <span class="keyword">true</span>);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    std::vector&lt;std::string&gt; expected_header{<span class="stringliteral">&quot;seq&quot;</span>,<span class="stringliteral">&quot;name/first&quot;</span>,<span class="stringliteral">&quot;age&quot;</span>,<span class="stringliteral">&quot;city&quot;</span>,<span class="stringliteral">&quot;pick&quot;</span>,<span class="stringliteral">&quot;date&quot;</span>};</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    std::vector&lt;std::string&gt; expected_header{<span class="stringliteral">&quot;seq&quot;</span>, <span class="stringliteral">&quot;name/first&quot;</span>, <span class="stringliteral">&quot;age&quot;</span>, <span class="stringliteral">&quot;city&quot;</span>, <span class="stringliteral">&quot;pick&quot;</span>, <span class="stringliteral">&quot;date&quot;</span>};</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::vector&lt;std::string&gt; expected{<span class="stringliteral">&quot;&quot;</span>};</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::vector&lt;std::string&gt; row;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">while</span>(csv_reader.good()) {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keywordflow">while</span> (csv_reader.good()) {</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      row = csv_reader.read();</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    }</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
@@ -173,11 +173,10 @@ $(function() {
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  ::testing::InitGoogleTest(&amp;argc, argv);</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  <span class="keywordflow">return</span> RUN_ALL_TESTS();</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;}</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="atest__csv__reader__ifstream_8cpp_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="test__csv__reader__ifstream_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="test__csv__reader__ifstream_8cpp_source.html#l00100">test_csv_reader_ifstream.cpp:100</a></div></div>
-<div class="ttc" id="aclasscsvio_1_1util_1_1CSVLineReader_html"><div class="ttname"><a href="classcsvio_1_1util_1_1CSVLineReader.html">csvio::util::CSVLineReader</a></div><div class="ttdoc">Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180.</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00395">csv_io.hpp:395</a></div></div>
-<div class="ttc" id="aclasscsvio_1_1CSVReader_html"><div class="ttname"><a href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a></div><div class="ttdoc">Reader to read a stream as CSV.</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00513">csv_io.hpp:513</a></div></div>
+<div class="ttc" id="aclasscsvio_1_1util_1_1CSVLineReader_html"><div class="ttname"><a href="classcsvio_1_1util_1_1CSVLineReader.html">csvio::util::CSVLineReader</a></div><div class="ttdoc">Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180.</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00773">csv_io.hpp:773</a></div></div>
+<div class="ttc" id="aclasscsvio_1_1CSVReader_html"><div class="ttname"><a href="classcsvio_1_1CSVReader.html">csvio::CSVReader</a></div><div class="ttdoc">Reader to read a stream as CSV.</div><div class="ttdef"><b>Definition:</b> <a href="csv__io_8hpp_source.html#l00877">csv_io.hpp:877</a></div></div>
 <div class="ttc" id="acsv__io_8hpp_html"><div class="ttname"><a href="csv__io_8hpp.html">csv_io.hpp</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

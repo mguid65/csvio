@@ -69,6 +69,7 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -83,15 +84,16 @@ $(function() {
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;istream&gt;</code><br />
 <code>#include &lt;list&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
-<code>#include &lt;string_view&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for csv_io.hpp:</div>
 <div class="dyncontent">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="csv__io_8hpp__incl.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="csv__io_8hpp__incl.svg" width="100%" height="384"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -104,30 +106,55 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVInputParser.html">csvio::util::CSVInputParser&lt; RowContainer &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class of functions to parse a csv row into a non map container.  <a href="structcsvio_1_1util_1_1CSVInputParser.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1util_1_1CSVLineReader.html">csvio::util::CSVLineReader</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180.  <a href="classcsvio_1_1util_1_1CSVLineReader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1util_1_1CSVLineWriter.html">csvio::util::CSVLineWriter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a csv line to a stream, provides a written lines counter.  <a href="classcsvio_1_1util_1_1CSVLineWriter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1CSVOutputFormatter.html">csvio::util::CSVOutputFormatter&lt; RowContainer &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">a class describing how csv output should be formatted  <a href="structcsvio_1_1util_1_1CSVOutputFormatter.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVMapReader.html">csvio::CSVMapReader&lt; RowMapContainer, LineReader, Parser, HeaderParser &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reader to read a stream as CSV into a map like container.  <a href="classcsvio_1_1CSVMapReader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader&lt; RowContainer, LineReader &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVReader.html">csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reader to read a stream as CSV.  <a href="classcsvio_1_1CSVReader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html">csvio::CSVWriter&lt; RowContainer, LineWriter &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcsvio_1_1CSVWriter.html">csvio::CSVWriter&lt; RowContainer, LineWriter, Formatter &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data as csv.  <a href="classcsvio_1_1CSVWriter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimJoinEscapedFormat.html">csvio::util::DelimJoinEscapedFormat&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join a CSV on a delimiter escaping each field.  <a href="structcsvio_1_1util_1_1DelimJoinEscapedFormat.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimJoinUnescapedFormat.html">csvio::util::DelimJoinUnescapedFormat&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Join a CSV on a delimiter leaving each field unescaped.  <a href="structcsvio_1_1util_1_1DelimJoinUnescapedFormat.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimSplitEscaped.html">csvio::util::DelimSplitEscaped&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV assuming it is escaped and leave it escaped.  <a href="structcsvio_1_1util_1_1DelimSplitEscaped.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimSplitNaive.html">csvio::util::DelimSplitNaive&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV assuming no escaped characters.  <a href="structcsvio_1_1util_1_1DelimSplitNaive.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimSplitUnescaped.html">csvio::util::DelimSplitUnescaped&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV assuming it is escaped and unescape the output.  <a href="structcsvio_1_1util_1_1DelimSplitUnescaped.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1DelimSplitUnescapedThreaded.html">csvio::util::DelimSplitUnescapedThreaded&lt; RowContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV assuming it is escaped and unescape the output.  <a href="structcsvio_1_1util_1_1DelimSplitUnescapedThreaded.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1has__push__back.html">csvio::util::has_push_back&lt; typename, T &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">SFINAE Helper to determine if T has a push_back method.  <a href="structcsvio_1_1util_1_1has__push__back.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1has__push__back_3_01C_00_01Ret_07Args_8_8_8_08_4.html">csvio::util::has_push_back&lt; C, Ret(Args...)&gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">csvio::CSVReader&lt; RowContainer, LineReader &gt;::iterator</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1CSVReader_1_1iterator.html">csvio::CSVReader&lt; RowContainer, LineReader, Parser &gt;::iterator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcsvio_1_1CSVReader.html" title="Reader to read a stream as CSV.">CSVReader</a> iterator.  <a href="structcsvio_1_1CSVReader_1_1iterator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1MapDelimSplitEscaped.html">csvio::util::MapDelimSplitEscaped&lt; RowMapContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV to a map assuming values are escaped and leave them escaped.  <a href="structcsvio_1_1util_1_1MapDelimSplitEscaped.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1MapDelimSplitUnescaped.html">csvio::util::MapDelimSplitUnescaped&lt; RowMapContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV to a map assuming it is escaped and unescape the output.  <a href="structcsvio_1_1util_1_1MapDelimSplitUnescaped.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structcsvio_1_1util_1_1MapDelimSplitUnescapedThreaded.html">csvio::util::MapDelimSplitUnescapedThreaded&lt; RowMapContainer &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a CSV to a map container assuming the values are escaped, and unescape output.  <a href="structcsvio_1_1util_1_1MapDelimSplitUnescapedThreaded.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -136,6 +163,11 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacecsvio_1_1util"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio_1_1util.html">csvio::util</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a02fa418d8edf3a3238b5d5b6121df01d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio.html#a02fa418d8edf3a3238b5d5b6121df01d">csvio::string_view</a> = const std::string &amp;</td></tr>
+<tr class="separator:a02fa418d8edf3a3238b5d5b6121df01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -146,12 +178,12 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a151788a2ff4afe027e6306fbbc77be21"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">csvio::util::escape</a> (std::string_view data, char delim=',', bool force_escape=false)</td></tr>
-<tr class="memdesc:a151788a2ff4afe027e6306fbbc77be21"><td class="mdescLeft">&#160;</td><td class="mdescRight">function to escape characters in csv fields according to RFC 4180  <a href="namespacecsvio_1_1util.html#a151788a2ff4afe027e6306fbbc77be21">More...</a><br /></td></tr>
-<tr class="separator:a151788a2ff4afe027e6306fbbc77be21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a089aafabb17e8a588ce85de77dc70231"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio_1_1util.html#a089aafabb17e8a588ce85de77dc70231">csvio::util::unescape</a> (std::string_view data)</td></tr>
-<tr class="memdesc:a089aafabb17e8a588ce85de77dc70231"><td class="mdescLeft">&#160;</td><td class="mdescRight">unescape a csv escaped string according to RFC 4180  <a href="namespacecsvio_1_1util.html#a089aafabb17e8a588ce85de77dc70231">More...</a><br /></td></tr>
-<tr class="separator:a089aafabb17e8a588ce85de77dc70231"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacb4aa7906f7a35c8193201b2a40facc"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">csvio::util::escape</a> (string_view data, char delim=',', bool force_escape=false)</td></tr>
+<tr class="memdesc:aacb4aa7906f7a35c8193201b2a40facc"><td class="mdescLeft">&#160;</td><td class="mdescRight">function to escape characters in csv fields according to RFC 4180  <a href="namespacecsvio_1_1util.html#aacb4aa7906f7a35c8193201b2a40facc">More...</a><br /></td></tr>
+<tr class="separator:aacb4aa7906f7a35c8193201b2a40facc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b723dd3c5c5166dc82284ae15d19ba4"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecsvio_1_1util.html#a5b723dd3c5c5166dc82284ae15d19ba4">csvio::util::unescape</a> (string_view data)</td></tr>
+<tr class="memdesc:a5b723dd3c5c5166dc82284ae15d19ba4"><td class="mdescLeft">&#160;</td><td class="mdescRight">unescape a csv escaped string according to RFC 4180  <a href="namespacecsvio_1_1util.html#a5b723dd3c5c5166dc82284ae15d19ba4">More...</a><br /></td></tr>
+<tr class="separator:a5b723dd3c5c5166dc82284ae15d19ba4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

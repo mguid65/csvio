@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['iterator',['iterator',['../structcsvio_1_1CSVReader_1_1iterator.html#ad2edfa8c162db1bf9fa063f557e28b86',1,'csvio::CSVReader::iterator::iterator()'],['../structcsvio_1_1CSVReader_1_1iterator.html#af2f24b5a448ac3b74178767fd958e06a',1,'csvio::CSVReader::iterator::iterator(CSVReader *ptr)']]]
+  ['iterator',['iterator',['../structcsvio_1_1CSVReader_1_1iterator.html#a549b4a67acaf67e770fcda45c74c8b80',1,'csvio::CSVReader::iterator::iterator()'],['../structcsvio_1_1CSVReader_1_1iterator.html#a920283e7193bef76c7c0b8234b4812ed',1,'csvio::CSVReader::iterator::iterator(CSVReader *ptr)']]]
 ];
