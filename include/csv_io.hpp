@@ -257,7 +257,7 @@ struct DelimSplitEscaped {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     for (const auto& c : input) {
@@ -326,7 +326,7 @@ struct DelimSplitUnescapedThreaded {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     for (const auto& c : input) {
@@ -413,7 +413,7 @@ struct DelimSplitUnescaped {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     for (const auto& c : input) {
@@ -490,7 +490,7 @@ struct MapDelimSplitUnescaped {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     auto current_header = header_names.begin();
@@ -569,7 +569,7 @@ struct MapDelimSplitUnescapedThreaded {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     auto current_header = header_names.begin();
@@ -655,7 +655,7 @@ struct MapDelimSplitEscaped {
     CSVParserScope state{LINE};
 
     string chunk;
-    chunk.reserve(512);
+    chunk.reserve(256);
     int num_cols{1};
 
     auto current_header = header_names.begin();
