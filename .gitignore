@@ -28,3 +28,8 @@ benchmark/src/cmake_install.cmake
 
 benchmark/data/CSV_WRITER_BENCHMARK_00*
 benchmark/data/CSV_READER_BENCHMARK_00*
+
+.idea
+.idea/*
+
+*.cbp
