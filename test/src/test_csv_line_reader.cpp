@@ -54,7 +54,7 @@ TEST(CSVLineReaderTest, ReadOneSampleCSVLine) {
 
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
-  EXPECT_EQ(true, csv_lr.good());
+  EXPECT_EQ(false, csv_lr.good());
 }
 
 TEST(CSVLineReaderTest, ReadOneSampleNoNewline) {
@@ -85,7 +85,7 @@ TEST(CSVLineReaderTest, ReadTwoSampleCSVLines) {
   EXPECT_EQ("1,1,1,1,1,1,1,1\n", csv_lr.readline());
   EXPECT_EQ("2,2,2,2,2,2,2,2\n", csv_lr.readline());
   EXPECT_EQ(2u, csv_lr.lcount());
-  EXPECT_EQ(true, csv_lr.good());
+  EXPECT_EQ(false, csv_lr.good());
 }
 
 TEST(CSVLineReaderTest, ReadOneSampleCSVLineAllNewLines) {
@@ -94,7 +94,7 @@ TEST(CSVLineReaderTest, ReadOneSampleCSVLineAllNewLines) {
 
   EXPECT_EQ("\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\",\"1\n\"\n", csv_lr.readline());
   EXPECT_EQ(1u, csv_lr.lcount());
-  EXPECT_EQ(true, csv_lr.good());
+  EXPECT_EQ(false, csv_lr.good());
 }
 
 TEST(CSVLineReaderTest, ReadOneSampleLineHardParse) {
@@ -160,7 +160,7 @@ TEST(CSVLineReaderTest, ReadTwoLinesCRLF) {
   EXPECT_EQ("1,1,1,1,1,1,1,1\r\n", csv_lr.readline());
   EXPECT_EQ("2,2,2,2,2,2,2,2\r\n", csv_lr.readline());
   EXPECT_EQ(2u, csv_lr.lcount());
-  EXPECT_EQ(true, csv_lr.good());
+  EXPECT_EQ(false, csv_lr.good());
 }
 
 }  // namespace

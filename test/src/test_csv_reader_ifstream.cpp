@@ -61,7 +61,7 @@ TEST(CSVReaderIfstream, ReadWholeFileNoHeader) {
     csvio::util::CSVLineReader csv_line_reader(infile);
     csvio::CSVReader csv_reader(csv_line_reader);
 
-    std::vector<std::string> expected{""};
+    std::vector<std::string> expected{ "100", "Henry", "59", "Zuzabuner", "YELLOW", "11/09/2017" };
     std::vector<std::string> row;
 
     while (csv_reader.good()) {
@@ -69,7 +69,7 @@ TEST(CSVReaderIfstream, ReadWholeFileNoHeader) {
     }
 
     EXPECT_EQ(expected, row);
-    EXPECT_EQ(102u, csv_reader.lcount());
+    EXPECT_EQ(101u, csv_reader.lcount());
   }
   infile.close();
 }
@@ -81,7 +81,7 @@ TEST(CSVReaderIfstream, ReadWholeFileWithHeader) {
     csvio::CSVReader csv_reader(csv_line_reader, ',', true);
 
     std::vector<std::string> expected_header{"seq", "name/first", "age", "city", "pick", "date"};
-    std::vector<std::string> expected{""};
+    std::vector<std::string> expected{ "100", "Henry", "59", "Zuzabuner", "YELLOW", "11/09/2017" };
     std::vector<std::string> row;
 
     while (csv_reader.good()) {
@@ -90,7 +90,7 @@ TEST(CSVReaderIfstream, ReadWholeFileWithHeader) {
 
     EXPECT_EQ(expected_header, csv_reader.get_header_names());
     EXPECT_EQ(expected, row);
-    EXPECT_EQ(102u, csv_reader.lcount());
+    EXPECT_EQ(101u, csv_reader.lcount());
   }
   infile.close();
 }

@@ -804,6 +804,19 @@ public:
       m_result.push_back(c);
     }
 
+    // handle the possibility of the last line, we dont want to parse it
+    // we will inspect the next three characters and see if eofbit is set.
+    // if it is not, then we will unget these characters;
+    m_csv_stream.get();
+    m_csv_stream.get();
+    m_csv_stream.get();
+
+    if (good()) {
+      m_csv_stream.unget();
+      m_csv_stream.unget();
+      m_csv_stream.unget();
+    }
+
     m_lines_read++;
     m_state = LINE;
     return m_result;

@@ -53,7 +53,7 @@ TEST(CSVMapReaderTest, ReadOneCSVLine) {
       {"a", "1"}, {"b", "2"}, {"c", "3"}, {"d", "4"}, {"e", "5"}};
 
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadBlankCSVFields) {
@@ -64,7 +64,7 @@ TEST(CSVMapReaderTest, ReadBlankCSVFields) {
   std::map<std::string, std::string> expected{
       {"a", ""}, {"b", ""}, {"c", ""}, {"d", ""}, {"e", ""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLine) {
@@ -75,7 +75,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLine) {
   std::map<std::string, std::string> expected{
       {"a", "a"}, {"b", "b"}, {"c", "c"}, {"d", "d"}, {"e", "e"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotes) {
@@ -88,7 +88,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotes) {
   std::map<std::string, std::string> expected{
       {"a", "\"a\""}, {"b", "\"b\""}, {"c", "\"c\""}, {"d", "\"d\""}, {"e", "\"e\""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneCSVLineAltDelim) {
@@ -99,7 +99,7 @@ TEST(CSVMapReaderTest, ReadOneCSVLineAltDelim) {
   std::map<std::string, std::string> expected{
       {"a", "1"}, {"b", "2"}, {"c", "3"}, {"d", "4"}, {"e", "5"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelim) {
@@ -110,7 +110,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelim) {
   std::map<std::string, std::string> expected{
       {"a", "1"}, {"b", "2"}, {"c", "3"}, {"d", "4"}, {"e", "5"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelim) {
@@ -123,7 +123,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelim) {
   std::map<std::string, std::string> expected{
       {"1", "\"a\""}, {"2", "\"b\""}, {"3", "\"c\""}, {"4", "\"d\""}, {"5", "\"e\""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ConstructorFromLineReaderAltContainer) {
@@ -149,7 +149,7 @@ TEST(CSVMapReaderTest, ReadCSVAltContainer) {
   std::vector<std::string> expected_header{"a", "b", "c", "d", "e"};
   EXPECT_EQ(expected_header, csv_map_reader.get_header_names());
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltContainer) {
@@ -160,7 +160,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltContainer) {
   std::unordered_map<std::string, std::string> expected{
       {"a", "a"}, {"b", "b"}, {"c", "c"}, {"d", "d"}, {"e", "e"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainer) {
@@ -173,7 +173,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainer) {
   std::unordered_map<std::string, std::string> expected{
       {"a", "\"a\""}, {"b", "\"b\""}, {"c", "\"c\""}, {"d", "\"d\""}, {"e", "\"e\""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainerThreaded) {
@@ -189,7 +189,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltContainerThreade
   std::unordered_map<std::string, std::string> expected{
       {"a", "\"a\""}, {"b", "\"b\""}, {"c", "\"c\""}, {"d", "\"d\""}, {"e", "\"e\""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneCSVLineAltDelimAltContainer) {
@@ -200,7 +200,7 @@ TEST(CSVMapReaderTest, ReadOneCSVLineAltDelimAltContainer) {
   std::unordered_map<std::string, std::string> expected{
       {"a", "a"}, {"b", "b"}, {"c", "c"}, {"d", "d"}, {"e", "e"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelimAltContainer) {
@@ -211,7 +211,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineAltDelimAltContainer) {
   std::unordered_map<std::string, std::string> expected{
       {"a", "a"}, {"b", "b"}, {"c", "c"}, {"d", "d"}, {"e", "e"}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelimAltContainer) {
@@ -223,7 +223,7 @@ TEST(CSVMapReaderTest, ReadOneEscapedCSVLineWithEscapedQuotesAltDelimAltContaine
   std::unordered_map<std::string, std::string> expected{
       {"a", "\"a\""}, {"b", "\"b\""}, {"c", "\"c\""}, {"d", "\"d\""}, {"e", "\"e\""}};
   EXPECT_EQ(expected, csv_map_reader.read());
-  EXPECT_EQ(true, csv_map_reader.good());
+  EXPECT_EQ(false, csv_map_reader.good());
 }
 
 }  // namespace
