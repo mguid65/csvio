@@ -839,6 +839,64 @@ private:
   size_t m_lines_read{0};
 };
 
+/** \class CSVSimpleLineReader
+ *  \brief CSV line reader which reads csv lines
+ *
+ *  This line reader is a sane alternative to the conforming line reader which
+ *  allows for newline characters in your csv fields.
+ *  If you have an insane dataset which allows newlines in the middle of fields,
+ *  I'm sorry...
+ *
+ *  This should be a slightly faster alternative for most cases.
+ */
+class CSVSimpleLineReader {
+public:
+  /** \brief Construct a CSVSimpleLineReader from a reference to a istream
+   *  \param instream reference to a istream
+   */
+  explicit CSVSimpleLineReader(std::istream& instream) : m_csv_stream(instream) {}
+
+  /** \brief read a csv line
+   *  \return a string with the contents of the csv line
+   */
+  std::string readline() {
+    m_result.clear();
+
+    std::getline(m_csv_stream, m_result);
+
+    // handle the possibility of the last line, we dont want to parse it
+    // we will inspect the next three characters and see if eofbit is set.
+    // if it is not, then we will unget these characters;
+    m_csv_stream.get();
+    m_csv_stream.get();
+    m_csv_stream.get();
+
+    if (good()) {
+      m_csv_stream.unget();
+      m_csv_stream.unget();
+      m_csv_stream.unget();
+    }
+
+    m_lines_read++;
+    return m_result;
+  }
+
+  /** \brief Get number of csv lines read so far
+   *  \return number of csv lines read so far
+   */
+  const size_t lcount() const { return m_lines_read; }
+
+  /** \brief check if the underlying stream is still good
+   *  \return true if good, otherwise false
+   */
+  bool good() { return m_csv_stream.good(); }
+
+private:
+  std::istream& m_csv_stream;
+  std::string m_result;
+  size_t m_lines_read{0};
+};
+
 /** \class CSVLineWriter
  *  \brief Writes a csv line to a stream, provides a written lines counter
  *

@@ -1,10 +1,10 @@
 #include <iostream>
-
+#include <string>
 #include "csv_io.hpp"
-
 #include "benchmark/benchmark.h"
 
 int main() {
+  const std::string name{"line_read_throughput"};
   const int line_byte_size = 37;
 
   std::ifstream infile("./data/CSV_READER_BENCHMARK_001.csv");
@@ -24,7 +24,8 @@ int main() {
   int size_in_bytes = 1000000 * line_byte_size;
   double size_in_MB = size_in_bytes / 1e6;
 
-  std::cout << "Bytes Read         : " << size_in_bytes << '\n'
+  std::cout << name << '\n'
+            << "Bytes Read         : " << size_in_bytes << '\n'
             << "Time(nanos)        : " << duration << '\n'
             << "Throughput(Megabytes/sec) : " << (size_in_MB / time_in_sec) << '\n';
 }

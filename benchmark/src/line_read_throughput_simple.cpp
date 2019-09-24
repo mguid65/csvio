@@ -4,18 +4,17 @@
 #include "benchmark/benchmark.h"
 
 int main() {
-  const std::string name{"line_write_throughput"};
+  const std::string name{"line_read_throughput_simple"};
   const int line_byte_size = 37;
 
-  std::ofstream outfile("./data/CSV_READER_BENCHMARK_002.csv");
-  csvio::util::CSVLineWriter csv_line_writer(outfile);
-  csvio::CSVWriter<std::vector> csv_reader(csv_line_writer);
+  std::ifstream infile("./data/CSV_READER_BENCHMARK_001.csv");
+  csvio::util::CSVSimpleLineReader csv_line_reader(infile);
+  csvio::CSVReader<std::vector, csvio::util::CSVSimpleLineReader> csv_reader(csv_line_reader);
 
-  std::vector<std::string> data{"sometext", "sometext", "sometext", "sometext"};
   auto t1 = std::chrono::high_resolution_clock::now();
 
   for (int i = 0; i < 1000000; i++) {
-    csv_reader.write(data);
+    benchmark::DoNotOptimize(csv_reader.read());
   }
 
   auto t2 = std::chrono::high_resolution_clock::now();
@@ -26,7 +25,7 @@ int main() {
   double size_in_MB = size_in_bytes / 1e6;
 
   std::cout << name << '\n'
-            << "Bytes Written      : " << size_in_bytes << '\n'
+            << "Bytes Read         : " << size_in_bytes << '\n'
             << "Time(nanos)        : " << duration << '\n'
             << "Throughput(Megabytes/sec) : " << (size_in_MB / time_in_sec) << '\n';
 }
