@@ -62,43 +62,11 @@ using std::map;
 #define unlikely(expr) (__builtin_expect(!!(expr), 0))
 #endif
 
+/** \internal */
 namespace util {
-/** \class has_push_back
- *  \brief SFINAE Helper to determine if T has a push_back method
- */
-template <typename, typename T>
-struct has_push_back {
-  static_assert(
-      std::integral_constant<T, false>::value,
-      "Second template parameter needs to be of function type.");
-};
-
-/** \class has_push_back
- *  \brief Specialization of has_push_back
- */
-template <typename C, typename Ret, typename... Args>
-struct has_push_back<C, Ret(Args...)> {
-private:
-  /** \brief check if a type T has method push_back
-   *  \return boolean whether T has a method push_back
-   */
-  template <typename T>
-  static constexpr auto check(T*) -> typename std::is_same<
-      decltype(std::declval<T>().push_back(std::declval<Args>()...)), Ret>::type;
-
-  /** \brief overload which returns false
-   *  \return false
-   */
-  template <typename>
-  static constexpr std::false_type check(...);
-
-  using type = decltype(check<C>(0));
-
-public:
-  static constexpr bool value = type::value;
-};
 
 /** \brief function to escape characters in csv fields according to RFC 4180
+ *  \ingroup utility
  *
  *  Source: https://tools.ietf.org/html/rfc4180
  *
@@ -144,6 +112,7 @@ inline string escape(string_view data, char delim = ',', bool force_escape = fal
 }
 
 /** \brief unescape a csv escaped string according to RFC 4180
+ *  \ingroup utility
  *
  *  Generally linear avg time and space complexity
  *
@@ -165,17 +134,15 @@ inline string unescape(string_view data) {
 #endif
 
   for (const char& c : sv_data) {
-    switch (c) {
-      case '\"':
-        quotes_seen++;
-        if (quotes_seen == 2) {
-          quotes_seen = 0;
-          result.push_back('\"');
-        }
-        break;
-      default:
+    if (c == '\"') {
+      quotes_seen++;
+      if (quotes_seen == 2) {
         quotes_seen = 0;
-        result.push_back(c);
+        result.push_back('\"');
+      }
+    } else {
+      quotes_seen = 0;
+      result.push_back(c);
     }
   }
   return result;
@@ -185,6 +152,7 @@ enum CSVParserScope { LINE, QUOTE };
 
 
 /** \class DelimSplitNaive
+ *  \ingroup parser
  *  \brief Split a CSV assuming no escaped characters
  */
 template <template <class...> class RowContainer>
@@ -198,10 +166,6 @@ struct DelimSplitNaive {
    *  \return RowContainer of split csv fields
    */
   RowContainer<string>& operator() (string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
     m_data.clear();
 
     string tmp(input.data(), input.length());
@@ -222,6 +186,7 @@ struct DelimSplitNaive {
 
 
 /** \class DelimSplitEscaped
+ *  \ingroup parser
  *  \brief Split a CSV assuming it is escaped and leave it escaped
  */
 template <template <class...> class RowContainer>
@@ -249,11 +214,6 @@ struct DelimSplitEscaped {
    * empty string
    */
   void delim_split_escaped_impl(string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
-
     CSVParserScope state{LINE};
 
     string chunk;
@@ -290,6 +250,7 @@ struct DelimSplitEscaped {
 
 
 /** \class DelimSplitUnescapedThreaded
+ *  \ingroup parser
  *  \brief Split a CSV assuming it is escaped and unescape the output
  *
  *  Threaded unescaping for output
@@ -318,11 +279,6 @@ struct DelimSplitUnescapedThreaded {
    * empty string
    */
   void delim_split_escaped_impl(string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
-
     CSVParserScope state{LINE};
 
     string chunk;
@@ -379,6 +335,7 @@ struct DelimSplitUnescapedThreaded {
 
 
 /** \class DelimSplitUnescaped
+ *  \ingroup parser
  *  \brief Split a CSV assuming it is escaped and unescape the output
  */
 template <template <class...> class RowContainer>
@@ -405,11 +362,6 @@ struct DelimSplitUnescaped {
    * empty string
    */
   void delim_split_escaped_impl(string_view input, const char delim) {
-    static_assert(
-        has_push_back<
-            RowContainer<string>, void(const typename RowContainer<string>::value_type&)>::value,
-        "The template parameter needs to be a container type with an push_back function.");
-
     CSVParserScope state{LINE};
 
     string chunk;
@@ -459,6 +411,7 @@ struct DelimSplitUnescaped {
 };
 
 /** \class MapDelimSplitUnescaped
+ *  \ingroup parser
  *  \brief Split a CSV to a map assuming it is escaped and unescape the output
  */
 template <template <class...> class RowMapContainer>
@@ -539,6 +492,7 @@ struct MapDelimSplitUnescaped {
 
 
 /** \class MapDelimSplitUnescapedThreaded
+ *  \ingroup parser
  *  \brief Split a CSV to a map container assuming the values are escaped, and unescape output
  */
 template <template <class...> class RowMapContainer>
@@ -626,6 +580,7 @@ struct MapDelimSplitUnescapedThreaded {
 
 
 /** \class MapDelimSplitEscaped
+ *  \ingroup parser
  *  \brief Split a CSV to a map assuming values are escaped and leave them escaped
  */
 template <template <class...> class RowMapContainer>
@@ -692,6 +647,7 @@ struct MapDelimSplitEscaped {
 
 
 /** \class DelimJoinEscapedFormat
+ *  \ingroup formatter
  *  \brief Join a CSV on a delimiter escaping each field
  */
 template <template <class...> class RowContainer = vector>
@@ -731,6 +687,7 @@ struct DelimJoinEscapedFormat {
 
 
 /** \class DelimJoinUnescapedFormat
+ *  \ingroup formatter
  *  \brief Join a CSV on a delimiter leaving each field unescaped
  */
 template <template <class...> class RowContainer = vector>
@@ -768,6 +725,7 @@ struct DelimJoinUnescapedFormat {
 
 
 /** \class CSVLineReader
+ *  \ingroup line_reader
  *  \brief Stateful CSV line reader which reads csv lines with escaped fields according to RFC 4180
  */
 class CSVLineReader {
@@ -825,7 +783,7 @@ public:
   /** \brief Get number of csv lines read so far
    *  \return number of csv lines read so far
    */
-  const size_t lcount() const { return m_lines_read; }
+  [[nodiscard]] size_t lcount() const { return m_lines_read; }
 
   /** \brief check if the underlying stream is still good
    *  \return true if good, otherwise false
@@ -840,6 +798,7 @@ private:
 };
 
 /** \class CSVSimpleLineReader
+ *  \ingroup line_reader
  *  \brief CSV line reader which reads csv lines
  *
  *  This line reader is a sane alternative to the conforming line reader which
@@ -884,7 +843,7 @@ public:
   /** \brief Get number of csv lines read so far
    *  \return number of csv lines read so far
    */
-  const size_t lcount() const { return m_lines_read; }
+  [[nodiscard]] size_t lcount() const { return m_lines_read; }
 
   /** \brief check if the underlying stream is still good
    *  \return true if good, otherwise false
@@ -898,6 +857,7 @@ private:
 };
 
 /** \class CSVLineWriter
+ *  \ingroup line_writer
  *  \brief Writes a csv line to a stream, provides a written lines counter
  *
  *  doesnt do much other than make the implementation symmetrical
@@ -929,7 +889,7 @@ public:
   /** \brief Get number of csv lines written so far
    *  \return number of csv lines written so far
    */
-  const size_t lcount() const { return m_lines_written; }
+  [[nodiscard]] size_t lcount() const { return m_lines_written; }
 
 private:
   ostream& m_csv_stream;
@@ -939,6 +899,7 @@ private:
 }  // namespace util
 
 /** \class CSVReader
+ *  \ingroup reader
  *  \brief Reader to read a stream as CSV
  */
 template <
@@ -959,7 +920,7 @@ public:
     /** \brief parameterized constructor that takes a pointer to a CSVReader
      *  \param ptr pointer to a valid non-nullptr CSVReader iterator
      */
-    iterator(CSVReader* ptr) : m_ptr(ptr) {
+    explicit iterator(CSVReader* ptr) : m_ptr(ptr) {
       m_ptr->read();
       m_good = m_ptr->good();
     }
@@ -1030,7 +991,7 @@ public:
   /** \brief get the current delimiter
    *  \return constant char delimiter value
    */
-  const char get_delimiter() const { return m_delim; }
+  [[nodiscard]] char get_delimiter() const { return m_delim; }
 
   /** \brief check if the underlying stream is still good
    *  \return true if good, otherwise false
@@ -1059,7 +1020,7 @@ public:
   /** \brief Get number of csv lines read so far
    *  \return number of csv lines read so far
    */
-  const size_t lcount() const { return m_csv_line_reader.lcount(); }
+  [[nodiscard]] size_t lcount() const { return m_csv_line_reader.lcount(); }
 
 protected:
   /** \brief advance the current string and parse it
@@ -1110,6 +1071,7 @@ protected:
 };
 
 /** \class CSVWriter
+ *  \ingroup writer
  *  \brief Writes data as csv
  */
 template <
@@ -1139,7 +1101,7 @@ public:
   /** \brief get the current delimiter from this writer
    *  \return constant character delimiter
    */
-  const char get_delimiter() const { return m_delim; }
+  [[nodiscard]] char get_delimiter() const { return m_delim; }
 
   /** \brief check if the underlying stream is still good
    *  \return true if good, otherwise false
@@ -1171,7 +1133,7 @@ public:
   /** \brief Get number of csv lines written so far
    *  \return number of csv lines written so far
    */
-  const size_t lcount() const { return m_csv_line_writer.lcount(); }
+  [[nodiscard]] size_t lcount() const { return m_csv_line_writer.lcount(); }
 
 protected:
   char m_delim;
@@ -1186,6 +1148,7 @@ protected:
 };
 
 /** \class CSVMapReader
+ *  \ingroup reader
  *  \brief Reader to read a stream as CSV into a map like container
  */
 template <
@@ -1219,7 +1182,7 @@ public:
   /** \brief get the current delimiter
    *  \return constant char delimiter value
    */
-  const char get_delimiter() const { return m_delim; }
+  [[nodiscard]]char get_delimiter() const { return m_delim; }
 
   /** \brief check if the underlying stream is still good
    *  \return true if good, otherwise false
@@ -1243,7 +1206,7 @@ public:
   /** \brief Get number of csv lines read so far
    *  \return number of csv lines read so far
    */
-  const size_t lcount() const { return m_csv_line_reader.lcount(); }
+  [[nodiscard]] size_t lcount() const { return m_csv_line_reader.lcount(); }
 
 protected:
   /** \brief advance the current string and parse it
