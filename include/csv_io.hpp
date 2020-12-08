@@ -1,5 +1,5 @@
-#ifndef _CSV_IO_HPP_
-#define _CSV_IO_HPP_
+#ifndef CSV_IO_HPP
+#define CSV_IO_HPP
 
 /*
  * MIT License
@@ -49,13 +49,7 @@ using std::string_view;
 using string_view = const std::string&;
 #endif
 
-using std::function;
-using std::istream;
-using std::ostream;
 using std::string;
-using std::thread;
-using std::vector;
-using std::map;
 
 #ifdef __GNUC__
 #define likely(expr) (__builtin_expect(!!(expr), 1))
@@ -165,7 +159,7 @@ struct DelimSplitNaive {
    *  \param delim delimiter to split on
    *  \return RowContainer of split csv fields
    */
-  RowContainer<string>& operator() (string_view input, const char delim) {
+  RowContainer<string>& operator() (string_view input, char delim) {
     m_data.clear();
 
     string tmp(input.data(), input.length());
@@ -198,7 +192,7 @@ struct DelimSplitEscaped {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  RowContainer<string>& operator()(string_view input, const char delim) {
+  RowContainer<string>& operator()(string_view input, char delim) {
     m_data.clear();
     delim_split_escaped_impl(input, delim);
     return m_data;
@@ -213,7 +207,7 @@ struct DelimSplitEscaped {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  void delim_split_escaped_impl(string_view input, const char delim) {
+  void delim_split_escaped_impl(string_view input, char delim) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -263,7 +257,7 @@ struct DelimSplitUnescapedThreaded {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  RowContainer<string>& operator()(string_view input, const char delim) {
+  RowContainer<string>& operator()(string_view input, char delim) {
     m_data.clear();
     delim_split_unescaped_threaded_impl(input, delim);
     return m_data;
@@ -278,7 +272,7 @@ struct DelimSplitUnescapedThreaded {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  void delim_split_escaped_impl(string_view input, const char delim) {
+  void delim_split_escaped_impl(string_view input, char delim) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -317,9 +311,9 @@ struct DelimSplitUnescapedThreaded {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  void delim_split_unescaped_threaded_impl(string_view input, const char delim) {
+  void delim_split_unescaped_threaded_impl(string_view input, char delim) {
     delim_split_escaped_impl(input, delim);
-    vector<thread> threads;  // would be better to use a thread pool
+    std::vector<std::thread> threads;  // would be better to use a thread pool
 
     for (auto& field : m_data) {
       threads.emplace_back([&]() { field = unescape(field); });
@@ -346,7 +340,7 @@ struct DelimSplitUnescaped {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  RowContainer<string>& operator()(string_view input, const char delim) {
+  RowContainer<string>& operator()(string_view input, char delim) {
     m_data.clear();
     delim_split_unescaped_impl(input, delim);
     return m_data;
@@ -361,7 +355,7 @@ struct DelimSplitUnescaped {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  void delim_split_escaped_impl(string_view input, const char delim) {
+  void delim_split_escaped_impl(string_view input, char delim) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -402,7 +396,7 @@ struct DelimSplitUnescaped {
    *  \return RowContainer of split csv fields, if input string empty, return RowContainer with one
    * empty string
    */
-  void delim_split_unescaped_impl(string_view input, const char delim) {
+  void delim_split_unescaped_impl(string_view input, char delim) {
     delim_split_escaped_impl(input, delim);
     for (auto& field : m_data) field = unescape(field);
   }
@@ -424,7 +418,7 @@ struct MapDelimSplitUnescaped {
    *  \return RowMapContainer of split csv fields
    */
   RowMapContainer<string, string>& operator() (
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     m_data.clear();
     delim_split_unescaped_impl(input, delim, header_names);
     return m_data;
@@ -439,7 +433,7 @@ struct MapDelimSplitUnescaped {
    *  \param header_names input canonical header names
    */
   void delim_split_escaped_impl(
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -482,7 +476,7 @@ struct MapDelimSplitUnescaped {
    *  \param header_names input canonical header names
    */
   void delim_split_unescaped_impl(
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     delim_split_escaped_impl(input, delim, header_names);
     for (auto& key_field : m_data) key_field.second = unescape(key_field.second);
   }
@@ -504,7 +498,7 @@ struct MapDelimSplitUnescapedThreaded {
    *  \return RowMapContainer of split csv fields
    */
   RowMapContainer<string, string>& operator() (
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     m_data.clear();
     delim_split_unescaped_threaded_impl(input, delim, header_names);
     return m_data;
@@ -519,7 +513,7 @@ struct MapDelimSplitUnescapedThreaded {
    *  \param header_names input canonical header names
    */
   void delim_split_escaped_impl(
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -562,7 +556,7 @@ struct MapDelimSplitUnescapedThreaded {
    *  \param header_names input canonical header names
    */
   void delim_split_unescaped_threaded_impl(
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     delim_split_escaped_impl(input, delim, header_names);
     std::vector<std::thread> threads;  // would be better to use a thread pool
 
@@ -591,7 +585,7 @@ struct MapDelimSplitEscaped {
    *  \param header_names input canonical header names
    *  \return RowMapContainer of split csv fields
    */
-  RowMapContainer<string, string>& operator() (string_view input, const char delim, vector<string>& header_names) {
+  RowMapContainer<string, string>& operator() (string_view input, char delim, std::vector<string>& header_names) {
     m_data.clear();
     delim_split_escaped_impl(input, delim, header_names);
     return m_data;
@@ -606,7 +600,7 @@ struct MapDelimSplitEscaped {
    *  \param header_names input canonical header names
    */
   void delim_split_escaped_impl(
-      string_view input, const char delim, vector<string>& header_names) {
+      string_view input, char delim, std::vector<string>& header_names) {
     CSVParserScope state{LINE};
 
     string chunk;
@@ -650,17 +644,17 @@ struct MapDelimSplitEscaped {
  *  \ingroup formatter
  *  \brief Join a CSV on a delimiter escaping each field
  */
-template <template <class...> class RowContainer = vector>
+template <template <class...> class RowContainer = std::vector>
 struct DelimJoinEscapedFormat {
 
-  /** \brief get an escaped csv string from a vector of csv values
+  /** \brief get an escaped csv string from a std::vector of csv values
    *  \param csv_row csv row to join to a csv string
    *  \param delim delimiter to join values on
    *  \param line_terminator line terminating sequence
-   *  \return an escaped csv string of the joined vector
+   *  \return an escaped csv string of the joined std::vector
    */
   string& operator() (
-      const RowContainer<string>& csv_row, const char delim, const string& line_terminator) {
+      const RowContainer<string>& csv_row, char delim, const string& line_terminator) {
     m_data.clear();
     m_data.reserve(csv_row.size() * 2);
 
@@ -690,17 +684,17 @@ struct DelimJoinEscapedFormat {
  *  \ingroup formatter
  *  \brief Join a CSV on a delimiter leaving each field unescaped
  */
-template <template <class...> class RowContainer = vector>
+template <template <class...> class RowContainer = std::vector>
 struct DelimJoinUnescapedFormat {
 
-  /** \brief get an unescaped csv string from a vector of csv values
+  /** \brief get an unescaped csv string from a std::vector of csv values
    *  \param csv_row csv row to join to a csv string
    *  \param delim delimiter to join values on
    *  \param line_terminator line terminating sequence
-   *  \return an unescaped csv string of the joined vector
+   *  \return an unescaped csv string of the joined std::vector
    */
   string& operator() (
-      const RowContainer<string>& csv_row, const char delim, const string& line_terminator) {
+      const RowContainer<string>& csv_row, char delim, const string& line_terminator) {
     m_data.clear();
     bool first{true};
     for (auto& s : csv_row) {
@@ -733,7 +727,7 @@ public:
   /** \brief Construct a CSVLineReader from a reference to a istream
    *  \param instream reference to a istream
    */
-  explicit CSVLineReader(istream& instream) : m_csv_stream(instream) {}
+  explicit CSVLineReader(std::istream& instream) : m_csv_stream(instream) {}
 
   /** \brief read a csv line
    *  \return a string with the contents of the csv line
@@ -792,7 +786,7 @@ public:
 
 private:
   CSVParserScope m_state{LINE};
-  istream& m_csv_stream;
+  std::istream& m_csv_stream;
   string m_result;
   size_t m_lines_read{0};
 };
@@ -869,7 +863,7 @@ public:
   /** \brief Construct a CSVLineWriter from an outstream
    *  \param outstream ostream to write lines to
    */
-  explicit CSVLineWriter(ostream& outstream) : m_csv_stream(outstream) {}
+  explicit CSVLineWriter(std::ostream& outstream) : m_csv_stream(outstream) {}
 
   /** \brief write a csv line to the stream
    *  \param line line to write to stream
@@ -892,7 +886,7 @@ public:
   [[nodiscard]] size_t lcount() const { return m_lines_written; }
 
 private:
-  ostream& m_csv_stream;
+  std::ostream& m_csv_stream;
   size_t m_lines_written{0};
 };
 
@@ -903,7 +897,7 @@ private:
  *  \brief Reader to read a stream as CSV
  */
 template <
-    template <class...> class RowContainer = vector,
+    template <class...> class RowContainer = std::vector,
     typename LineReader = csvio::util::CSVLineReader,
     typename Parser = csvio::util::DelimSplitUnescaped<RowContainer> >
 class CSVReader {
@@ -972,7 +966,7 @@ public:
    *  \param parse_func a function which describes how to split a csv row
    */
   explicit CSVReader(
-      LineReader& line_reader, const char delimiter = ',', bool has_header = false,
+      LineReader& line_reader, char delimiter = ',', bool has_header = false,
       bool warn_columns = true)
       : m_csv_line_reader(line_reader),
         m_delim(delimiter),
@@ -986,7 +980,7 @@ public:
   /** \brief set the delimiter to a different character
    *  \param delim new delimiter
    */
-  void set_delimiter(const char delim) { m_delim = delim; }
+  void set_delimiter(char delim) { m_delim = delim; }
 
   /** \brief get the current delimiter
    *  \return constant char delimiter value
@@ -1075,7 +1069,7 @@ protected:
  *  \brief Writes data as csv
  */
 template <
-    template <class...> class RowContainer = vector, class LineWriter = csvio::util::CSVLineWriter, class Formatter = csvio::util::DelimJoinEscapedFormat<RowContainer> >
+    template <class...> class RowContainer = std::vector, class LineWriter = csvio::util::CSVLineWriter, class Formatter = csvio::util::DelimJoinEscapedFormat<RowContainer> >
 class CSVWriter {
 public:
   /** \brief construct a CSVWriter from a LineWriter
@@ -1086,7 +1080,7 @@ public:
    *  \param format_func a function to format a container to an output csv string
    */
   explicit CSVWriter(
-      LineWriter& line_writer, const char delimiter = ',', bool warn_columns = true,
+      LineWriter& line_writer, char delimiter = ',', bool warn_columns = true,
       string line_terminator = "\r\n" )
       : m_csv_line_writer(line_writer),
         m_delim(delimiter),
@@ -1096,7 +1090,7 @@ public:
   /** \brief set a new delimiter for this writer
    *  \param delim new delimiter
    */
-  void set_delimiter(const char delim) { m_delim = delim; }
+  void set_delimiter(char delim) { m_delim = delim; }
 
   /** \brief get the current delimiter from this writer
    *  \return constant character delimiter
@@ -1164,11 +1158,11 @@ public:
    *  \param parse_func a function which describes how to split a csv row
    *  \param header_parse_func a function to parse the header
    *  because it doesn't go into the map (default is
-   * csvio::util::CSVInputParser<std::vector>::delim_split_unescaped)
+   * csvio::util::CSVInputParser<std::std::vector>::delim_split_unescaped)
    */
 
   explicit CSVMapReader(
-      LineReader& line_reader, const char delimiter = ',')
+      LineReader& line_reader, char delimiter = ',')
       : m_csv_line_reader(line_reader),
         m_delim(delimiter) {
     handle_header();
@@ -1177,7 +1171,7 @@ public:
   /** \brief set the delimiter to a different character
    *  \param delim new delimiter
    */
-  void set_delimiter(const char delim) { m_delim = delim; }
+  void set_delimiter(char delim) { m_delim = delim; }
 
   /** \brief get the current delimiter
    *  \return constant char delimiter value
@@ -1194,7 +1188,12 @@ public:
    */
   RowMapContainer<std::string, std::string>& current() { return m_current; }
 
+  /**
+   * \brief Get the csv header names in the order they were streamed in
+   * \return a vector of header names, or an empty vector
+   */
   const auto& get_header_names() const { return m_stream_order_header_names; }
+
   /** \brief Advance to the next row and return the current RowContainer of CSV values
    *  \return a reference to the current RowContainer
    */
