@@ -15,6 +15,8 @@ test/src/CMakeFiles/*
 test/src/CMakeCache.txt
 test/src/cmake_install.cmake
 
+cmake-build-*
+
 benchmark/Makefile
 benchmark/src/Makefile
 benchmark/CMakeFiles

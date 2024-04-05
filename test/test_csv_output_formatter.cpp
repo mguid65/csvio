@@ -28,7 +28,7 @@
 #include <string_view>
 #include <vector>
 
-#include "csv_io.hpp"
+#include "csvio/csvio.hpp"
 #include "gtest/gtest.h"
 
 namespace {
@@ -186,8 +186,3 @@ TEST(CSVOutputFormatterTest, JoinSampleListInFieldDelimiterEscapedToStringEscape
 }
 
 }  // namespace
-
-int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

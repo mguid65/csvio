@@ -1,0 +1,14 @@
+{
+    "version": 4,
+    "vendor": {
+        "conan": {}
+    },
+    "include": [
+        "/home/matthew/workspace/csvio/cmake-build-debuggcc11/conan/build/Debug/generators/CMakePresets.json",
+        "/home/matthew/workspace/csvio/cmake-build-releasegcc11/conan/build/Release/generators/CMakePresets.json",
+        "/home/matthew/workspace/csvio/cmake-build-debugclang17/conan/build/Debug/generators/CMakePresets.json",
+        "/home/matthew/workspace/csvio/cmake-build-releaseclang17/conan/build/Release/generators/CMakePresets.json",
+        "/home/matthew/workspace/csvio/cmake-build-debuggcc12/conan/build/RelWithDebInfo/generators/CMakePresets.json",
+        "/home/matthew/workspace/csvio/cmake-build-releasegcc12/conan/build/Release/generators/CMakePresets.json"
+    ]
+}

@@ -25,7 +25,7 @@
 
 #include <sstream>
 
-#include "csv_io.hpp"
+#include "csvio/csvio.hpp"
 #include "gtest/gtest.h"
 
 namespace {
@@ -59,8 +59,3 @@ TEST(CSVLineWriterTest, WriteOneSampleCSVLine) {
 }
 
 }  // namespace
-
-int main(int argc, char** argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

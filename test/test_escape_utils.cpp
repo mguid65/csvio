@@ -23,43 +23,46 @@
  *
  */
 
-#include <iostream>
-#include <sstream>
 #include <string>
-#include <vector>
-#include "csv_io.hpp"
+
+#include "csvio/csvio.hpp"
 #include "gtest/gtest.h"
 
 namespace {
 
-TEST(CSVWriterTest, WriteVectorOfEmptyString) {
-  std::ostringstream outstream;
-  csvio::util::CSVLineWriter csv_lw(outstream);
-  csvio::CSVWriter<std::vector> csv_writer(csv_lw);
-
-  csv_writer.write({""});
-  EXPECT_EQ("\r\n", outstream.str());
-  EXPECT_EQ(true, csv_writer.good());
+TEST(EscapeTest, EscapeEmptyString) {
+  std::string to_escape{""};
+  EXPECT_EQ("", csvio::util::escape(to_escape));
 }
 
-TEST(CSVWriterTest, WriteVectorOfSampleStrings) {
-  std::ostringstream outstream;
-  csvio::util::CSVLineWriter csv_lw(outstream);
-  csvio::CSVWriter<std::vector> csv_writer(csv_lw);
-
-  csv_writer.write({"a", "b", "c", "d"});
-  EXPECT_EQ("a,b,c,d\r\n", outstream.str());
-  EXPECT_EQ(true, csv_writer.good());
+TEST(EscapeTest, UnescapeEmptyString) {
+  std::string to_unescape{""};
+  EXPECT_EQ("", csvio::util::unescape(to_unescape));
 }
 
-TEST(CSVWriterTest, WriteVectorOfQuotedSampleStrings) {
-  std::ostringstream outstream;
-  csvio::util::CSVLineWriter csv_lw(outstream);
-  csvio::CSVWriter<std::vector> csv_writer(csv_lw);
+TEST(EscapeTest, EscapeStringWithQuote) {
+  std::string to_escape{"some\"value"};
+  EXPECT_EQ("\"some\"\"value\"", csvio::util::escape(to_escape));
+}
 
-  csv_writer.write({"\"a\"", "\"b\"", "\"c\"", "\"d\""});
-  EXPECT_EQ("\"\"\"a\"\"\",\"\"\"b\"\"\",\"\"\"c\"\"\",\"\"\"d\"\"\"\r\n", outstream.str());
-  EXPECT_EQ(true, csv_writer.good());
+TEST(EscapeTest, UnescapeStringStringWithQuote) {
+  std::string to_unescape{"\"some\"\"value\""};
+  EXPECT_EQ("some\"value", csvio::util::unescape(to_unescape));
+}
+
+TEST(EscapeTest, EscapeStringWithComma) {
+  std::string to_escape{"some,value"};
+  EXPECT_EQ("\"some,value\"", csvio::util::escape(to_escape));
+}
+
+TEST(EscapeTest, EscapeStringAltDelimiter) {
+  std::string to_escape{"some|value"};
+  EXPECT_EQ("\"some|value\"", csvio::util::escape(to_escape, '|'));
+}
+
+TEST(EscapeTest, EscapeStringForceEscape) {
+  std::string to_escape{"somevalue"};
+  EXPECT_EQ("\"somevalue\"", csvio::util::escape(to_escape, ',', true));
 }
 
 }  // namespace
