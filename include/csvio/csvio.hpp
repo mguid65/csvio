@@ -1019,7 +1019,7 @@ protected:
     m_current = m_parse_func(m_current_str_line, m_delim);
 
     if (m_num_columns == -1) {
-      m_num_columns = m_current.size();
+      m_num_columns = static_cast<long>(m_current.size());
     } else if (m_warn_columns &&
                (m_current.size() !=
                 static_cast<typename RowContainer<std::string>::size_type>(m_num_columns))) {
@@ -1032,7 +1032,7 @@ protected:
   void handle_header() {
     m_current_str_line = m_csv_line_reader.readline();
     m_header_names = m_parse_func(m_current_str_line, m_delim);
-    m_num_columns = m_header_names.size();
+    m_num_columns = static_cast<long>(m_header_names.size());
     m_current_str_line = "";
   }
 
@@ -1101,7 +1101,7 @@ public:
   void write(const RowContainer<std::string>& values) {
     if (values.empty()) return;
     if (m_num_columns == -1) {
-      m_num_columns = values.size();
+      m_num_columns = static_cast<long>(values.size());
     } else if (m_warn_columns &&
                (values.size() !=
                 static_cast<typename RowContainer<std::string>::size_type>(m_num_columns))) {
